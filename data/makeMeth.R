@@ -1,7 +1,7 @@
 setwd('/home/jrca253/EpigeneticAge/data')
 
 DATADIR  <- '/home/jrca253/DATA/Truseq/'
-METHFILE <- 'meth.txt'
+METHFILE <- 'meth_noNA.txt'
 COVFILE  <- 'cov.txt'
 
 ########################################################################################
@@ -148,6 +148,9 @@ for( i in 2:length(ID) ){
   rm(tmp)
         
 }
+
+##### REMOVE ALL ROWS WITH NAs #####
+B_seq_all <- B_seq_all[complete.cases(B_seq_all), ]
 
 write.table(B_seq_all, file = METHFILE, quote = F, append = FALSE, sep = "\t", row.names=FALSE)
 rm(B_seq_all)
