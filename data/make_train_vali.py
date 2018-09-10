@@ -6,7 +6,7 @@ train_fraction = 0.8
 vali_fraction  = 1.0 - train_fraction
 
 cov_filename  = "cov.txt"
-meth_filename = "meth.txt"
+meth_filename = "meth_noNA.txt"
 
 
 ##### LOAD DATA #####
@@ -72,7 +72,7 @@ df_meth_vali  = df_meth[ meth_vali_samples ]
 
 
 ##### WRITE FILES #####
-df_cov_train.to_csv("cov_train.txt",   sep = '\t', index = False, header = True, na_rep = 'NA')
-df_cov_vali.to_csv("cov_vali.txt",     sep = '\t', index = False, header = True, na_rep = 'NA')
-df_meth_train.to_csv("meth_train.txt", sep = '\t', index = False, header = True, na_rep = 'NA')
-df_meth_vali.to_csv("meth_vali.txt",   sep = '\t', index = False, header = True, na_rep = 'NA')
+df_cov_train.to_csv("cov_train_noNA.txt",   sep = '\t', index = False, header = True, na_rep = 'NA')
+df_cov_vali.to_csv("cov_vali_noNA.txt",     sep = '\t', index = False, header = True, na_rep = 'NA')
+df_meth_train.to_csv("meth_train_noNA.txt", sep = '\t', index = False, header = True, na_rep = 'NA')
+df_meth_vali.to_csv("meth_vali_noNA.txt",   sep = '\t', index = False, header = True, na_rep = 'NA')

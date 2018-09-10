@@ -1,6 +1,10 @@
 setwd("/home/jrca253/EpigeneticAge")
 library(glmnet)
 library(ggplot2)
+
+cov.vali  = "data/cov_vali_noNA.txt"
+meth.vali = "data/meth_vali_noNA.txt"
+
 alpha = 0.5
 adult.age = 20
 
@@ -30,7 +34,7 @@ transform.age.inverse <- function(tage){
 ##########################################################################
 # LOAD COVARIATE FILE
 ##########################################################################
-df.cov <- read.table("data/cov_vali.txt", header = TRUE, row.names = 1, sep = '\t')
+df.cov <- read.table(cov.vali, header = TRUE, row.names = 1, sep = '\t')
 age <- unlist(df.cov[1,], use.names = FALSE)
 age.transformed <- sapply(age, transform.age)
 
@@ -40,7 +44,7 @@ age.transformed <- sapply(age, transform.age)
 ##########################################################################
 
 ##### VALIDATION SAMPLES #####
-df.meth.validate <- read.table("data/meth_vali.txt", header = TRUE, row.names = 1, sep = '\t', skipNul = TRUE)
+df.meth.validate <- read.table(meth.vali, header = TRUE, row.names = 1, sep = '\t', skipNul = TRUE)
 df.meth.validate.clean <- df.meth.validate[complete.cases(df.meth.validate), ]
 meth.validate.data <- t(as.matrix(df.meth.validate.clean))
 

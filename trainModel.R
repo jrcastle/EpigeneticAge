@@ -1,6 +1,10 @@
 setwd("/home/jrca253/EpigeneticAge")
 library(glmnet)
 library(ggplot2)
+
+cov.train  = "data/cov_train_noNA.txt"
+meth.train = "data/meth_train_noNA.txt"
+
 alpha = 0.5
 adult.age = 20
 
@@ -31,7 +35,7 @@ transform.age.inverse <- function(tage){
 ##########################################################################
 # LOAD COVARIATE FILE
 ##########################################################################
-df.cov <- read.table("data/cov_train.txt", header = TRUE, row.names = 1, sep = '\t')
+df.cov <- read.table(cov.train, header = TRUE, row.names = 1, sep = '\t')
 age <- unlist(df.cov[1,], use.names = FALSE)
 age.transformed <- sapply(age, transform.age)
 
@@ -41,14 +45,9 @@ age.transformed <- sapply(age, transform.age)
 ##########################################################################
 
 ##### TRAINING SAMPLES #####
-df.meth <- read.table("data/meth_train.txt", header = TRUE, row.names = 1, sep = '\t', skipNul = TRUE)
+df.meth <- read.table(meth.train, header = TRUE, row.names = 1, sep = '\t', skipNul = TRUE)
 df.meth.clean <- df.meth[complete.cases(df.meth), ]
 meth.training.data <- t(as.matrix(df.meth.clean))
-
-##### VALIDATION SAMPLES #####
-df.meth.validate <- read.table("data/meth_vali.txt", header = TRUE, row.names = 1, sep = '\t', skipNul = TRUE)
-df.meth.validate.clean <- df.meth.validate[complete.cases(df.meth.validate), ]
-meth.validate.data <- t(as.matrix(df.meth.validate.clean))
 
 
 ##########################################################################
@@ -79,14 +78,14 @@ p <- ggplot(data.frame(res = residual, weight = 1), aes(x=res)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   
 
-png("residual_hist.png")
+png("residual_hist_trainsample.png")
 p
 dev.off()
 
 hist(residual, main = "Prediction Residuals", xlab = "Age - MethAge")
 dev.off()
 
-png("MethAgevsSampleAge.png")
+png("MethAgevsSampleAge_trainsample.png")
 plot(age, res, main="Methlyation Age vs Sample Age", xlab="Sample Age ", ylab="Methylation Age ", pch=19) 
 abline(lm(res~age), col="red") # regression line (y~x) 
 rsq <- summary(lm(res~age))$r.squared
