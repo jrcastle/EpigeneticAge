@@ -5,8 +5,9 @@ import random
 train_fraction = 0.8
 vali_fraction  = 1.0 - train_fraction
 
-cov_filename  = "cov.txt"
-meth_filename = "meth_noNA.txt"
+cov_filename  = "cov_noNA.txt"
+meth_filename = "meth_noNA_addCov.txt"
+suffix        = "_noNA_addCov.txt"
 
 
 ##### LOAD DATA #####
@@ -44,6 +45,7 @@ meth_train_samples = []
 meth_vali_samples  = []
 
 
+print "Splitting ..." 
 for sample in cov_columns:
 
     if FIRST:
@@ -72,7 +74,7 @@ df_meth_vali  = df_meth[ meth_vali_samples ]
 
 
 ##### WRITE FILES #####
-df_cov_train.to_csv("cov_train_noNA.txt",   sep = '\t', index = False, header = True, na_rep = 'NA')
-df_cov_vali.to_csv("cov_vali_noNA.txt",     sep = '\t', index = False, header = True, na_rep = 'NA')
-df_meth_train.to_csv("meth_train_noNA.txt", sep = '\t', index = False, header = True, na_rep = 'NA')
-df_meth_vali.to_csv("meth_vali_noNA.txt",   sep = '\t', index = False, header = True, na_rep = 'NA')
+df_cov_train.to_csv("cov_train" + suffix,   sep = '\t', index = False, header = True, na_rep = 'NA')
+df_cov_vali.to_csv("cov_vali" + suffix,     sep = '\t', index = False, header = True, na_rep = 'NA')
+df_meth_train.to_csv("meth_train" + suffix, sep = '\t', index = False, header = True, na_rep = 'NA')
+df_meth_vali.to_csv("meth_vali" + suffix,   sep = '\t', index = False, header = True, na_rep = 'NA')

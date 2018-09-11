@@ -1,7 +1,7 @@
 #!/home/jrca253/anaconda2/bin/python
 
-fTrain = open('TMP_train.txt', 'r')
-fValid = open('TMP_vali.txt',  'r')
+fTrain = open('tmp1.txt', 'r')
+fValid = open('tmp2.txt', 'r')
 
 train_cpgs = fTrain.readlines()
 valid_cpgs = fValid.readlines()

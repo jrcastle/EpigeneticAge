@@ -1,4 +1,5 @@
 setwd("/home/jrca253/EpigeneticAge")
+#setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(glmnet)
 library(ggplot2)
 
@@ -59,7 +60,7 @@ load("lambda.glmnet.Training.RData")
 ##########################################################################
 # DNA METHYLATION AGE PREDICTION
 ##########################################################################
-result <- predict(glmnet.Training, meth.training.data, type="response", s=lambda.glmnet.Training)
+result <- predict(glmnet.Training, meth.validate.data, type="response", s=lambda.glmnet.Training)
 result <- sapply(result,transform.age.inverse)
 
 
@@ -67,7 +68,7 @@ result <- sapply(result,transform.age.inverse)
 # VALIDATE 
 ##########################################################################
 residual = age - result
-
+median(residual)
 p <- ggplot(data.frame(res = residual, weight = 1), aes(x=res)) +
   geom_histogram(binwidth = 5, color="black", fill="white") +
   labs(x = "Sample Age - Meth Age") + 
@@ -81,12 +82,9 @@ png("residual_hist.png")
 p
 dev.off()
 
-hist(residual, main = "Prediction Residuals", xlab = "Age - MethAge")
-dev.off()
-
 png("MethAgevsSampleAge.png")
-plot(age, res, main="Methlyation Age vs Sample Age", xlab="Sample Age ", ylab="Methylation Age ", pch=19) 
-abline(lm(res~age), col="red") # regression line (y~x) 
-rsq <- summary(lm(res~age))$r.squared
+plot(age, result, main="Methlyation Age vs Sample Age", xlab="Sample Age ", ylab="Methylation Age ", pch=19) 
+abline(lm(result~age), col="red") # regression line (y~x) 
+rsq <- summary(lm(result~age))$r.squared
 text(23,70, paste("r^2 = ", round(rsq, digits = 4), sep = ""))
-
+dev.off()

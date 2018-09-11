@@ -85,15 +85,16 @@ Age_FB    <- ifelse(cov_norm$Age.at.First.Birth < 25, 1,
 ########################################################################################
 # MAKE COV FILE
 ########################################################################################
-dfCov <- data.frame(Age, Batch)
-
-X           <- model.matrix(~Age + Race + Batch, dfCov)
+options(na.action='na.pass')
+dfCov <- data.frame(Age, Race, Batch, BMI, Smoking, Drinking, Menarche, Menopause)
+X           <- model.matrix(~Age + Race + Batch + BMI + Smoking + Drinking + Menarche + Menopause, dfCov)
 X           <- t(X)
 colnames(X) <- dataframe_name
 X           <- X[-1,]
 
 write.table(X, file = COVFILE, quote = F, col.names = NA, row.names = T, sep = '\t')
 
+quit()
 
 ########################################################################################
 # MAKE METH FILE, MERGE SAMPLES
