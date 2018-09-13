@@ -2,8 +2,8 @@ setwd("/home/jrca253/EpigeneticAge")
 library(glmnet)
 library(ggplot2)
 
-cov.train  = "data/cov_train_noNA_addCov.txt"
-meth.train = "data/meth_train_noNA_addCov.txt"
+cov.train  = "data/cov_train_noNA_split4.txt"
+meth.train = "data/meth_train_noNA_split4.txt"
 
 alpha = 0.5
 adult.age = 20
@@ -70,7 +70,7 @@ save(lambda.glmnet.Training, file = "lambda.glmnet.Training.RData")
 residual = age - result
 
 p <- ggplot(data.frame(res = residual), aes(x=res)) +
-  geom_histogram(binwidth = 5, color="black", fill="white") +
+  geom_histogram(binwidth = 1, color="black", fill="white") +
   labs(x = "Sample Age - Meth Age") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals") + 
