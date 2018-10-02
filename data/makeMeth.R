@@ -1,7 +1,7 @@
 setwd('/home/jrca253/EpigeneticAge/data')
 
 DATADIR  <- '/home/jrca253/DATA/Truseq/'
-METHFILE <- 'meth_noNA.txt'
+METHFILE <- 'meth_lt10_missing.txt'
 COVFILE  <- 'cov.txt'
 
 ########################################################################################
@@ -94,7 +94,7 @@ X           <- X[-1,]
 
 write.table(X, file = COVFILE, quote = F, col.names = NA, row.names = T, sep = '\t')
 
-quit()
+
 
 ########################################################################################
 # MAKE METH FILE, MERGE SAMPLES
@@ -107,9 +107,11 @@ BATCH    <- Batch[i]
 RACE     <- Race[i]
 DIR      <- paste(DATADIR, BATCH, "/", sep = '')
 SAMPLEID <- ID[i]
+NAME     <- paste(Batch[i], ID[i], sep = '_')
 
 if(BATCH == 'HS_032'|| BATCH == 'HS_049' ){
   SAMPLEID <- Sampleid[i]
+  NAME <- Sampleid[i]
 }
 
 FILENAME <- paste(DIR, SAMPLEID, '_inTruseq.csv', sep = '')
@@ -118,8 +120,8 @@ B_seq_all           <- read.csv(FILENAME, header = T)
 B_seq_all           <- B_seq_all[ which(B_seq_all$N >= 10),]
 B_seq_all$position  <- paste(B_seq_all$chr, B_seq_all$pos, sep = ':')
 B_seq_all$SAMPLEID  <- B_seq_all$X / B_seq_all$N
-colnames(B_seq_all) <- c('chr','pos','N','X','position', SAMPLEID)
-B_seq_all           <- B_seq_all[ c('position', SAMPLEID) ]
+colnames(B_seq_all) <- c('chr','pos','N','X','position', NAME)
+B_seq_all           <- B_seq_all[ c('position', NAME) ]
 
 ##### PROCESS AND MERGE REMAINING SAMPLES #####
 for( i in 2:length(ID) ){
@@ -128,9 +130,11 @@ for( i in 2:length(ID) ){
   BATCH    <- Batch[i]
   DIR      <- paste(DATADIR, BATCH, "/", sep = '')
   SAMPLEID <- ID[i]
+  NAME     <- paste(Batch[i], ID[i], sep = '_')
 
   if(BATCH == 'HS_032'|| BATCH == 'HS_049' ){
     SAMPLEID <- Sampleid[i]
+    NAME <- Sampleid[i]
   }
   
   FILENAME <- paste(DIR, SAMPLEID, '_inTruseq.csv', sep = '')
@@ -139,8 +143,8 @@ for( i in 2:length(ID) ){
   tmp           <- tmp[ which(tmp$N >= 10),]
   tmp$position  <- paste(tmp$chr, tmp$pos, sep = ':')
   tmp$SAMPLEID  <- tmp$X / tmp$N
-  colnames(tmp) <- c('chr','pos','N','X','position', SAMPLEID)
-  tmp           <- tmp[ c('position', SAMPLEID) ]
+  colnames(tmp) <- c('chr','pos','N','X','position', NAME)
+  tmp           <- tmp[ c('position', NAME) ]
   
   B_seq_all <- Reduce(
     function(x, y) merge(x, y, by = c('position'), all=T),
@@ -150,8 +154,9 @@ for( i in 2:length(ID) ){
         
 }
 
-##### REMOVE ALL ROWS WITH NAs #####
-B_seq_all <- B_seq_all[complete.cases(B_seq_all), ]
+##### NA CUTS #####
+B_seq_all <- B_seq_all[rowSums(is.na(B_seq_all)) < 10,]
+#B_seq_all <- B_seq_all[complete.cases(B_seq_all), ]
 
 write.table(B_seq_all, file = METHFILE, quote = F, append = FALSE, sep = "\t", row.names=FALSE)
 rm(B_seq_all)

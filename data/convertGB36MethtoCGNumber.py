@@ -17,7 +17,7 @@ del df_GB36_to_CGNumber
 
 print "Loading meth_hg18.txt ..."
 df = pd.read_table(
-    'meth_hg18.txt',
+    'meth.txt',
     header = 0,
     sep = '\t'
 )
@@ -26,10 +26,12 @@ df = pd.read_table(
 print "Converting from CHR:POS to CG Number ..."
 df['position'] = df['position'].map(GB36_to_CGNumber_dict)
 df = df[ df['position'].notnull() ]
+df['position'] = pd.DataFrame( df['position'].values.tolist(), index = df['position'].index)
+df = df[ df['position'].notnull() ]
 
 
 df.to_csv(
-    'meth_GCNumber.txt',
+    'meth_CGNumber.txt',
     header = True,
     index = False,
     sep = '\t'

@@ -5,13 +5,16 @@ df = pd.read_table(
     'HumanMethylation450_15017482_v1-2.csv',
     header = 7,
     sep = ',',
-    usecols = ['IlmnID', 'Chromosome_36', 'Coordinate_36'],
+    usecols = ['IlmnID', 'CHR', 'MAPINFO'],
     dtype = object
 )
 
 
-df['CHR:POS'] = 'chr' + df['Chromosome_36'].map(str) + ':' + df['Coordinate_36'].map(str)
+df['CHR:POS'] = 'chr' + df['CHR'].map(str) + ':' + df['MAPINFO'].map(str)
 df = df[ ['CHR:POS', 'IlmnID'] ]
+
+df.drop( df.loc[ df['CHR:POS'] == "chrMULTI:MULTI" ].index, inplace = True )
+df.drop( df.loc[ df['CHR:POS'] == "chrnan:nan" ].index, inplace = True )
 
 
 df.to_csv(
