@@ -1,13 +1,14 @@
 #!/home/jrca253/anaconda2/bin/python
 import pandas as pd
 import random
+random.seed(123) 
 
 train_fraction = 0.8
 vali_fraction  = 1.0 - train_fraction
 
 cov_filename  = "cov.txt"
-meth_filename = "meth_noNA.txt"
-suffix        = "_noNA_split0.txt"
+meth_filename = "meth_imputed.txt"
+suffix        = "_imputed.txt"
 
 
 ##### LOAD DATA #####
@@ -25,16 +26,13 @@ df_meth = pd.read_table(
     header = 0,
     sep = '\t'
 )
-meth_columns = []
-meth_columns.append( df_meth.columns.values.tolist()[0] )
+meth_columns = df_meth.columns.values.tolist()
 
-
-##### RENAME METH COLUMNS TO MATCH COV COLUMNS
-for i in range(1, len(cov_columns)):
-    meth_columns.append( cov_columns[i] )
-#ENDFOR
-
-df_meth.columns = meth_columns
+if meth_columns[1:] != cov_columns[1:]:
+    print "Samples in %s and %s do not match!" % (cov_filename, meth_filename)
+    print "Please resolve this discrepancy before running this code"
+    exit()
+#ENDIF
 
 
 ##### SPLIT COLUMNS RANDOMLY #####
