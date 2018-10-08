@@ -7,8 +7,8 @@ train_fraction = 0.8
 vali_fraction  = 1.0 - train_fraction
 
 cov_filename  = "cov.txt"
-meth_filename = "meth_imputed.txt"
-suffix        = "_imputed.txt"
+meth_filename = "meth_noNA.txt"
+suffix        = "_noNA.txt"
 
 
 ##### LOAD DATA #####

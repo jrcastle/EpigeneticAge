@@ -1,8 +1,13 @@
 setwd('/home/jrca253/EpigeneticAge/data')
 
-DATADIR  <- '/home/jrca253/DATA/Truseq/'
-METHFILE <- 'meth_lt10_missing.txt'
-COVFILE  <- 'cov.txt'
+# K => Normal
+# N => Adjacent Normal
+# T => Tumor
+tissue.type <- "N"
+DATADIR     <- '/home/jrca253/DATA/Truseq/'
+METHFILE    <- 'meth_N_lt10_missing.txt'
+COVFILE     <- 'cov_N.txt'
+
 
 ########################################################################################
 # LOAD MASTER FILE
@@ -37,48 +42,48 @@ cov$Batch <- ifelse(cov$ID <= 48, 'HS_032',
                    )
 
 
-ID <- as.vector(cov$ID)
-cov$Race <- as.character(cov$Race)
-cov$Race <- ifelse(cov$Race == 'AfricanAmerican', 'African American', cov$Race)
-cov$dataframe_name <- paste(cov$Batch,cov$ID, sep = '_')
+ID                <- as.vector(cov$ID)
+cov$Race          <- as.character(cov$Race)
+cov$Race          <- ifelse(cov$Race == 'AfricanAmerican', 'African American', cov$Race)
+cov$dataframe.name <- paste(cov$Batch,cov$ID, sep = '_')
 
 
 ########################################################################################
-# SELECT ONLY NORMAL SAMPLES
+# SELECT SAMPLES
 ########################################################################################
-cov_norm <- cov[which(substr(cov$Sample.id,1,1)=='K'),]
-cov_norm[cov_norm==''] <- NA
+cov.selected <- cov[which(substr(cov$Sample.id,1,1)==tissue.type),]
+cov.selected[cov.selected==''] <- NA
 
 
 ########################################################################################
 # OMIT MISSING SAMPLES
 ########################################################################################
-cov_norm <- cov_norm[which(cov_norm$ID<65 |cov_norm$ID>72),]
-ID <- as.vector(cov_norm$ID)
+cov.selected <- cov.selected[which(cov.selected$ID<65 |cov.selected$ID>72),]
+ID <- as.vector(cov.selected$ID)
 
-dataframe_name = as.character(cov_norm[which(cov_norm$ID<=96),]$Sample.id)
-dataframe_name = do.call(c, list(dataframe_name, as.character(cov_norm[which(cov_norm$ID>96),]$dataframe_name)))
+dataframe.name = as.character(cov.selected[which(cov.selected$ID<=96),]$Sample.id)
+dataframe.name = do.call(c, list(dataframe.name, as.character(cov.selected[which(cov.selected$ID>96),]$dataframe.name)))
 
 
 ########################################################################################
 # COVARIATES
 ########################################################################################
-Age       <- as.numeric(as.character(cov_norm$Age))
-Race      <- as.character(cov_norm$Race)
-Batch     <- as.character(cov_norm$Batch)
-Sampleid  <- as.character(cov_norm$Sample.id)
+Age       <- as.numeric(as.character(cov.selected$Age))
+Race      <- as.character(cov.selected$Race)
+Batch     <- as.character(cov.selected$Batch)
+Sampleid  <- as.character(cov.selected$Sample.id)
                          
-BMI       <- as.numeric(as.character(cov_norm$BMI))
-Smoking   <- as.character(cov_norm$Current.Smoker)
-Drinking  <- as.character(cov_norm$Currently.Drink)
-Menarche  <- as.numeric(as.character(cov_norm$Menarche))
-Menopause <- as.character(cov_norm$Menstrual.Status)
-Parity    <- as.numeric(as.character(cov_norm$Number.of.Live.Births))
-VD        <- as.character(cov_norm$Vitaminuse)
-Age_FB    <- ifelse(cov_norm$Age.at.First.Birth < 25, 1,
-                    ifelse(cov_norm$Age.at.First.Birth < 30, 2,
-                           ifelse(cov_norm$Age.at.First.Birth < 35, 3,4)
-			  )
+BMI       <- as.numeric(as.character(cov.selected$BMI))
+Smoking   <- as.character(cov.selected$Current.Smoker)
+Drinking  <- as.character(cov.selected$Currently.Drink)
+Menarche  <- as.numeric(as.character(cov.selected$Menarche))
+Menopause <- as.character(cov.selected$Menstrual.Status)
+Parity    <- as.numeric(as.character(cov.selected$Number.of.Live.Births))
+VD        <- as.character(cov.selected$Vitaminuse)
+Age.FB    <- ifelse(cov.selected$Age.at.First.Birth < 25, 1,
+                    ifelse(cov.selected$Age.at.First.Birth < 30, 2,
+                           ifelse(cov.selected$Age.at.First.Birth < 35, 3,4)
+			                    )
 	           )
 
 
@@ -86,10 +91,10 @@ Age_FB    <- ifelse(cov_norm$Age.at.First.Birth < 25, 1,
 # MAKE COV FILE
 ########################################################################################
 options(na.action='na.pass')
-dfCov <- data.frame(Age, Race, Batch, BMI, Smoking, Drinking, Menarche, Menopause)
-X           <- model.matrix(~Age + Race + Batch + BMI + Smoking + Drinking + Menarche + Menopause, dfCov)
+df.selected <- data.frame(Age, Race, Batch)
+X           <- model.matrix(~Age + Race + Batch, df.selected)
 X           <- t(X)
-colnames(X) <- dataframe_name
+colnames(X) <- dataframe.name
 X           <- X[-1,]
 
 write.table(X, file = COVFILE, quote = F, col.names = NA, row.names = T, sep = '\t')
@@ -108,19 +113,20 @@ DIR      <- paste(DATADIR, BATCH, "/", sep = '')
 SAMPLEID <- ID[i]
 NAME     <- paste(Batch[i], ID[i], sep = '_')
 
-if(BATCH == 'HS_032'|| BATCH == 'HS_049' ){
+if( BATCH == 'HS_032'|| BATCH == 'HS_049' ){
   SAMPLEID <- Sampleid[i]
   NAME <- Sampleid[i]
 }
 
 FILENAME <- paste(DIR, SAMPLEID, '_inTruseq.csv', sep = '')
 
-B_seq_all           <- read.csv(FILENAME, header = T)
-B_seq_all           <- B_seq_all[ which(B_seq_all$N >= 10),]
-B_seq_all$position  <- paste(B_seq_all$chr, B_seq_all$pos, sep = ':')
-B_seq_all$SAMPLEID  <- B_seq_all$X / B_seq_all$N
-colnames(B_seq_all) <- c('chr','pos','N','X','position', NAME)
-B_seq_all           <- B_seq_all[ c('position', NAME) ]
+B.seq.all           <- read.csv(FILENAME, header = T)
+B.seq.all           <- B.seq.all[ which(B.seq.all$N >= 10),]
+B.seq.all$position  <- paste(B.seq.all$chr, B.seq.all$pos, sep = ':')
+B.seq.all$SAMPLEID  <- B.seq.all$X / B.seq.all$N
+colnames(B.seq.all) <- c('chr','pos','N','X','position', NAME)
+B.seq.all           <- B.seq.all[ c('position', NAME) ]
+
 
 ##### PROCESS AND MERGE REMAINING SAMPLES #####
 for( i in 2:length(ID) ){
@@ -145,17 +151,17 @@ for( i in 2:length(ID) ){
   colnames(tmp) <- c('chr','pos','N','X','position', NAME)
   tmp           <- tmp[ c('position', NAME) ]
   
-  B_seq_all <- Reduce(
+  B.seq.all <- Reduce(
     function(x, y) merge(x, y, by = c('position'), all=T),
-    list(B_seq_all, tmp)
+    list(B.seq.all, tmp)
   )
   rm(tmp)
         
 }
 
 ##### NA CUTS #####
-B_seq_all <- B_seq_all[rowSums(is.na(B_seq_all)) < 10,]
-#B_seq_all <- B_seq_all[complete.cases(B_seq_all), ]
+B.seq.all <- B.seq.all[rowSums(is.na(B.seq.all)) < 10,]
+#B.seq.all <- B.seq.all[complete.cases(B.seq.all), ]
 
-write.table(B_seq_all, file = METHFILE, quote = F, append = FALSE, sep = "\t", row.names=FALSE)
-rm(B_seq_all)
+write.table(B.seq.all, file = METHFILE, quote = F, append = FALSE, sep = "\t", row.names=FALSE)
+rm(B.seq.all)

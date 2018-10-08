@@ -1,11 +1,5 @@
 #!/bin/sh
 # sbatch --job-name=MakeMeth --partition=FatComp --mail-type ALL --mail-user jrca253@uky.edu ./MAKEMETH.sh
-SBATCH --job-name=MakeMeth
-SBATCH --partition=FatComp
-
-SBATCH --mail-type ALL
-SBATCH --mail-user jrca253@uky.edu
-
 . /etc/profile.d/modules.sh
 echo "Job running on SLURM NODELIST: $SLURM_NODELIST "
 
