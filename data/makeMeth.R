@@ -9,7 +9,7 @@ missingness.fraction = 0.01
 # K => Normal
 # N => Adjacent Normal
 # T => Tumor
-tissue.type <- "K"
+tissue.type <- "N"
 DATADIR     <- '/home/jrca253/DATA/Truseq/'
 METHFILE    <- paste('meth_', tissue.type, '.txt', sep = '')
 COVFILE     <- paste('cov_',  tissue.type, '.txt', sep = '')
@@ -166,10 +166,9 @@ for( i in 2:length(ID) ){
 }
 
 ##### NA CUTS #####
-na.cut <- as.integer(missingness.fraction * length(ID) )
-if( na.cut > 10 ){
-    na.cut = 10
-}
+na.cut <- as.integer( missingness.fraction * length(ID) )
+if( na.cut > 10 ) na.cut = 10;
+if( na.cut == 0 ) na.cut = 1;
 
 B.seq.all <- B.seq.all[rowSums(is.na(B.seq.all)) <= na.cut,]
 
