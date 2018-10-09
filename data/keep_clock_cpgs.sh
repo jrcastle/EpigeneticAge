@@ -1,20 +1,22 @@
 #!/bin/sh
-OUT="meth_CGNumber_ClockCpGs.txt"
+cpg_file="tmp.txt"
+meth_file="meth_N_lt10_missing.txt"
+out_file="tmp2.txt"
 
 # IF OUTFILE EXISTS, REMOVE
-if [ -f $OUT ]
+if [ -f $out_file ]
 then
-    rm $OUT
+    rm $out_file
 fi
 
 # HEADER
-head -1 meth_CGNumber.txt > $OUT
+head -1 $meth_file > $out_file
 
 # CpGs
 i=1
-for cpg in `cat ClockCpGs.txt`; do
+for cpg in `cat $cpg_file`; do
     echo "Finding CpG $i ..."
-    grep $cpg meth_CGNumber.txt >> $OUT
+    grep $cpg $meth_file >> $out_file
     let "i++"
 done
 

@@ -1,8 +1,8 @@
 library("impute")
 setwd("/home/jrca253/EpigeneticAge/data")
 
-meth.file.in  = "meth_lt10_missing.txt"
-meth.file.out = "meth_imputed.txt"
+meth.file.in  = "meth_N_lt10_missing.txt"
+meth.file.out = "meth_N_imputed.txt"
 
 
 ###########################################################################################

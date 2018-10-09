@@ -6,9 +6,9 @@ random.seed(123)
 train_fraction = 0.8
 vali_fraction  = 1.0 - train_fraction
 
-cov_filename  = "cov.txt"
-meth_filename = "meth_noNA.txt"
-suffix        = "_noNA.txt"
+cov_filename  = "cov_K.txt"
+meth_filename = "meth_K_imputed.txt"
+suffix        = "_imputed.txt"
 
 
 ##### LOAD DATA #####
@@ -79,10 +79,10 @@ df_meth_vali  = df_meth[ meth_vali_samples ]
 
 ##### WRITE FILES #####
 print "Writing cov_train" + suffix + " ..."
-df_cov_train.to_csv("cov_train" + suffix,   sep = '\t', index = False, header = True, na_rep = 'NA')
+df_cov_train.to_csv("cov_K_train" + suffix,   sep = '\t', index = False, header = True, na_rep = 'NA')
 print "Writing cov_vali" + suffix + " ..."
-df_cov_vali.to_csv("cov_vali" + suffix,     sep = '\t', index = False, header = True, na_rep = 'NA')
+df_cov_vali.to_csv("cov_K_vali" + suffix,     sep = '\t', index = False, header = True, na_rep = 'NA')
 print "Writing meth_train" + suffix + " ..."
-df_meth_train.to_csv("meth_train" + suffix, sep = '\t', index = False, header = True, na_rep = 'NA')
+df_meth_train.to_csv("meth_K_train" + suffix, sep = '\t', index = False, header = True, na_rep = 'NA')
 print "Writing meth_vali" + suffix + " ..."
-df_meth_vali.to_csv("meth_vali" + suffix,   sep = '\t', index = False, header = True, na_rep = 'NA')
+df_meth_vali.to_csv("meth_K_vali" + suffix,   sep = '\t', index = False, header = True, na_rep = 'NA')
