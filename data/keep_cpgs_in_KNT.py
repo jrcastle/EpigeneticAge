@@ -25,7 +25,7 @@ df_N = pd.read_table(
     header = 0
 )
 
-print "Loading " + meth_file_T + " ..."
+print "Loading " + meth_file_T + " ...\n\n"
 df_T = pd.read_table(
     meth_file_T,
     sep = '\t',
@@ -38,22 +38,23 @@ print "Reducing " + meth_file_K + " ..."
 df_Kfinal = df_K.loc[ df_K['position'].isin(df_N['position']) & df_K['position'].isin(df_T['position']) ]
 print "Reducing " + meth_file_N + " ..."
 df_Nfinal = df_N.loc[ df_N['position'].isin(df_K['position']) & df_N['position'].isin(df_T['position']) ]
-print "Reducing " + meth_file_T + " ..."
+print "nReducing " + meth_file_T + " ..."
 df_Tfinal = df_T.loc[ df_T['position'].isin(df_K['position']) & df_T['position'].isin(df_N['position']) ]
 
-print"K:"
+print"\n\nK:"
 print df_Kfinal.head()
-print"N:"
+print"\nN:"
 print df_Nfinal.head()
-print"T:"
+print"\nT:"
 print df_Tfinal.head()
 
-print "K CpGs: " + str(df_Kfinal.shape[0])
+print "\n\nK CpGs: " + str(df_Kfinal.shape[0])
 print "N CpGs: " + str(df_Nfinal.shape[0])
 print "T CpGs: " + str(df_Tfinal.shape[0])
 
 
 ##### SAVE #### 
+print "\n\nSaving " + out_file_K + " ..."
 df_Kfinal.to_csv(
     out_file_K,
     sep = '\t',
@@ -61,6 +62,7 @@ df_Kfinal.to_csv(
     index = False
 )
 
+print "Saving "+ out_file_N + " ..."
 df_Nfinal.to_csv(
     out_file_N,
     sep= '\t',
@@ -68,6 +70,7 @@ df_Nfinal.to_csv(
     index = False
 )
 
+print "Saving "+ out_file_T + " ..."
 df_Tfinal.to_csv(
     out_file_T,
     sep= '\t',
