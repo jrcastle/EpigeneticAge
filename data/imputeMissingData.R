@@ -1,8 +1,8 @@
 library("impute")
 setwd("/home/jrca253/EpigeneticAge/data")
 
-meth.file.in  = "meth_N_lt10_missing.txt"
-meth.file.out = "meth_N_imputed.txt"
+meth.file.in  = "meth_T_cpgs_in_KNT.txt"
+meth.file.out = "meth_T_cpgs_in_KNT_imputed.txt"
 
 
 ###########################################################################################
@@ -26,6 +26,6 @@ meth.df.out <- meth.df.out[ colnames(meth.df.in) ]
 ###########################################################################################
 # SAVE
 ###########################################################################################
-print(paste("Saving ", meth.file.in, " ...", sep = ""))
+print(paste("Saving ", meth.file.out, " ...", sep = ""))
 write.table(meth.df.out, meth.file.out, sep = "\t", row.names=FALSE)
 

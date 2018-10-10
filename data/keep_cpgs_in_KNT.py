@@ -59,7 +59,8 @@ df_Kfinal.to_csv(
     out_file_K,
     sep = '\t',
     header = True,
-    index = False
+    index = False,
+    na_rep = 'NA'
 )
 
 print "Saving "+ out_file_N + " ..."
@@ -67,7 +68,8 @@ df_Nfinal.to_csv(
     out_file_N,
     sep= '\t',
     header = True,
-    index = False
+    index = False,
+    na_rep = 'NA'
 )
 
 print "Saving "+ out_file_T + " ..."
@@ -75,5 +77,6 @@ df_Tfinal.to_csv(
     out_file_T,
     sep= '\t',
     header = True,
-    index = False
+    index = False,
+    na_rep = 'NA'
 )

@@ -32,8 +32,8 @@ The following variables should be inspected for accuracy before running this cod
 This code reads in the methylation data set and splits it into two separate data sets for training and testing the model, respectively. The following variables should be inspected for accuracy before running this code:
 * random.seed()
 * train_fraction -> The fraction of samples that will go into the training data set
-* cov_filename  = The name of the covariate file for normal tissue samples
-* meth_filename = The name of the input methylation dataset for normal tissue samples
+* cov_filename  -> The name of the covariate file for normal tissue samples
+* meth_filename -> The name of the input methylation dataset for normal tissue samples
 
 ### 5. trainModel.R
 This code reads in the training data set and utilizes the glmnet elastic net linear regression [5-7] algorithm to train the model and select clock CpGs. The code saves .RData files that contain the lambda selected from 10-fold cross validation and the final model.

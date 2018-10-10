@@ -7,7 +7,5 @@ echo "Job running on SLURM NODELIST: $SLURM_NODELIST "
 # Modules needed for this R job
 module load R/3.4.1
 
-echo `ulimit -s`
-
 #R Program execution command
-#Rscript imputeMissingData.R
+Rscript imputeMissingData.R

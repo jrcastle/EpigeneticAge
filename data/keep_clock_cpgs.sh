@@ -1,7 +1,7 @@
 #!/bin/sh
-cpg_file="tmp.txt"
-meth_file="meth_N_lt10_missing.txt"
-out_file="tmp2.txt"
+cpg_file="ClockCpGs.txt"
+meth_file="meth_K_cpgs_in_KNT_imputed_vali.txt"
+out_file="meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs.txt"
 
 # IF OUTFILE EXISTS, REMOVE
 if [ -f $out_file ]
@@ -16,7 +16,7 @@ head -1 $meth_file > $out_file
 i=1
 for cpg in `cat $cpg_file`; do
     echo "Finding CpG $i ..."
-    grep $cpg $meth_file >> $out_file
+    grep -w $cpg $meth_file >> $out_file
     let "i++"
 done
 

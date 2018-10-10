@@ -9,7 +9,7 @@ missingness.fraction = 0.01
 # K => Normal
 # N => Adjacent Normal
 # T => Tumor
-tissue.type <- "N"
+tissue.type <- "T"
 DATADIR     <- '/home/jrca253/DATA/Truseq/'
 METHFILE    <- paste('meth_', tissue.type, '.txt', sep = '')
 COVFILE     <- paste('cov_',  tissue.type, '.txt', sep = '')
@@ -74,18 +74,20 @@ dataframe.name = do.call(c, list(dataframe.name, as.character(cov.selected[which
 ########################################################################################
 # COVARIATES
 ########################################################################################
-Age       <- as.numeric(as.character(cov.selected$Age))
-Race      <- as.character(cov.selected$Race)
-Batch     <- as.character(cov.selected$Batch)
-Sampleid  <- as.character(cov.selected$Sample.id)
+Age            <- as.numeric(as.character(cov.selected$Age))
+Race           <- as.character(cov.selected$Race)
+Batch          <- as.character(cov.selected$Batch)
+Sampleid       <- as.character(cov.selected$Sample.id)
                          
-BMI       <- as.numeric(as.character(cov.selected$BMI))
-Smoking   <- as.character(cov.selected$Current.Smoker)
-Drinking  <- as.character(cov.selected$Currently.Drink)
-Menarche  <- as.numeric(as.character(cov.selected$Menarche))
-Menopause <- as.character(cov.selected$Menstrual.Status)
-Parity    <- as.numeric(as.character(cov.selected$Number.of.Live.Births))
-VD        <- as.character(cov.selected$Vitaminuse)
+BMI            <- as.numeric(as.character(cov.selected$BMI))
+Smoking        <- as.character(cov.selected$Current.Smoker)
+Drinking       <- as.character(cov.selected$Currently.Drink)
+Menarche       <- as.numeric(as.character(cov.selected$Menarche))
+Menopause      <- as.character(cov.selected$Menstrual.Status)
+Parity         <- as.numeric(as.character(cov.selected$Number.of.Live.Births))
+VD             <- as.character(cov.selected$Vitaminuse)
+Cancer.subtype <- as.character(cov.selected$Cancer.subtypes)
+
 Age.FB    <- ifelse(cov.selected$Age.at.First.Birth < 25, 1,
                     ifelse(cov.selected$Age.at.First.Birth < 30, 2,
                            ifelse(cov.selected$Age.at.First.Birth < 35, 3,4)
@@ -99,6 +101,10 @@ Age.FB    <- ifelse(cov.selected$Age.at.First.Birth < 25, 1,
 options(na.action='na.pass')
 df.selected <- data.frame(Age, Race, Batch)
 X           <- model.matrix(~Age + Race + Batch, df.selected)
+if(tissue.type == "T"){
+  df.selected <- data.frame(Age, Race, Batch, Cancer.subtype)
+  X           <- model.matrix(~Age + Race + Batch + Cancer.subtype, df.selected)
+}
 X           <- t(X)
 colnames(X) <- dataframe.name
 X           <- X[-1,]
