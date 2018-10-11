@@ -138,7 +138,7 @@ result.T <- sapply(result.T, anti.trafo)
 # K PLOTS 
 ##########################################################################
 residual.K <- result.K - sample.ages.K 
-median.error.K <- median(residual.K)
+mean.error.K <- mean(residual.K)
 stdev.error.K <- sd(residual.K)
 
 p <- ggplot(data.frame(res = residual.K), aes(x=res)) +
@@ -150,8 +150,8 @@ p <- ggplot(data.frame(res = residual.K), aes(x=res)) +
   labs(x = "Meth Age - Sample Age") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals in Normal Tissue") + 
-  annotate("text", x = -16, y = 25, label = paste("Median Residual = ", round(median.error.K, digits = 2), sep = "")) + 
-  annotate("text", x = -16, y = 24, label = paste("St. Dev Residual = ", round(stdev.error.K, digits = 2), sep = "")) +
+  annotate("text", x = -16, y = 32, label = paste("Median Residual = ", round(mean.error.K, digits = 1), sep = "")) + 
+  annotate("text", x = -16, y = 30.5, label = paste("St. Dev Residual = ", round(stdev.error.K, digits = 1), sep = "")) +
   geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dotted") + 
   theme_bw() + 
   theme(
@@ -190,20 +190,20 @@ dev.off()
 # N PLOTS 
 ##########################################################################
 residual.N <- result.N - sample.ages.N
-median.error.N <- median(residual.N)
+mean.error.N <- mean(residual.N)
 stdev.error.N <- sd(residual.N)
 
 p <- ggplot(data.frame(res = residual.N), aes(x=res)) +
   geom_histogram(binwidth = 5, color="black", fill="white") +
   scale_y_continuous(
     expand=c(0, 0),
-    limits = c(0, 33)
+    limits = c(0, 15)
   ) + 
   labs(x = "Meth Age - Sample Age") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals in Adjacent Normal Tissue") + 
-  annotate("text", x = -16, y = 25, label = paste("Median Residual = ", round(median.error.N, digits = 2), sep = "")) + 
-  annotate("text", x = -16, y = 24, label = paste("St. Dev Residual = ", round(stdev.error.N, digits = 2), sep = "")) +
+  annotate("text", x = -21, y = 14, label = paste("Median Residual = ", round(mean.error.N, digits = 1), sep = "")) + 
+  annotate("text", x = -21, y = 13, label = paste("St. Dev Residual = ", round(stdev.error.N, digits = 1), sep = "")) +
   geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dotted") + 
   theme_bw() + 
   theme(
@@ -242,11 +242,11 @@ dev.off()
 # T PLOTS 
 ##########################################################################
 residual.T <- result.T - sample.ages.T
-median.error.T <- median(residual.T)
+mean.error.T <- mean(residual.T)
 stdev.error.T <- sd(residual.T)
 
 p <- ggplot(data.frame(res = residual.T), aes(x=res)) +
-  geom_histogram(binwidth = 5, color="black", fill="white") +
+  geom_histogram(binwidth = 10, color="black", fill="white") +
   scale_y_continuous(
     expand=c(0, 0),
     limits = c(0, 33)
@@ -254,8 +254,8 @@ p <- ggplot(data.frame(res = residual.T), aes(x=res)) +
   labs(x = "Meth Age - Sample Age") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals in Tumor Tissue") + 
-  annotate("text", x = -16, y = 25, label = paste("Median Residual = ", round(median.error.T, digits = 2), sep = "")) + 
-  annotate("text", x = -16, y = 24, label = paste("St. Dev Residual = ", round(stdev.error.T, digits = 2), sep = "")) +
+  annotate("text", x = 100, y = 32, label = paste("Median Residual = ", round(mean.error.T, digits = 1), sep = "")) + 
+  annotate("text", x = 100, y = 30.5, label = paste("St. Dev Residual = ", round(stdev.error.T, digits = 1), sep = "")) +
   geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dotted") + 
   theme_bw() + 
   theme(
@@ -311,9 +311,9 @@ gc()
 p <- ggplot(df.KT, aes(x = res)) +
   #geom_histogram(binwidth = 5, alpha = .5) +
   #scale_fill_manual(name = "ttype", values = c("red","blue"), labels=c("K", "T")) + 
-  geom_histogram(data=subset(df.KT, ttype == 'K'), aes(fill = "K"), binwidth = 5, alpha = 1.) +
-  geom_histogram(data=subset(df.KT, ttype == 'T'), aes(fill = "T"), binwidth = 5, alpha = 0.5) +
-  scale_fill_manual(name = "Tissue Type", values = c("red","blue"), labels=c("K", "T")) +
+  geom_histogram(data=subset(df.KT, ttype == 'K'), aes(fill = "K"), binwidth = 5, alpha = 1) +
+  geom_histogram(data=subset(df.KT, ttype == 'T'), aes(fill = "T"), binwidth = 5, alpha = 0.8) +
+  scale_fill_manual(name = "Tissue Type", values = c("darkorange3", "deepskyblue4"), labels=c("K", "T")) +
   scale_y_continuous(
     expand=c(0, 0),
     limits = c(0, 33)
@@ -321,10 +321,26 @@ p <- ggplot(df.KT, aes(x = res)) +
   labs(x = "Meth Age - Sample Age") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals in Normal and Tumor Tissue") + 
-  annotate("text", x = 100, y = 25, label = paste("Median Residual (K) = ", round(median.error.K, digits = 2), sep = ""), color = "red") + 
-  annotate("text", x = 100, y = 24, label = paste("St. Dev Residual (K) = ", round(stdev.error.K, digits = 2), sep = ""), color = "red") +
-  annotate("text", x = 100, y = 22, label = paste("Median Residual (T) = ", round(median.error.T, digits = 2), sep = ""), color = "blue") + 
-  annotate("text", x = 100, y = 21, label = paste("St. Dev Residual (T) = ", round(stdev.error.T, digits = 2), sep = ""), color = "blue") +
+  annotate(
+    "text", x = 100, y = 25, 
+    label = paste("Mean Residual (K) = ", round(mean.error.K, digits = 1), sep = ""), 
+    color = "darkorange3"
+  ) + 
+  annotate(
+    "text", x = 100, y = 24, 
+    label = paste("St. Dev Residual (K) = ", round(stdev.error.K, digits = 1), sep = ""), 
+    color = "darkorange3"
+  ) +
+  annotate(
+    "text", x = 100, y = 22, 
+    label = paste("Mean Residual (T) = ", round(mean.error.T, digits = 1), sep = ""), 
+    color = "deepskyblue4"
+  ) + 
+  annotate(
+    "text", x = 100, y = 21, 
+    label = paste("St. Dev Residual (T) = ", round(stdev.error.T, digits = 1), sep = ""), 
+    color = "deepskyblue4"
+  ) +
   geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
   theme_bw() + 
   theme(legend.position=c(0.8, 0.9)) +
@@ -356,7 +372,16 @@ plot(sample.ages.K,
 ) 
 points(sample.ages.T, result.T, col = "red")
 abline(lm(result.K~sample.ages.K), col="blue") # regression line (y~x) 
-legend(20, 190, legend = c("K", "T"), col = c("blue", "red"), lty = c(0,0), pch=c(19,1), bg='white', bty = "n") #, lty=1:2, cex=0.8
+legend(
+  20, 190, 
+  title = "Tissue Type",
+  legend = c("K", "T"), 
+  col = c("blue", "red"), 
+  lty = c(0,0), 
+  pch = c(19,1), 
+  bg='white', 
+  bty = "n"
+)
 dev.off()
 
 #wilcox.test(residual.K, mu=0, conf.int = TRUE)
