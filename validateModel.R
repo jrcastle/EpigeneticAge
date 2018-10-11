@@ -3,9 +3,9 @@ setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(glmnet)
 library(ggplot2)
 
-cov.vali  = "data/cov_vali_noNA_split4.txt"
-meth.vali = "data/meth_vali_noNA_split4.txt"
-model.dir = "betas_only_split4/"
+cov.vali  = "data/cov_K_vali.txt"
+meth.vali = "data/meth_K_cpgs_in_KNT_imputed_vali.txt"
+model.dir = "cpgs_in_KNT_imputed/"
 alpha = 0.5
 adult.age = 20
 
@@ -37,6 +37,8 @@ transform.age.inverse <- function(tage){
 ##########################################################################
 df.cov <- read.table(cov.vali, header = TRUE, row.names = 1, sep = '\t')
 age <- unlist(df.cov[1,], use.names = FALSE)
+mean(age)
+sd(age)
 age.transformed <- sapply(age, transform.age)
 
 
@@ -68,26 +70,52 @@ result <- sapply(result,transform.age.inverse)
 ##########################################################################
 # VALIDATE 
 ##########################################################################
-residual = age - result
-median(residual)
+residual <- age - result
+median.error <- median(residual)
+stdev.error <- sd(residual)
+
 p <- ggplot(data.frame(res = residual), aes(x=res)) +
   geom_histogram(binwidth = 5, color="black", fill="white") +
+  scale_y_continuous(
+    expand=c(0, 0),
+    limits = c(0, 33)
+  ) + 
   labs(x = "Sample Age - Meth Age") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals") + 
+  annotate("text", x = -16, y = 25, label = paste("Median Residual = ", round(median.error, digits = 2), sep = "")) + 
+  annotate("text", x = -16, y = 24, label = paste("St. Dev Residual = ", round(stdev.error, digits = 2), sep = "")) +
+  geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dotted") + 
   theme_bw() + 
-  theme(plot.title = element_text(hjust = 0.5))
-  
+  theme(
+    axis.ticks.length=unit(-0.25, "cm"), 
+    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
+    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
+    plot.title = element_text(hjust = 0.5)
+  )
+
 
 png( paste(model.dir, "residual_hist.png", sep = '') )
 p
 dev.off()
 
 png( paste(model.dir, "MethAgevsSampleAge.png", sep = '') )
-plot(age, result, main="Methlyation Age vs Sample Age", xlab="Sample Age ", ylab="Methylation Age ", pch=19) 
-abline(lm(result~age), col="red") # regression line (y~x) 
+plot(age, 
+     result, 
+     main="Methlyation Age vs Sample Age", 
+     xlab="Sample Age ", 
+     ylab="Methylation Age ", 
+     pch=19,
+     xlim=c(15,87), 
+     xaxs="i",
+     ylim=c(15,87), 
+     yaxs="i",
+     tck = 0.02
+) 
+abline(lm(result~age), col="black") # regression line (y~x) 
+abline(a=0, b=1, col = "red", lty = 2)
 rsq <- summary(lm(result~age))$r.squared
-text(24,70, paste("r^2 = ", round(rsq, digits = 4), sep = ""))
+text(24,80, paste("r^2 = ", round(rsq, digits = 4), sep = ""))
 dev.off()
 
 
@@ -103,6 +131,3 @@ indices <- model.coefficients[,1]
 model.coefficients$name = fit.features[indices]
 model.coefficients <- data.frame(model.coefficients$name, model.coefficients$x)
 write.table(model.coefficients, paste(model.dir, "model_coefficients.csv", sep = ''), sep = ",", row.names=FALSE)
-
-
-
