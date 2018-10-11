@@ -36,10 +36,45 @@ This code reads in the methylation data set and splits it into two separate data
 * meth_filename -> The name of the input methylation dataset for normal tissue samples
 
 ### 5. trainModel.R
-This code reads in the training data set and utilizes the glmnet elastic net linear regression [5-7] algorithm to train the model and select clock CpGs. The code saves .RData files that contain the lambda selected from 10-fold cross validation and the final model.
+This code reads in the training data set and utilizes the glmnet elastic net linear regression [5-7] algorithm to train the model and select clock CpGs. The code saves .RData files that contain the lambda selected from 10-fold cross validation and the final model. The following variables should be inspected for accuracy before running this code:
 * setwd -> This should point to the EpigeneticAge directory
 * cov.train -> Name of the input covariate file
 * meth.train -> Name of the input methylation training data set
+
+### 6. validateModel.R
+This code reads in the output trainModel.R as well as the normal tissue test data and outputs some quick sanity check plots to allow one to quickly assess the quality of the trained model. In addition, the trained model coefficients are stored in a .csv file for convenient access/later use. The following variables should be inspected for accuracy before running this code:
+* cov.vali  -> The name of the covariate file for the normal tissue test data set
+* meth.vali -> The name of the methylation file for the normal tissue test data set 
+* model.dir -> The directory in which the output .RData from the previous step are stored
+
+### 7. data/get_clock_cpgs.sh
+This code reads the output .csv from the previous step and generates a text file with the names of all the Clock CpGs selected by the elastic net algorithm. The following variables should be inspected for accuracy before running this code:
+* model_output -> Point to the output .csv from the previous step
+* out_file -> Desired name of the output text file
+
+### 8. data/keep_clock_cpgs.sh
+This code reads in a text file containing the names of the Clock CpGs as well as a methylation data set and outputs a reduced methylation data set that only contains the Clock CpGs. This will greatly increase the speed and reduce resource consumption of subsequent analyses. The following variables should be inspected for accuracy before running this code:
+* cpg_file -> Point to the text file containing the names of the clock cpgs
+* meth_file -> Point to the target methylation data set to be reduced
+* out_file -> Desired name of the output reduced methylation data set
+
+### 9. DNAmage_KvsNvsT.R
+This code reads in reduced data sets for normal, adjacent normal, and tumor tissue samples (and respective covariate files) and assesses the relationship of DNA methylation age and sample age. The following variables should be inspected for accuracy before running this code:
+* setwd()
+* model.dir -> Point to the directory where the model .RData is stored (end string with a "/")
+* meth.file.K -> Point to the reduced methylation file for normal tissue
+* meth.file.N -> Point to the reduced methylation file for adjacent normal tissue
+* meth.file.T -> Point to the reduced methylation file for tumor tissue
+* cov.file.K -> Point to the covariate file for normal tissue
+* cov.file.N -> Point to the covariate file for adjacent normal tissue
+* cov.file.T -> Point to the covariate file for tumor tissue
+
+### 10. DNAmage_CancerSubtype.R
+This code reads in reduced data sets for tumor tissue samples (and respective covariate file) and assesses the relationship of DNA methylation age and sample age for different cancer subtypes. The following variables should be inspected for accuracy before running this code:
+* setwd()
+* model.dir -> Point to the directory where the model .RData is stored (end string with a "/")
+* meth.file.T -> Point to the reduced methylation file for tumor tissue
+* cov.file.T -> Point to the covariate file for tumor tissue
 
 References
 ---------------------
