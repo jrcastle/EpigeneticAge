@@ -146,11 +146,11 @@ p <- ggplot(data.frame(res = residual.LumA), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_LumA.png", sep = '') )
+png( paste(model.dir, "residual_hist_LumA.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_LumA.png", sep = '') )
+png( paste(model.dir, "MethAgevsSampleAge_LumA.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.LumA, 
      result.LumA, 
      main="Methlyation Age vs Sample Age in Luminal A Tumor Tissue", 
@@ -198,11 +198,11 @@ p <- ggplot(data.frame(res = residual.LumB), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_LumB.png", sep = '') )
+png( paste(model.dir, "residual_hist_LumB.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_LumB.png", sep = '') )
+png( paste(model.dir, "MethAgevsSampleAge_LumB.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.LumB, 
      result.LumB, 
      main="Methlyation Age vs Sample Age in Luminal B Tumor Tissue", 
@@ -250,11 +250,11 @@ p <- ggplot(data.frame(res = residual.TrpN), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_TrpN.png", sep = '') )
+png( paste(model.dir, "residual_hist_TrpN.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_TrpN.png", sep = '') )
+png( paste(model.dir, "MethAgevsSampleAge_TrpN.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.TrpN, 
      result.TrpN, 
      main="Methlyation Age vs Sample Age in Triple-Negative Tumor Tissue", 
@@ -355,15 +355,11 @@ p <- ggplot(df.ABN, aes(x = res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_CancerSub.png", sep = '') )
+png( paste(model.dir, "residual_hist_CancerSub.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
 
-#wilcox.test(residual.K, mu=0, conf.int = TRUE)
-#wilcox.test(residual.N, mu=0, conf.int = TRUE)
-#wilcox.test(residual.T, mu=0, conf.int = TRUE)
-#kruskal.test(residual.K~residual.T)
-#cor.test(residual.K, residual.T)
-#ks.test(residual.K, residual.T)
-
+wilcox.test(residual.LumA, mu=0, conf.int = TRUE)
+wilcox.test(residual.LumB, mu=0, conf.int = TRUE)
+wilcox.test(residual.TrpN, mu=0, conf.int = TRUE)

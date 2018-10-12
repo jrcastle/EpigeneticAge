@@ -162,11 +162,11 @@ p <- ggplot(data.frame(res = residual.K), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_K.png", sep = '') )
+png( paste(model.dir, "residual_hist_K.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_K.png", sep = '') )
+png( paste(model.dir, "MethAgevsSampleAge_K.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.K, 
      result.K, 
      main="Methlyation Age vs Sample Age in Normal Tissue", 
@@ -214,11 +214,11 @@ p <- ggplot(data.frame(res = residual.N), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_N.png", sep = '') )
+png( paste(model.dir, "residual_hist_N.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_N.png", sep = '') )
+png( paste(model.dir, "MethAgevsSampleAge_N.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.N, 
      result.N, 
      main="Methlyation Age vs Sample Age in Adjacent Normal Tissue", 
@@ -266,11 +266,11 @@ p <- ggplot(data.frame(res = residual.T), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_T.png", sep = '') )
+png( paste(model.dir, "residual_hist_T.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_T.png", sep = '') )
+png( paste(model.dir, "MethAgevsSampleAge_T.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.T, 
      result.T, 
      main="Methlyation Age vs Sample Age in Tumor Tissue", 
@@ -352,11 +352,11 @@ p <- ggplot(df.KT, aes(x = res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_KT.png", sep = '') )
+png( paste(model.dir, "residual_hist_KT.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_KT.png", sep = '') )
+png( paste(model.dir, "MethAgevsSampleAge_KT.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.K, 
      result.K, 
      main="Methlyation Age vs Sample Age in Normal and Tumor Tissue", 
@@ -368,15 +368,15 @@ plot(sample.ages.K,
      ylim=c(15,200), 
      yaxs="i",
      tck = 0.02,
-     col = "blue"
+     col = "darkorange3"
 ) 
-points(sample.ages.T, result.T, col = "red")
-abline(lm(result.K~sample.ages.K), col="blue") # regression line (y~x) 
+points(sample.ages.T, result.T, col = "deepskyblue4")
+abline(lm(result.K~sample.ages.K), col="darkorange3") # regression line (y~x) 
 legend(
   20, 190, 
   title = "Tissue Type",
   legend = c("K", "T"), 
-  col = c("blue", "red"), 
+  col = c("darkorange3", "deepskyblue4"), 
   lty = c(0,0), 
   pch = c(19,1), 
   bg='white', 
@@ -384,9 +384,6 @@ legend(
 )
 dev.off()
 
-#wilcox.test(residual.K, mu=0, conf.int = TRUE)
-#wilcox.test(residual.N, mu=0, conf.int = TRUE)
-#wilcox.test(residual.T, mu=0, conf.int = TRUE)
-#kruskal.test(residual.K~residual.T)
-#cor.test(residual.K, residual.T)
-#ks.test(residual.K, residual.T)
+wilcox.test(residual.K, mu=0, conf.int = TRUE)
+wilcox.test(residual.N, mu=0, conf.int = TRUE)
+wilcox.test(residual.T, mu=0, conf.int = TRUE)
