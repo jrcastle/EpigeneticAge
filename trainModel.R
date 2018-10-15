@@ -65,8 +65,12 @@ result <- predict(glmnet.Training, meth.training.data, type="response", s=lambda
 result <- sapply(result,transform.age.inverse)
 save(glmnet.Training, file = "glmnet.Training.RData")
 save(lambda.glmnet.Training, file = "lambda.glmnet.Training.RData")
+save(glmnet.Training.CV, file = "glmnet.Training.CV.RData")
 
 ##### QUICK CHECKS #####
+# Note: the version of R on the HPC does not support png 
+# do not run the remainder of this code on the HPC
+q() 
 residual = age - result
 
 p <- ggplot(data.frame(res = residual), aes(x=res)) +
