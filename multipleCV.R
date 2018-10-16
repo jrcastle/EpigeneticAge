@@ -58,7 +58,12 @@ meth.training.data <- t(as.matrix(df.meth.clean))
 FIRST <- TRUE
 for(i in 1:number.cvs){
   print( paste( "Running cross-validation ", i, " of ", number.cvs, sep = "") )
-  glmnet.Training.CV = cv.glmnet(meth.training.data, age.transformed, nfolds = 10, alpha = alpha, family="gaussian")
+  
+  N <- 0
+  while( N != 99 ){
+    glmnet.Training.CV = cv.glmnet(meth.training.data, age.transformed, nfolds = 10, alpha = alpha, family="gaussian")
+    N <- length(glmnet.Training.CV$lambda)
+  }
   
   if( FIRST ){
     df.lambda <- data.frame(glmnet.Training.CV$lambda)
