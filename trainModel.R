@@ -2,11 +2,12 @@ setwd("/home/jrca253/EpigeneticAge")
 library(glmnet)
 library(ggplot2)
 
-cov.train  = "data/cov_K_train.txt"
-meth.train = "data/meth_K_cpgs_in_KNT_imputed_train.txt"
+cov.train  <- "data/cov_K_train.txt"
+meth.train <- "data/meth_K_cpgs_in_KNT_imputed_train.txt"
 
-alpha = 0.5
-adult.age = 20
+alpha     <- 0.5
+adult.age <- 20
+one.cv    <- FALSE
 
 ##########################################################################
 # AGE TRANSFORM FUNCTION
@@ -41,36 +42,46 @@ age.transformed <- sapply(age, transform.age)
 
 
 ##########################################################################
-# LOAD METH FILE
+# LOAD METH TRAINING SAMPLES
 ##########################################################################
-
-##### TRAINING SAMPLES #####
 df.meth <- read.table(meth.train, header = TRUE, row.names = 1, sep = '\t', skipNul = FALSE)
-#df.meth.clean <- df.meth[complete.cases(df.meth), ]
-#meth.training.data <- t(as.matrix(df.meth.clean))
 meth.training.data <- t(as.matrix(df.meth))
+
 
 ##########################################################################
 # TRAIN MODEL
 ##########################################################################
-glmnet.Training.CV = cv.glmnet(meth.training.data, age.transformed, nfolds = 10, alpha = alpha, family="gaussian")
-lambda.glmnet.Training = glmnet.Training.CV$lambda.min
-glmnet.Training = glmnet(meth.training.data, age.transformed, family = "gaussian", alpha = alpha, nlambda = 100)
+if( one.cv ){
+  # This is old code that does a single cross validation, the glmnet
+  # package notes that the results of this are random and will fluctuate
+  # from CV to CV. The suggested way to reduce the randomness is to run 
+  # multiple CVs and average the results. This is accomplished in 
+  # multipleCV.R
+  glmnet.Training.CV <- cv.glmnet(meth.training.data, age.transformed, nfolds = 10, alpha = alpha, family="gaussian")
+  lambda.glmnet.Training <- glmnet.Training.CV$lambda.min
+}else{
+  load( "lambda.min.100CV.RData" )
+  lambda.glmnet.Training <- lambda.min
+}
+
+glmnet.Training <- glmnet(meth.training.data, age.transformed, family = "gaussian", alpha = alpha, nlambda = 100)
+
+save(glmnet.Training, file = "glmnet.Training.RData")
+save(lambda.glmnet.Training, file = "lambda.glmnet.Training.RData")
 
 
 ##########################################################################
 # DNA METHYLATION AGE PREDICTION
 ##########################################################################
+# Note: the version of R on the HPC does not support png
+# do not run the remainder of this code on the HPC
+q()
+
 result <- predict(glmnet.Training, meth.training.data, type="response", s=lambda.glmnet.Training)
 result <- sapply(result,transform.age.inverse)
-save(glmnet.Training, file = "glmnet.Training.RData")
-save(lambda.glmnet.Training, file = "lambda.glmnet.Training.RData")
-save(glmnet.Training.CV, file = "glmnet.Training.CV.RData")
+
 
 ##### QUICK CHECKS #####
-# Note: the version of R on the HPC does not support png 
-# do not run the remainder of this code on the HPC
-q() 
 residual = age - result
 
 p <- ggplot(data.frame(res = residual), aes(x=res)) +

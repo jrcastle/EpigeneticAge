@@ -98,7 +98,7 @@ mse.min <- min(mean.mse)
 ##########################################################################
 # SAVE
 ##########################################################################
-save(df.lambda, file = "df.lambda.RData")
-save(df.mse, file = "df.mse.RData")
-save(lambda.min, file = "lambda.min.RData")
-save(mse.min, file = "mse.min.RData")
+save(df.lambda, file = "df.lambda.100CV.RData")
+save(df.mse, file = "df.mse.100CV.RData")
+save(lambda.min, file = "lambda.min.100CV.RData")
+save(mse.min, file = "mse.min.100CV.RData")
