@@ -1,10 +1,13 @@
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
 
-model.dir   <- "cpgs_in_KNT_imputed/"
-meth.file.T <- "data/meth_T_cpgs_in_KNT_imputed_ClockCpGs.txt"
-cov.file.T  <- "data/cov_T.txt"
+rm(list=ls()); gc();
 
+seed        <- "123"
+model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
+meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+ 
 
 ###########################################################################################
 # AGE TRANSFORMATION FUNCTIONS

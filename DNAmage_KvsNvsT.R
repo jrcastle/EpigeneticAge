@@ -1,15 +1,18 @@
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
 
-model.dir <- "cpgs_in_KNT_imputed/"
+rm(list=ls()); gc();
 
-meth.file.K <- "data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs.txt"
-meth.file.N <- "data/meth_N_cpgs_in_KNT_imputed_ClockCpGs.txt"
-meth.file.T <- "data/meth_T_cpgs_in_KNT_imputed_ClockCpGs.txt"
+seed      <- "123"
+model.dir <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
 
-cov.file.K <- "data/cov_K_vali.txt"
-cov.file.N <- "data/cov_N.txt"
-cov.file.T <- "data/cov_T.txt"
+meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
+meth.file.N <- paste("data/meth_N_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+
+cov.file.K <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+cov.file.N <- paste("data/cov_N_seed", seed, ".txt", sep = "")
+cov.file.T <- paste("data/cov_T_seed", seed, ".txt", sep = "")
 
 
 ###########################################################################################

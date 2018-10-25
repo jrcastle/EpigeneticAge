@@ -7,7 +7,7 @@ meth.train <- "data/meth_K_cpgs_in_KNT_imputed_train.txt"
 
 alpha     <- 0.5
 adult.age <- 20
-one.cv    <- FALSE
+one.cv    <- TRUE
 
 ##########################################################################
 # AGE TRANSFORM FUNCTION

@@ -3,9 +3,13 @@ setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(glmnet)
 library(ggplot2)
 
-cov.vali  = "data/cov_K_vali.txt"
-meth.vali = "data/meth_K_cpgs_in_KNT_imputed_vali.txt"
-model.dir = "cpgs_in_KNT_imputed/"
+rm(list=ls()); gc();
+
+seed      <- "123"
+model.dir <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
+meth.vali <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_seed", seed, ".txt", sep = "")
+cov.vali  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+
 alpha = 0.5
 adult.age = 20
 
@@ -58,7 +62,8 @@ meth.validate.data <- t(as.matrix(df.meth.validate))
 ##########################################################################
 load( paste(model.dir, "glmnet.Training.RData", sep = '') )
 load( paste(model.dir, "lambda.glmnet.Training.RData", sep = '') )
-
+load( paste(model.dir, "lambda.min.100CV.RData", sep = '') )
+lambda.glmnet.Training <- lambda.min
 
 ##########################################################################
 # DNA METHYLATION AGE PREDICTION
@@ -70,21 +75,22 @@ result <- sapply(result,transform.age.inverse)
 ##########################################################################
 # VALIDATE 
 ##########################################################################
-residual <- age - result
+residual <- result - age
 median.error <- median(residual)
 stdev.error <- sd(residual)
+mean.error <- mean(residual)
 
 p <- ggplot(data.frame(res = residual), aes(x=res)) +
   geom_histogram(binwidth = 5, color="black", fill="white") +
   scale_y_continuous(
     expand=c(0, 0),
-    limits = c(0, 33)
+    limits = c(0, 45)
   ) + 
   labs(x = "Sample Age - Meth Age") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals") + 
-  annotate("text", x = -16, y = 25, label = paste("Median Residual = ", round(median.error, digits = 2), sep = "")) + 
-  annotate("text", x = -16, y = 24, label = paste("St. Dev Residual = ", round(stdev.error, digits = 2), sep = "")) +
+  annotate("text", x = -30, y = 40, label = paste("Median Residual = ", round(median.error, digits = 2), sep = "")) + 
+  annotate("text", x = -30, y = 38, label = paste("St. Dev Residual = ", round(stdev.error, digits = 2), sep = "")) +
   geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dotted") + 
   theme_bw() + 
   theme(
