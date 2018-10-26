@@ -314,7 +314,7 @@ p <- ggplot(df.ABN, aes(x = res)) +
     expand=c(0, 0),
     limits = c(0, 20)
   ) + 
-  labs(x = "Meth Age - Sample Age") + 
+  labs(x = "DNAm Age Acceleration") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals for Cancer Subtypes") + 
   annotate(

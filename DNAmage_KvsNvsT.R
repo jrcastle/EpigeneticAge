@@ -150,7 +150,7 @@ p <- ggplot(data.frame(res = residual.K), aes(x=res)) +
     expand=c(0, 0),
     limits = c(0, 33)
   ) + 
-  labs(x = "Meth Age - Sample Age") + 
+  labs(x = "DNAm Age Acceleration") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals in Normal Tissue") + 
   annotate("text", x = -16, y = 32, label = paste("Median Residual = ", round(mean.error.K, digits = 1), sep = "")) + 
@@ -202,7 +202,7 @@ p <- ggplot(data.frame(res = residual.N), aes(x=res)) +
     expand=c(0, 0),
     limits = c(0, 15)
   ) + 
-  labs(x = "Meth Age - Sample Age") + 
+  labs(x = "DNAm Age Acceleration") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals in Adjacent Normal Tissue") + 
   annotate("text", x = -21, y = 14, label = paste("Median Residual = ", round(mean.error.N, digits = 1), sep = "")) + 
@@ -254,7 +254,7 @@ p <- ggplot(data.frame(res = residual.T), aes(x=res)) +
     expand=c(0, 0),
     limits = c(0, 33)
   ) + 
-  labs(x = "Meth Age - Sample Age") + 
+  labs(x = "DNAm Age Acceleration") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals in Tumor Tissue") + 
   annotate("text", x = 100, y = 32, label = paste("Median Residual = ", round(mean.error.T, digits = 1), sep = "")) + 
@@ -302,12 +302,17 @@ tmp.K <- data.frame(residual.K)
 tmp.K$type <- "K"
 colnames(tmp.K) <- c("res", "ttype")
 
+tmp.N <- data.frame(residual.N)
+tmp.N$type <- "N"
+colnames(tmp.N) <- c("res", "ttype")
+
 tmp.T <- data.frame(residual.T)
 tmp.T$type <- "T"
 colnames(tmp.T) <- c("res", "ttype")
 
-df.KT <- rbind(tmp.K, tmp.T)
+df.KT <- rbind(tmp.K, tmp.N, tmp.T)
 rm(tmp.K)
+rm(tmp.N)
 rm(tmp.T)
 gc()
 
@@ -316,12 +321,13 @@ p <- ggplot(df.KT, aes(x = res)) +
   #scale_fill_manual(name = "ttype", values = c("red","blue"), labels=c("K", "T")) + 
   geom_histogram(data=subset(df.KT, ttype == 'K'), aes(fill = "K"), binwidth = 5, alpha = 1) +
   geom_histogram(data=subset(df.KT, ttype == 'T'), aes(fill = "T"), binwidth = 5, alpha = 0.8) +
-  scale_fill_manual(name = "Tissue Type", values = c("darkorange3", "deepskyblue4"), labels=c("K", "T")) +
+  geom_histogram(data=subset(df.KT, ttype == 'N'), aes(fill = "N"), binwidth = 5, alpha = 0.8) +
+  scale_fill_manual(name = "Tissue Type", values = c("darkorange3", "black", "deepskyblue4"), labels=c("K", "N", "T")) +
   scale_y_continuous(
     expand=c(0, 0),
     limits = c(0, 33)
   ) + 
-  labs(x = "Meth Age - Sample Age") + 
+  labs(x = "DNAm Age Acceleration") + 
   labs(y = "Frequency") + 
   labs(title = "Prediction Residuals in Normal and Tumor Tissue") + 
   annotate(
@@ -336,11 +342,21 @@ p <- ggplot(df.KT, aes(x = res)) +
   ) +
   annotate(
     "text", x = 100, y = 22, 
+    label = paste("Mean Residual (N) = ", round(mean.error.N, digits = 1), sep = ""), 
+    color = "black"
+  ) + 
+  annotate(
+    "text", x = 100, y = 21, 
+    label = paste("St. Dev Residual (N) = ", round(stdev.error.N, digits = 1), sep = ""), 
+    color = "black"
+  ) +
+  annotate(
+    "text", x = 100, y = 19, 
     label = paste("Mean Residual (T) = ", round(mean.error.T, digits = 1), sep = ""), 
     color = "deepskyblue4"
   ) + 
   annotate(
-    "text", x = 100, y = 21, 
+    "text", x = 100, y = 18, 
     label = paste("St. Dev Residual (T) = ", round(stdev.error.T, digits = 1), sep = ""), 
     color = "deepskyblue4"
   ) +
@@ -355,11 +371,11 @@ p <- ggplot(df.KT, aes(x = res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_KT.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "residual_hist_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_KT.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "MethAgevsSampleAge_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.K, 
      result.K, 
      main="Methlyation Age vs Sample Age in Normal and Tumor Tissue", 
@@ -375,13 +391,14 @@ plot(sample.ages.K,
 ) 
 points(sample.ages.T, result.T, col = "deepskyblue4")
 abline(lm(result.K~sample.ages.K), col="darkorange3") # regression line (y~x) 
+points(sample.ages.N, result.N, col = "black", pch = 19)
 legend(
   20, 190, 
   title = "Tissue Type",
-  legend = c("K", "T"), 
-  col = c("darkorange3", "deepskyblue4"), 
+  legend = c("K", "N", "T"), 
+  col = c("darkorange3", "black", "deepskyblue4"), 
   lty = c(0,0), 
-  pch = c(19,1), 
+  pch = c(19,19, 1), 
   bg='white', 
   bty = "n"
 )
@@ -390,3 +407,4 @@ dev.off()
 wilcox.test(residual.K, mu=0, conf.int = TRUE)
 wilcox.test(residual.N, mu=0, conf.int = TRUE)
 wilcox.test(residual.T, mu=0, conf.int = TRUE)
+

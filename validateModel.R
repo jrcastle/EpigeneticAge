@@ -63,6 +63,9 @@ meth.validate.data <- t(as.matrix(df.meth.validate))
 load( paste(model.dir, "glmnet.Training.RData", sep = '') )
 load( paste(model.dir, "lambda.glmnet.Training.RData", sep = '') )
 load( paste(model.dir, "lambda.min.100CV.RData", sep = '') )
+load( paste(model.dir, "mse.min.100CV.RData", sep = '') )
+mse.min
+1-mse.min
 lambda.glmnet.Training <- lambda.min
 
 ##########################################################################

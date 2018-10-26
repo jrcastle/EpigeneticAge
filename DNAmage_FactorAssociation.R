@@ -1,5 +1,6 @@
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
+library(moments)
 
 rm(list=ls()); gc();
 
@@ -73,11 +74,10 @@ residual.K <- result.K - sample.ages.K
 mean.error.K <- mean(residual.K)
 stdev.error.K <- sd(residual.K)
 
-hist(residual.K)
-
 ##### Add result and residual to cov dataframe #####
 df.cov.K["DNAm.Age",] <- result.K
 df.cov.K["DNAm.Age.Residual",] <- residual.K
+
 
 ##########################################################################
 # Multivariate Correlation Analysis
@@ -138,8 +138,6 @@ lm.DNAm.Age <- lm(DNAm.Age ~
                   Location
                  )
 
-summary(lm.DNAm.Age)
-
 lm.DNAm.Age.Residual <- lm(DNAm.Age.Residual ~ 
                            Race + 
                            BMI + 
@@ -155,8 +153,6 @@ lm.DNAm.Age.Residual <- lm(DNAm.Age.Residual ~
                            Menopause + 
                            Location
                            )
-
-summary(lm.DNAm.Age.Residual)
 
 
 ##########################################################################
@@ -198,9 +194,11 @@ p <- ggplot(df.tmp, aes(x=race, y=Mean.DNAm.Age)) +
      geom_bar(stat="identity", width = 0.5) + 
      geom_errorbar(aes(ymin = Mean.DNAm.Age - std.DNAm.Age, ymax = Mean.DNAm.Age + std.DNAm.Age), width = 0.2) + 
      labs(x = "Race") + 
-     labs(y = "DNAm Age") + 
+     labs(y = "Mean DNAm Age") + 
      annotate("text", x = 0.75, y = 64.5, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 61.5, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age[1]+2, label = paste("n = ", length(DNAm.Age.AfrAmer), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age[2]+2, label = paste("n = ", length(DNAm.Age.White), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -217,9 +215,11 @@ p <- ggplot(df.tmp, aes(x = race, y = Mean.DNAm.Age.Residual)) +
      geom_bar(stat="identity", width = 0.5) + 
      geom_errorbar(aes(ymin = Mean.DNAm.Age.Residual - std.DNAm.Age.Residual, ymax = Mean.DNAm.Age.Residual + std.DNAm.Age.Residual), width = 0.2) + 
      labs(x = "Race") + 
-     labs(y = "DNAm Age Acceleration") + 
+     labs(y = "Mean DNAm Age Acceleration") + 
      annotate("text", x = 0.75, y = 9, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 8.3, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age.Residual[1]+0.5, label = paste("n = ", length(DNAm.Age.AfrAmer), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age.Residual[2]+0.5, label = paste("n = ", length(DNAm.Age.White), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -273,9 +273,11 @@ p <- ggplot(df.tmp, aes(x=location, y=Mean.DNAm.Age)) +
      geom_bar(stat="identity", width = 0.5) + 
      geom_errorbar(aes(ymin = Mean.DNAm.Age - std.DNAm.Age, ymax = Mean.DNAm.Age + std.DNAm.Age), width = 0.2) + 
      labs(x = "Location") + 
-     labs(y = "DNAm Age") + 
+     labs(y = "Mean DNAm Age") + 
      annotate("text", x = 0.75, y = 66, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 63, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age[1]+2, label = paste("n = ", length(DNAm.Age.Rural), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age[2]+2, label = paste("n = ", length(DNAm.Age.Urban), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -292,9 +294,11 @@ p <- ggplot(df.tmp, aes(x = location, y = Mean.DNAm.Age.Residual)) +
      geom_bar(stat="identity", width = 0.5) + 
      geom_errorbar(aes(ymin = Mean.DNAm.Age.Residual - std.DNAm.Age.Residual, ymax = Mean.DNAm.Age.Residual + std.DNAm.Age.Residual), width = 0.2) + 
      labs(x = "Location") + 
-     labs(y = "DNAm Age Acceleration") + 
+     labs(y = "Mean DNAm Age Acceleration") + 
      annotate("text", x = 0.75, y = -4.5, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = -5.2, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age.Residual[1]+0.5, label = paste("n = ", length(DNAm.Age.Rural), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age.Residual[2]+0.5, label = paste("n = ", length(DNAm.Age.Urban), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -315,7 +319,7 @@ dev.off()
 ##### Correlate DNAm Age and Residual to Factor #####
 DNAm.Age            <- as.numeric(as.vector(df.cov.K["DNAm.Age", complete.cases(df.cov.K["BMI",]) ]))
 DNAm.Age.Residual   <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", complete.cases(df.cov.K["BMI",]) ]))
-BMI                <- as.numeric(as.vector(df.cov.K["BMI", complete.cases(df.cov.K["BMI",]) ]))
+BMI                 <- as.numeric(as.vector(df.cov.K["BMI", complete.cases(df.cov.K["BMI",]) ]))
 
 DNAm.Age.Rho  <- cor.test(BMI, DNAm.Age, method = "spearman" )$estimate
 DNAm.Age.pval <- cor.test(BMI, DNAm.Age, method = "spearman" )$p.value
@@ -337,6 +341,7 @@ p <- ggplot(df.tmp, aes(x=BMI, y=DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 17, y = 72, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 17, y = 70, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 17, y = 68, label = paste("n = ", length(DNAm.Age), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -355,6 +360,7 @@ p <- ggplot(df.tmp, aes(x = BMI, y = DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 17, y = 15, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 17, y = 13, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 17, y = 11, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -397,6 +403,7 @@ p <- ggplot(df.tmp, aes(x=Cig.Pack.Years, y=DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 27, y = 70, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 27, y = 68, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 27, y = 66, label = paste("n = ", length(DNAm.Age), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -415,6 +422,7 @@ p <- ggplot(df.tmp, aes(x = Cig.Pack.Years, y = DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 27, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 27, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 27, y = 16, label = paste("n = ", length(DNAm.Age), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -466,9 +474,11 @@ p <- ggplot(df.tmp, aes(x=drinking, y=Mean.DNAm.Age)) +
      geom_bar(stat="identity", width = 0.5) + 
      geom_errorbar(aes(ymin = Mean.DNAm.Age - std.DNAm.Age, ymax = Mean.DNAm.Age + std.DNAm.Age), width = 0.2) + 
      labs(x = "") + 
-     labs(y = "DNAm Age") + 
+     labs(y = "Mean DNAm Age") + 
      annotate("text", x = 0.75, y = 64.5, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 61.5, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age[1]+2, label = paste("n = ", length(DNAm.Age.DrinkingNo), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age[2]+2, label = paste("n = ", length(DNAm.Age.DrinkingYes), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
       axis.ticks.length=unit(-0.25, "cm"), 
@@ -485,9 +495,11 @@ p <- ggplot(df.tmp, aes(x = drinking, y = Mean.DNAm.Age.Residual)) +
      geom_bar(stat="identity", width = 0.5) + 
      geom_errorbar(aes(ymin = Mean.DNAm.Age.Residual - std.DNAm.Age.Residual, ymax = Mean.DNAm.Age.Residual + std.DNAm.Age.Residual), width = 0.2) + 
      labs(x = "") + 
-     labs(y = "DNAm Age Acceleration") + 
+     labs(y = "Mean DNAm Age Acceleration") + 
      annotate("text", x = 0.75, y = -5.4, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = -6.1, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age.Residual[1]+0.5, label = paste("n = ", length(DNAm.Age.Residual.DrinkingNo), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age.Residual[2]+0.5, label = paste("n = ", length(DNAm.Age.Residual.DrinkingYes), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -530,6 +542,7 @@ p <- ggplot(df.tmp, aes(x=Menarche, y=DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 16, y = 75, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 16, y = 73, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 16, y = 71, label = paste("n = ", length(DNAm.Age), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -548,6 +561,7 @@ p <- ggplot(df.tmp, aes(x = Menarche, y = DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 16, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 16, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 16, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -568,7 +582,7 @@ dev.off()
 ##### Correlate DNAm Age and Residual to Factor #####
 DNAm.Age            <- as.numeric(as.vector(df.cov.K["DNAm.Age", complete.cases(df.cov.K["Been.PregnantYes",]) ]))
 DNAm.Age.Residual   <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", complete.cases(df.cov.K["Been.PregnantYes",]) ]))
-Been.PregnantYes    <- as.numeric(as.vector(df.cov.K["DrinkingYes", complete.cases(df.cov.K["Been.PregnantYes",]) ]))
+Been.PregnantYes    <- as.numeric(as.vector(df.cov.K["Been.PregnantYes", complete.cases(df.cov.K["Been.PregnantYes",]) ]))
 
 DNAm.Age.Rho  <- cor.test(Been.PregnantYes, DNAm.Age, method = "spearman" )$estimate
 DNAm.Age.pval <- cor.test(Been.PregnantYes, DNAm.Age, method = "spearman" )$p.value
@@ -588,10 +602,10 @@ DNAm.Age.Residual.Been.PregnantYes <- as.numeric(as.vector(df.cov.K["DNAm.Age.Re
 DNAm.Age.Residual.Been.PregnantNo  <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", (df.cov.K["Been.PregnantYes",] == 0 & !is.na(df.cov.K["Been.PregnantYes",]))]))
 
 pregnant               <- c("Have you been pregnant? - No", "Have you been pregnant? - Yes")
-Mean.DNAm.Age          <- as.numeric( c(mean(DNAm.Age.DrinkingNo), mean(DNAm.Age.DrinkingYes)) ) 
-std.DNAm.Age           <- as.numeric( c(sd(DNAm.Age.DrinkingNo), sd(DNAm.Age.DrinkingYes)) ) 
-Mean.DNAm.Age.Residual <- as.numeric( c(mean(DNAm.Age.Residual.DrinkingNo), mean(DNAm.Age.Residual.DrinkingYes)) ) 
-std.DNAm.Age.Residual  <- as.numeric( c(sd(DNAm.Age.Residual.DrinkingNo), sd(DNAm.Age.Residual.DrinkingYes)) )
+Mean.DNAm.Age          <- as.numeric( c(mean(DNAm.Age.Been.PregnantNo), mean(DNAm.Age.Been.PregnantYes)) ) 
+std.DNAm.Age           <- as.numeric( c(sd(DNAm.Age.Been.PregnantNo), sd(DNAm.Age.Been.PregnantYes)) ) 
+Mean.DNAm.Age.Residual <- as.numeric( c(mean(DNAm.Age.Residual.Been.PregnantNo), mean(DNAm.Age.Residual.Been.PregnantYes)) ) 
+std.DNAm.Age.Residual  <- as.numeric( c(sd(DNAm.Age.Residual.Been.PregnantNo), sd(DNAm.Age.Residual.Been.PregnantYes)) )
 
 df.tmp <- data.frame(pregnant, Mean.DNAm.Age, std.DNAm.Age, Mean.DNAm.Age.Residual, std.DNAm.Age.Residual)
 
@@ -599,9 +613,11 @@ p <- ggplot(df.tmp, aes(x=pregnant, y=Mean.DNAm.Age)) +
      geom_bar(stat="identity", width = 0.5) + 
      geom_errorbar(aes(ymin = Mean.DNAm.Age - std.DNAm.Age, ymax = Mean.DNAm.Age + std.DNAm.Age), width = 0.2) + 
      labs(x = "") + 
-     labs(y = "DNAm Age") + 
+     labs(y = "Mean DNAm Age") + 
      annotate("text", x = 0.75, y = 64.5, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 61.5, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age[1]+2, label = paste("n = ", length(DNAm.Age.Been.PregnantNo), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age[2]+2, label = paste("n = ", length(DNAm.Age.Been.PregnantYes), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -618,9 +634,11 @@ p <- ggplot(df.tmp, aes(x = pregnant, y = Mean.DNAm.Age.Residual)) +
      geom_bar(stat="identity", width = 0.5) + 
      geom_errorbar(aes(ymin = Mean.DNAm.Age.Residual - std.DNAm.Age.Residual, ymax = Mean.DNAm.Age.Residual + std.DNAm.Age.Residual), width = 0.2) + 
      labs(x = "") + 
-     labs(y = "DNAm Age Acceleration") + 
+     labs(y = "Mean DNAm Age Acceleration") + 
      annotate("text", x = 0.75, y = 8, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 7.3, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age.Residual[1]+0.5, label = paste("n = ", length(DNAm.Age.Residual.Been.PregnantNo), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age.Residual[2]+0.5, label = paste("n = ", length(DNAm.Age.Residual.Been.PregnantYes), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -663,6 +681,7 @@ p <- ggplot(df.tmp, aes(x=Times.Pregnant, y=DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 6, y = 76, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 6, y = 74, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 6, y = 72, label = paste("n = ", length(DNAm.Age), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -681,6 +700,7 @@ p <- ggplot(df.tmp, aes(x = Times.Pregnant, y = DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 6, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 6, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 6, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -723,6 +743,7 @@ p <- ggplot(df.tmp, aes(x=Parity, y=DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 3.5, y = 75, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 3.5, y = 73, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 3.5, y = 71, label = paste("n = ", length(DNAm.Age), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -741,6 +762,7 @@ p <- ggplot(df.tmp, aes(x = Parity, y = DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 3.5, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 3.5, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 3.5, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -783,6 +805,7 @@ p <- ggplot(df.tmp, aes(x=Age.FB, y=DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 40, y = 75, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 40, y = 73, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 40, y = 71, label = paste("n = ", length(DNAm.Age), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -801,6 +824,7 @@ p <- ggplot(df.tmp, aes(x = Age.FB, y = DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 40, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 40, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 40, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -858,6 +882,8 @@ p <- ggplot(df.tmp, aes(x=menopause, y=Mean.DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 0.75, y = 59, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 56, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age[1]+2, label = paste("n = ", length(DNAm.Age.MenopausePre), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age[2]+2, label = paste("n = ", length(DNAm.Age.MenopausePost), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -877,6 +903,8 @@ p <- ggplot(df.tmp, aes(x = menopause, y = Mean.DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 0.75, y = 10, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 9.3, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age.Residual[1]+0.5, label = paste("n = ", length(DNAm.Age.Residual.MenopausePre), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age.Residual[2]-0.5, label = paste("n = ", length(DNAm.Age.Residual.MenopausePost), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -919,6 +947,7 @@ p <- ggplot(df.tmp, aes(x=Age.Menopause, y=DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 33, y = 75, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 33, y = 73, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 33, y = 71, label = paste("n = ", length(DNAm.Age), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -937,6 +966,7 @@ p <- ggplot(df.tmp, aes(x = Age.Menopause, y = DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 33, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 33, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 33, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -991,6 +1021,8 @@ p <- ggplot(df.tmp, aes(x=vd, y=Mean.DNAm.Age)) +
      labs(y = "DNAm Age") + 
      annotate("text", x = 0.75, y = 63, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = 60, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age[1]+2, label = paste("n = ", length(DNAm.Age.VDNo), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age[2]+2, label = paste("n = ", length(DNAm.Age.VDYes), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -1010,6 +1042,8 @@ p <- ggplot(df.tmp, aes(x = vd, y = Mean.DNAm.Age.Residual)) +
      labs(y = "DNAm Age Acceleration") + 
      annotate("text", x = 0.75, y = -5.5, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
      annotate("text", x = 0.75, y = -6.2, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
+     annotate("text", x = 1, y = Mean.DNAm.Age.Residual[1]+0.5, label = paste("n = ", length(DNAm.Age.Residual.VDNo), sep = ""), col = "blue") +
+     annotate("text", x = 2, y = Mean.DNAm.Age.Residual[2]-0.5, label = paste("n = ", length(DNAm.Age.Residual.VDYes), sep = ""), col = "blue") +
      theme_bw() + 
      theme(
        axis.ticks.length=unit(-0.25, "cm"), 
@@ -1024,7 +1058,15 @@ dev.off()
 
 
 ##########################################################################
-# Univariate Analysis Summary
+# Univariate/Multivariate Analysis Summary
 ##########################################################################
+
+##### Uni #####
 df.univar[which(df.univar$DNAm.Age.pval < 0.05),1:2]
 df.univar[which(df.univar$DNAm.Age.Residual.pval < 0.05),3:4]
+
+df.univar
+
+##### Multi #####
+summary(lm.DNAm.Age)
+summary(lm.DNAm.Age.Residual)
