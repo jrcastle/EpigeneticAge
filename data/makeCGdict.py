@@ -18,7 +18,7 @@ df.drop( df.loc[ df['CHR:POS'] == "chrnan:nan" ].index, inplace = True )
 
 
 df.to_csv(
-    'GB36_to_CGNumber_dict.txt',
+    'CHR-POS_to_CGNumber_dict.txt',
     header = True,
     index = False,
     sep = '\t'

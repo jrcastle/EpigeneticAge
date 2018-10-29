@@ -4,14 +4,15 @@ setwd('/home/jrca253/EpigeneticAge/data')
 # To ease computational load on large-sample datasets, the 
 # maximum number of samples missing a particular CpG is 
 # hardcoded at 10.
-missingness.fraction = 0.01 
+missingness.fraction = 0  #0.01
 
 # K => Normal
 # N => Adjacent Normal
 # T => Tumor
 tissue.type <- "K"
 DATADIR     <- '/home/jrca253/DATA/Truseq/'
-METHFILE    <- paste('meth_', tissue.type, '.txt', sep = '')
+#METHFILE    <- paste('meth_', tissue.type, '.txt', sep = '')
+METHFILE    <- paste('meth_', tissue.type, 'AllCpGs', '.txt', sep = '')
 COVFILE     <- paste('cov_',  tissue.type, '.txt', sep = '')
 
 
@@ -124,7 +125,7 @@ colnames(X) <- dataframe.name
 X           <- X[-1,]
 
 write.table(X, file = COVFILE, quote = F, col.names = NA, row.names = T, sep = '\t')
-q()
+
 
 ########################################################################################
 # MAKE METH FILE, MERGE SAMPLES
