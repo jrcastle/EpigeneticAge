@@ -4,7 +4,7 @@ setwd('/home/jrca253/EpigeneticAge/data')
 # To ease computational load on large-sample datasets, the 
 # maximum number of samples missing a particular CpG is 
 # hardcoded at 10.
-missingness.fraction = 0  #0.01
+missingness.fraction = 0.01
 
 # K => Normal
 # N => Adjacent Normal
@@ -12,7 +12,7 @@ missingness.fraction = 0  #0.01
 tissue.type <- "K"
 DATADIR     <- '/home/jrca253/DATA/Truseq/'
 #METHFILE    <- paste('meth_', tissue.type, '.txt', sep = '')
-METHFILE    <- paste('meth_', tissue.type, 'AllCpGs', '.txt', sep = '')
+METHFILE    <- paste('meth_', tissue.type, '_AllCpGs', '.txt', sep = '')
 COVFILE     <- paste('cov_',  tissue.type, '.txt', sep = '')
 
 
@@ -191,7 +191,7 @@ na.cut <- as.integer( missingness.fraction * length(ID) )
 if( na.cut > 10 ) na.cut = 10;
 if( na.cut == 0 ) na.cut = 1;
 
-B.seq.all <- B.seq.all[rowSums(is.na(B.seq.all)) <= na.cut,]
+#B.seq.all <- B.seq.all[rowSums(is.na(B.seq.all)) <= na.cut,]
 
 write.table(B.seq.all, file = METHFILE, quote = F, append = FALSE, sep = "\t", row.names=FALSE)
 rm(B.seq.all)
