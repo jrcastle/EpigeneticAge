@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-meth_file = "meth_K_AllCpGs.txt"
+meth_file = "meth_T_AllCpGs.txt"
 
 print "Loading POS_to_CGNumber_dict.txt ..."
 df_CHR_POS_to_CGNumber = pd.read_table(
