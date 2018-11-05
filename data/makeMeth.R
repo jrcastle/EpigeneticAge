@@ -9,7 +9,7 @@ missingness.fraction = 0.01
 # K => Normal
 # N => Adjacent Normal
 # T => Tumor
-tissue.type <- "T"
+tissue.type <- "N"
 DATADIR     <- '/home/jrca253/DATA/Truseq/'
 #METHFILE    <- paste('meth_', tissue.type, '.txt', sep = '')
 METHFILE    <- paste('meth_', tissue.type, '_AllCpGs', '.txt', sep = '')
