@@ -1,5 +1,5 @@
 #!/bin/sh
-# sbatch --job-name=MakeMeth --partition=FatComp --mail-type ALL --mail-user jrca253@uky.edu ./IMPUTE.sh
+# sbatch --job-name=IMPUTE --partition=FatComp --mail-type ALL --mail-user jrca253@uky.edu ./IMPUTE.sh
 
 . /etc/profile.d/modules.sh
 echo "Job running on SLURM NODELIST: $SLURM_NODELIST "
@@ -8,4 +8,6 @@ echo "Job running on SLURM NODELIST: $SLURM_NODELIST "
 module load R/3.4.1
 
 #R Program execution command
+echo 'ulimit -s 16384'
+ulimit -s 16384
 Rscript imputeMissingData.R

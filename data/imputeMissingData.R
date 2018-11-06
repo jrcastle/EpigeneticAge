@@ -1,8 +1,8 @@
 library("impute")
 setwd("/home/jrca253/EpigeneticAge/data")
 
-meth.file.in  = "meth_T_CGNumber.csv"
-meth.file.out = "meth_T_CGNumber_imputed.csv"
+meth.file.in  = "meth_N_CGNumber.csv"
+meth.file.out = "meth_N_CGNumber_imputed.csv"
 
 
 ###########################################################################################
