@@ -1,6 +1,7 @@
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
 library(moments)
+library(stargazer)
 
 rm(list=ls()); gc();
 
@@ -9,6 +10,8 @@ model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
 meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
 cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
 
+age.covariate  = TRUE
+model.residual = FALSE
 
 ###########################################################################################
 # AGE TRANSFORMATION FUNCTIONS
@@ -71,6 +74,9 @@ result.K <- t(X) %*% beta
 result.K <- sapply(result.K, anti.trafo)
 
 residual.K <- result.K - sample.ages.K 
+if(model.residual){
+  residual.K <- as.numeric(as.vector(lm(result.K ~ sample.ages.K)$residual))
+}
 mean.error.K <- mean(residual.K)
 stdev.error.K <- sd(residual.K)
 
@@ -86,7 +92,7 @@ df.cov.K["DNAm.Age.Residual",] <- residual.K
 DNAm.Age          <- as.numeric(as.vector(df.cov.K["DNAm.Age",]))
 DNAm.Age.Residual <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual",]))
 Race              <- as.numeric(as.vector(df.cov.K["RaceWhite",]))
-BMI               <- as.numeric(as.vector(df.cov.K["LocationUrban",]))
+BMI               <- as.numeric(as.vector(df.cov.K["BMI",]))
 Cig.Pack.Years    <- as.numeric(as.vector(df.cov.K["Cig.Pack.Years",]))
 Drinking          <- as.numeric(as.vector(df.cov.K["DrinkingYes",]))
 Menarche          <- as.numeric(as.vector(df.cov.K["Menarche",]))
@@ -122,41 +128,384 @@ for(i in 1:length(Location.Rural) ){
 Location  <- as.numeric(Location)
 Menopause <- as.numeric(Menopause)
 
-lm.DNAm.Age <- lm(DNAm.Age ~ 
-                  Race + 
-                  BMI + 
-                  Cig.Pack.Years + 
-                  Drinking + 
-                  Menarche + 
-                  Been.PregnantYes + 
-                  Times.Pregnant + 
-                  Parity + 
-                  Age.FB + 
-                  #Menopause.Age + 
-                  VDYes + 
-                  Menopause + 
-                  Location
-                 )
+# Factorize categorical variables
+#Race             <- as.factor(Race)
+#Drinking         <- as.factor(Drinking)
+#Been.PregnantYes <- as.factor(Been.PregnantYes)
+#VDYes            <- as.factor(VDYes)
+#Menopause        <- as.factor(Menopause)
+#Location         <- as.factor(Location)
 
-lm.DNAm.Age.Residual <- lm(DNAm.Age.Residual ~ 
-                           Race + 
-                           BMI + 
-                           Cig.Pack.Years + 
-                           Drinking + 
-                           Menarche + 
-                           Been.PregnantYes + 
-                           Times.Pregnant + 
-                           Parity + 
-                           Age.FB + 
-                           #Menopause.Age + 
-                           VDYes + 
-                           Menopause + 
-                           Location
-                           )
+if( age.covariate ){
+  lm.DNAm.Age <- glm(DNAm.Age ~ 
+                     Race + 
+                     BMI + 
+                     Cig.Pack.Years + 
+                     Drinking + 
+                     Menarche + 
+                     Been.PregnantYes + 
+                     Times.Pregnant + 
+                     Parity + 
+                     Age.FB + 
+                     #Menopause.Age + 
+                     VDYes + 
+                     Menopause + 
+                     Location + 
+                     sample.ages.K
+                    )
+}else{
+  lm.DNAm.Age <- glm(DNAm.Age ~ 
+                     Race + 
+                     BMI + 
+                     Cig.Pack.Years + 
+                     Drinking + 
+                     Menarche + 
+                     Been.PregnantYes + 
+                     Times.Pregnant + 
+                     Parity + 
+                     Age.FB + 
+                     #Menopause.Age + 
+                     VDYes + 
+                     Menopause + 
+                     Location
+                    )
+}
 
+if( age.covariate ){
+  lm.DNAm.Age.Residual <- lm(DNAm.Age.Residual ~ 
+                             Race + 
+                             BMI + 
+                             Cig.Pack.Years + 
+                             Drinking + 
+                             Menarche + 
+                             Been.PregnantYes + 
+                             Times.Pregnant + 
+                             Parity + 
+                             Age.FB + 
+                             #Menopause.Age + 
+                             VDYes + 
+                             Menopause + 
+                             Location +
+                             sample.ages.K
+                            )
+} else{
+  lm.DNAm.Age.Residual <- lm(DNAm.Age.Residual ~ 
+                             Race + 
+                             BMI + 
+                             Cig.Pack.Years + 
+                             Drinking + 
+                             Menarche + 
+                             Been.PregnantYes + 
+                             Times.Pregnant + 
+                             Parity + 
+                             Age.FB + 
+                             #Menopause.Age + 
+                             VDYes + 
+                             Menopause + 
+                             Location
+                            )
+}
 
-lm.DNAm.Age.Residual <- lm(DNAm.Age.Residual ~ Menopause )
-summary(lm.DNAm.Age.Residual)
+##########################################################################
+# DNAm Age Univariate Analysis
+##########################################################################
+
+##### Race DNAm Age #####
+DNAm.Age.tmp     <- as.numeric(as.vector(df.cov.K["DNAm.Age",  !is.na(df.cov.K["RaceWhite",]) ]))
+Race             <- as.numeric(as.vector(df.cov.K["RaceWhite", !is.na(df.cov.K["RaceWhite",]) ]))
+sample.age.tmp   <- as.numeric(as.vector(df.cov.K["Age",       !is.na(df.cov.K["RaceWhite",]) ]))
+if( age.covariate ){
+  lm.Race.DNAm.Age <- glm(DNAm.Age.tmp ~ Race + sample.age.tmp)
+}else{
+  lm.Race.DNAm.Age <- glm(DNAm.Age.tmp ~ Race)
+}
+
+##### BMI DNAm Age #####
+DNAm.Age.tmp    <- as.numeric(as.vector(df.cov.K["DNAm.Age", !is.na(df.cov.K["BMI",]) ]))
+BMI             <- as.numeric(as.vector(df.cov.K["BMI",      !is.na(df.cov.K["BMI",]) ]))
+sample.age.tmp  <- as.numeric(as.vector(df.cov.K["Age",      !is.na(df.cov.K["BMI",]) ]))
+if( age.covariate ){
+  lm.BMI.DNAm.Age <- glm(DNAm.Age.tmp ~ BMI + sample.age.tmp)
+}else{
+  lm.BMI.DNAm.Age <- glm(DNAm.Age.tmp ~ BMI)
+}
+
+##### Cig.Pack.Years DNAm Age #####
+DNAm.Age.tmp               <- as.numeric(as.vector(df.cov.K["DNAm.Age",       !is.na(df.cov.K["Cig.Pack.Years",]) ]))
+Cig.Pack.Years             <- as.numeric(as.vector(df.cov.K["Cig.Pack.Years", !is.na(df.cov.K["Cig.Pack.Years",]) ]))
+sample.age.tmp             <- as.numeric(as.vector(df.cov.K["Age",            !is.na(df.cov.K["Cig.Pack.Years",]) ]))
+if( age.covariate ){
+  lm.Cig.Pack.Years.DNAm.Age <- glm(DNAm.Age.tmp ~ Cig.Pack.Years + sample.age.tmp)
+}else{
+  lm.Cig.Pack.Years.DNAm.Age <- glm(DNAm.Age.tmp ~ Cig.Pack.Years)
+}
+
+##### Drinking DNAm Age #####
+DNAm.Age.tmp         <- as.numeric(as.vector(df.cov.K["DNAm.Age",    !is.na(df.cov.K["DrinkingYes",]) ]))
+Drinking             <- as.numeric(as.vector(df.cov.K["DrinkingYes", !is.na(df.cov.K["DrinkingYes",]) ]))
+sample.age.tmp       <- as.numeric(as.vector(df.cov.K["Age",         !is.na(df.cov.K["DrinkingYes",]) ]))
+if( age.covariate ){
+  lm.Drinking.DNAm.Age <- glm(DNAm.Age.tmp ~ Drinking + sample.age.tmp)
+}else{
+  lm.Drinking.DNAm.Age <- glm(DNAm.Age.tmp ~ Drinking)
+}
+
+##### Menarche DNAm Age #####
+DNAm.Age.tmp         <- as.numeric(as.vector(df.cov.K["DNAm.Age", !is.na(df.cov.K["Menarche",]) ]))
+Menarche             <- as.numeric(as.vector(df.cov.K["Menarche", !is.na(df.cov.K["Menarche",]) ]))
+sample.age.tmp       <- as.numeric(as.vector(df.cov.K["Age",      !is.na(df.cov.K["Menarche",]) ]))
+if( age.covariate ){
+  lm.Menarche.DNAm.Age <- glm(DNAm.Age.tmp ~ Menarche + sample.age.tmp)
+}else{
+  lm.Menarche.DNAm.Age <- glm(DNAm.Age.tmp ~ Menarche)
+}
+
+##### Been.PregnantYes DNAm Age #####
+DNAm.Age.tmp                 <- as.numeric(as.vector(df.cov.K["DNAm.Age",         !is.na(df.cov.K["Been.PregnantYes",]) ]))
+Been.PregnantYes             <- as.numeric(as.vector(df.cov.K["Been.PregnantYes", !is.na(df.cov.K["Been.PregnantYes",]) ]))
+sample.age.tmp               <- as.numeric(as.vector(df.cov.K["Age",              !is.na(df.cov.K["Been.PregnantYes",]) ]))
+if( age.covariate ){
+  lm.Been.PregnantYes.DNAm.Age <- glm(DNAm.Age.tmp ~ Been.PregnantYes + sample.age.tmp)
+}else{
+  lm.Been.PregnantYes.DNAm.Age <- glm(DNAm.Age.tmp ~ Been.PregnantYes)
+}
+
+##### Times.Pregnant DNAm Age #####
+DNAm.Age.tmp               <- as.numeric(as.vector(df.cov.K["DNAm.Age",       !is.na(df.cov.K["Times.Pregnant",]) ]))
+Times.Pregnant             <- as.numeric(as.vector(df.cov.K["Times.Pregnant", !is.na(df.cov.K["Times.Pregnant",]) ]))
+sample.age.tmp             <- as.numeric(as.vector(df.cov.K["Age",            !is.na(df.cov.K["Times.Pregnant",]) ]))
+if( age.covariate ){
+  lm.Times.Pregnant.DNAm.Age <- glm(DNAm.Age.tmp ~ Times.Pregnant + sample.age.tmp)
+}else{
+  lm.Times.Pregnant.DNAm.Age <- glm(DNAm.Age.tmp ~ Times.Pregnant)
+}
+
+##### Parity DNAm Age #####
+DNAm.Age.tmp       <- as.numeric(as.vector(df.cov.K["DNAm.Age", !is.na(df.cov.K["Parity",]) ]))
+Parity             <- as.numeric(as.vector(df.cov.K["Parity",   !is.na(df.cov.K["Parity",]) ]))
+sample.age.tmp     <- as.numeric(as.vector(df.cov.K["Age",      !is.na(df.cov.K["Parity",]) ]))
+if( age.covariate ){
+  lm.Parity.DNAm.Age <- glm(DNAm.Age.tmp ~ Parity + sample.age.tmp)
+}else{
+  lm.Parity.DNAm.Age <- glm(DNAm.Age.tmp ~ Parity)
+}
+
+##### Age.FB DNAm Age #####
+DNAm.Age.tmp       <- as.numeric(as.vector(df.cov.K["DNAm.Age", !is.na(df.cov.K["Age.FB",]) ]))
+Age.FB             <- as.numeric(as.vector(df.cov.K["Age.FB",   !is.na(df.cov.K["Age.FB",]) ]))
+sample.age.tmp     <- as.numeric(as.vector(df.cov.K["Age",      !is.na(df.cov.K["Age.FB",]) ]))
+if( age.covariate ){
+  lm.Age.FB.DNAm.Age <- glm(DNAm.Age.tmp ~ Age.FB + sample.age.tmp)
+}else{
+  lm.Age.FB.DNAm.Age <- glm(DNAm.Age.tmp ~ Age.FB)
+}
+
+##### Menopause.Age DNAm Age #####
+DNAm.Age.tmp              <- as.numeric(as.vector(df.cov.K["DNAm.Age",      !is.na(df.cov.K["Menopause.Age",]) ]))
+Menopause.Age             <- as.numeric(as.vector(df.cov.K["Menopause.Age", !is.na(df.cov.K["Menopause.Age",]) ]))
+sample.age.tmp            <- as.numeric(as.vector(df.cov.K["Age",           !is.na(df.cov.K["Menopause.Age",]) ]))
+if( age.covariate ){
+  lm.Menopause.Age.DNAm.Age <- glm(DNAm.Age.tmp ~ Menopause.Age + sample.age.tmp)
+}else{
+  lm.Menopause.Age.DNAm.Age <- glm(DNAm.Age.tmp ~ Menopause.Age)
+}
+
+##### VDYes DNAm Age #####
+DNAm.Age.tmp      <- as.numeric(as.vector(df.cov.K["DNAm.Age", !is.na(df.cov.K["VDYes",]) ]))
+VDYes             <- as.numeric(as.vector(df.cov.K["VDYes",    !is.na(df.cov.K["VDYes",]) ]))
+sample.age.tmp    <- as.numeric(as.vector(df.cov.K["Age",      !is.na(df.cov.K["VDYes",]) ]))
+if( age.covariate ){
+  lm.VDYes.DNAm.Age <- glm(DNAm.Age.tmp ~ VDYes + sample.age.tmp)
+}else{
+  lm.VDYes.DNAm.Age <- glm(DNAm.Age.tmp ~ VDYes)
+}
+
+##### Location DNAm Age #####
+Location.Rural   <- as.numeric(as.vector(df.cov.K["LocationRural", (df.cov.K["LocationRural",] == 1 & !is.na(df.cov.K["LocationRural",]))]))
+Loacation.Urban  <- as.numeric(as.vector(df.cov.K["LocationUrban", (df.cov.K["LocationUrban",] == 1 & !is.na(df.cov.K["LocationUrban",]))]))
+DNAm.Age.Rural   <- as.numeric(as.vector(df.cov.K["DNAm.Age",      (df.cov.K["LocationRural",] == 1 & !is.na(df.cov.K["LocationRural",]))]))
+DNAm.Age.Urban   <- as.numeric(as.vector(df.cov.K["DNAm.Age",      (df.cov.K["LocationUrban",] == 1 & !is.na(df.cov.K["LocationUrban",]))]))
+sample.age.Rural <- as.numeric(as.vector(df.cov.K["Age",           (df.cov.K["LocationRural",] == 1 & !is.na(df.cov.K["LocationRural",]))]))
+sample.age.Urban <- as.numeric(as.vector(df.cov.K["Age",           (df.cov.K["LocationUrban",] == 1 & !is.na(df.cov.K["LocationUrban",]))]))
+Location.Rural[Location.Rural == 1] <- 0
+
+DNAm.Age.tmp         <- c(DNAm.Age.Rural, DNAm.Age.Urban)
+Location             <- c(Location.Rural, Loacation.Urban)         
+sample.age.tmp       <- c(sample.age.Rural, sample.age.Urban) 
+if( age.covariate ){
+  lm.Location.DNAm.Age <- glm(DNAm.Age.tmp ~ Location + sample.age.tmp)
+}else{
+  lm.Location.DNAm.Age <- glm(DNAm.Age.tmp ~ Location)
+}
+
+##### Menopause DNAm Age #####
+MenopausePost            <- as.numeric(as.vector(df.cov.K["MenopausePost-menopausal", (df.cov.K["MenopausePost-menopausal",] == 1 & !is.na(df.cov.K["MenopausePost-menopausal",]))]))
+MenopausePre             <- as.numeric(as.vector(df.cov.K["MenopausePre-menopausal",  (df.cov.K["MenopausePre-menopausal",]  == 1 & !is.na(df.cov.K["MenopausePre-menopausal",]))]))
+DNAm.Age.MenopausePost   <- as.numeric(as.vector(df.cov.K["DNAm.Age",                 (df.cov.K["MenopausePost-menopausal",] == 1 & !is.na(df.cov.K["MenopausePost-menopausal",]))]))
+DNAm.Age.MenopausePre    <- as.numeric(as.vector(df.cov.K["DNAm.Age",                 (df.cov.K["MenopausePre-menopausal",]  == 1 & !is.na(df.cov.K["MenopausePre-menopausal",]))]))
+sample.age.MenopausePost <- as.numeric(as.vector(df.cov.K["Age",                      (df.cov.K["MenopausePost-menopausal",] == 1 & !is.na(df.cov.K["MenopausePost-menopausal",]))]))
+sample.age.MenopausePre  <- as.numeric(as.vector(df.cov.K["Age",                      (df.cov.K["MenopausePre-menopausal",]  == 1 & !is.na(df.cov.K["MenopausePre-menopausal",]))]))
+MenopausePre[MenopausePre == 1] <- 0
+
+DNAm.Age.tmp   <- as.numeric( c(DNAm.Age.MenopausePre, DNAm.Age.MenopausePost) )
+Menopause      <- as.numeric( c(MenopausePre, MenopausePost) )
+sample.age.tmp <- as.numeric( c(sample.age.MenopausePre, sample.age.MenopausePost) )
+if( age.covariate ){
+  lm.Menopause.DNAm.Age <- glm(DNAm.Age.tmp ~ Menopause + sample.age.tmp)
+}else{
+  lm.Menopause.DNAm.Age <- glm(DNAm.Age.tmp ~ Menopause)
+}
+
+##########################################################################
+# DNAm Age Residual Univariate Analysis
+##########################################################################
+
+##### Race DNAm Age Residual #####
+DNAm.Age.Residual.tmp     <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual",  !is.na(df.cov.K["RaceWhite",]) ]))
+Race                      <- as.numeric(as.vector(df.cov.K["RaceWhite",          !is.na(df.cov.K["RaceWhite",]) ]))
+sample.age.tmp            <- as.numeric(as.vector(df.cov.K["Age",                !is.na(df.cov.K["RaceWhite",]) ]))
+if( age.covariate ){
+  lm.Race.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Race + sample.age.tmp)
+}else{
+  lm.Race.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Race)
+}
+
+##### BMI DNAm Age Residual #####
+DNAm.Age.Residual.tmp    <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["BMI",]) ]))
+BMI                      <- as.numeric(as.vector(df.cov.K["BMI",               !is.na(df.cov.K["BMI",]) ]))
+sample.age.tmp           <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["BMI",]) ]))
+if( age.covariate ){
+  lm.BMI.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ BMI + sample.age.tmp)
+}else{
+  lm.BMI.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ BMI)
+}
+
+##### Cig.Pack.Years DNAm Age Residual #####
+DNAm.Age.Residual.tmp               <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["Cig.Pack.Years",]) ]))
+Cig.Pack.Years                      <- as.numeric(as.vector(df.cov.K["Cig.Pack.Years",    !is.na(df.cov.K["Cig.Pack.Years",]) ]))
+sample.age.tmp                      <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["Cig.Pack.Years",]) ]))
+if( age.covariate ){
+  lm.Cig.Pack.Years.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Cig.Pack.Years + sample.age.tmp)
+}else{
+  lm.Cig.Pack.Years.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Cig.Pack.Years)
+}
+
+##### Drinking DNAm Age Residual #####
+DNAm.Age.Residual.tmp         <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["DrinkingYes",]) ]))
+Drinking                      <- as.numeric(as.vector(df.cov.K["DrinkingYes",       !is.na(df.cov.K["DrinkingYes",]) ]))
+sample.age.tmp                <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["DrinkingYes",]) ]))
+if( age.covariate ){
+  lm.Drinking.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Drinking + sample.age.tmp)
+}else{
+  lm.Drinking.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Drinking)
+}
+
+##### Menarche DNAm Age Residual #####
+DNAm.Age.Residual.tmp         <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["Menarche",]) ]))
+Menarche                      <- as.numeric(as.vector(df.cov.K["Menarche",          !is.na(df.cov.K["Menarche",]) ]))
+sample.age.tmp                <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["Menarche",]) ]))
+if( age.covariate ){
+  lm.Menarche.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Menarche + sample.age.tmp)
+}else{
+  lm.Menarche.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Menarche)
+}
+
+##### Been.PregnantYes DNAm Age Residual #####
+DNAm.Age.Residual.tmp                 <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["Been.PregnantYes",]) ]))
+Been.PregnantYes                      <- as.numeric(as.vector(df.cov.K["Been.PregnantYes",  !is.na(df.cov.K["Been.PregnantYes",]) ]))
+sample.age.tmp                        <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["Been.PregnantYes",]) ]))
+if( age.covariate ){
+  lm.Been.PregnantYes.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Been.PregnantYes + sample.age.tmp)
+}else{
+  lm.Been.PregnantYes.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Been.PregnantYes)
+}
+
+##### Times.Pregnant DNAm Age Residual #####
+DNAm.Age.Residual.tmp               <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual",  !is.na(df.cov.K["Times.Pregnant",]) ]))
+Times.Pregnant                      <- as.numeric(as.vector(df.cov.K["Times.Pregnant",     !is.na(df.cov.K["Times.Pregnant",]) ]))
+sample.age.tmp                      <- as.numeric(as.vector(df.cov.K["Age",                !is.na(df.cov.K["Times.Pregnant",]) ]))
+if( age.covariate ){
+  lm.Times.Pregnant.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Times.Pregnant + sample.age.tmp)
+}else{
+  lm.Times.Pregnant.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Times.Pregnant)
+}
+
+##### Parity DNAm Age Residual #####
+DNAm.Age.Residual.tmp       <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["Parity",]) ]))
+Parity                      <- as.numeric(as.vector(df.cov.K["Parity",            !is.na(df.cov.K["Parity",]) ]))
+sample.age.tmp              <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["Parity",]) ]))
+if( age.covariate ){
+  lm.Parity.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Parity + sample.age.tmp)
+}else{
+  lm.Parity.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Parity)
+}
+
+##### Age.FB DNAm Age Residual #####
+DNAm.Age.Residual.tmp       <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["Age.FB",]) ]))
+Age.FB                      <- as.numeric(as.vector(df.cov.K["Age.FB",            !is.na(df.cov.K["Age.FB",]) ]))
+sample.age.tmp              <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["Age.FB",]) ]))
+if( age.covariate ){
+  lm.Age.FB.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Age.FB + sample.age.tmp)
+}else{
+  lm.Age.FB.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Age.FB)
+}
+
+##### Menopause.Age DNAm Age Residual #####
+DNAm.Age.Residual.tmp              <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["Menopause.Age",]) ]))
+Menopause.Age                      <- as.numeric(as.vector(df.cov.K["Menopause.Age",     !is.na(df.cov.K["Menopause.Age",]) ]))
+sample.age.tmp                     <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["Menopause.Age",]) ]))
+if( age.covariate ){
+  lm.Menopause.Age.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Menopause.Age + sample.age.tmp)
+}else{
+  lm.Menopause.Age.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Menopause.Age)
+}
+
+##### VDYes DNAm Age Residual #####
+DNAm.Age.Residual.tmp      <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", !is.na(df.cov.K["VDYes",]) ]))
+VDYes                      <- as.numeric(as.vector(df.cov.K["VDYes",             !is.na(df.cov.K["VDYes",]) ]))
+sample.age.tmp             <- as.numeric(as.vector(df.cov.K["Age",               !is.na(df.cov.K["VDYes",]) ]))
+if( age.covariate ){
+  lm.VDYes.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ VDYes + sample.age.tmp)
+}else{
+  lm.VDYes.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ VDYes)
+}
+
+##### Location DNAm Age Residual #####
+Location.Rural            <- as.numeric(as.vector(df.cov.K["LocationRural",     (df.cov.K["LocationRural",] == 1 & !is.na(df.cov.K["LocationRural",]))]))
+Loacation.Urban           <- as.numeric(as.vector(df.cov.K["LocationUrban",     (df.cov.K["LocationUrban",] == 1 & !is.na(df.cov.K["LocationUrban",]))]))
+DNAm.Age.Residual.Rural   <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", (df.cov.K["LocationRural",] == 1 & !is.na(df.cov.K["LocationRural",]))]))
+DNAm.Age.Residual.Urban   <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual", (df.cov.K["LocationUrban",] == 1 & !is.na(df.cov.K["LocationUrban",]))]))
+sample.age.Rural          <- as.numeric(as.vector(df.cov.K["Age",               (df.cov.K["LocationRural",] == 1 & !is.na(df.cov.K["LocationRural",]))]))
+sample.age.Urban          <- as.numeric(as.vector(df.cov.K["Age",               (df.cov.K["LocationUrban",] == 1 & !is.na(df.cov.K["LocationUrban",]))]))
+Location.Rural[Location.Rural == 1] <- 0
+
+DNAm.Age.Residual.tmp         <- c(DNAm.Age.Residual.Rural, DNAm.Age.Residual.Urban)
+Location                      <- c(Location.Rural, Loacation.Urban)         
+sample.age.tmp                <- c(sample.age.Rural, sample.age.Urban) 
+if( age.covariate ){
+  lm.Location.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Location + sample.age.tmp)
+}else{
+  lm.Location.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Location)
+}
+
+##### Menopause DNAm Age Residual #####
+MenopausePost                     <- as.numeric(as.vector(df.cov.K["MenopausePost-menopausal", (df.cov.K["MenopausePost-menopausal",] == 1 & !is.na(df.cov.K["MenopausePost-menopausal",]))]))
+MenopausePre                      <- as.numeric(as.vector(df.cov.K["MenopausePre-menopausal",  (df.cov.K["MenopausePre-menopausal",]  == 1 & !is.na(df.cov.K["MenopausePre-menopausal",]))]))
+DNAm.Age.Residual.MenopausePost   <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual",        (df.cov.K["MenopausePost-menopausal",] == 1 & !is.na(df.cov.K["MenopausePost-menopausal",]))]))
+DNAm.Age.Residual.MenopausePre    <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual",        (df.cov.K["MenopausePre-menopausal",]  == 1 & !is.na(df.cov.K["MenopausePre-menopausal",]))]))
+sample.age.MenopausePost          <- as.numeric(as.vector(df.cov.K["Age",                      (df.cov.K["MenopausePost-menopausal",] == 1 & !is.na(df.cov.K["MenopausePost-menopausal",]))]))
+sample.age.MenopausePre           <- as.numeric(as.vector(df.cov.K["Age",                      (df.cov.K["MenopausePre-menopausal",]  == 1 & !is.na(df.cov.K["MenopausePre-menopausal",]))]))
+MenopausePre[MenopausePre == 1] <- 0
+
+DNAm.Age.Residual.tmp          <- as.numeric( c(DNAm.Age.Residual.MenopausePre, DNAm.Age.Residual.MenopausePost) )
+Menopause                      <- as.numeric( c(MenopausePre, MenopausePost) )
+sample.age.tmp                 <- as.numeric( c(sample.age.MenopausePre, sample.age.MenopausePost) )
+if( age.covariate ){
+  lm.Menopause.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Menopause + sample.age.tmp)
+}else{
+  lm.Menopause.DNAm.Age.Residual <- glm(DNAm.Age.Residual.tmp ~ Menopause)
+}
+
 
 ##########################################################################
 # Univariate Analysis - Race
@@ -1065,13 +1414,87 @@ dev.off()
 # Univariate/Multivariate Analysis Summary
 ##########################################################################
 
-##### Uni #####
-df.univar[which(df.univar$DNAm.Age.pval < 0.05),1:2]
-df.univar[which(df.univar$DNAm.Age.Residual.pval < 0.05),3:4]
+options(digits=4)
+##### DNAm Age Univariate #####
+summary(lm.Race.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Location.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.BMI.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Cig.Pack.Years.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Drinking.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Menarche.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Been.PregnantYes.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Times.Pregnant.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Parity.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Age.FB.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Menopause.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.Menopause.Age.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
+summary(lm.VDYes.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")]
 
-df.univar
+##### DNAm Age Residual Univariate #####
+df.Race             <- data.frame(summary(lm.Race.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Location         <- data.frame(summary(lm.Location.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.BMI              <- data.frame(summary(lm.BMI.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Cig.Pack.Years   <- data.frame(summary(lm.Cig.Pack.Years.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Drinking         <- data.frame(summary(lm.Drinking.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Menarche         <- data.frame(summary(lm.Menarche.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Been.PregnantYes <- data.frame(summary(lm.Been.PregnantYes.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Times.Pregnant   <- data.frame(summary(lm.Times.Pregnant.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Parity           <- data.frame(summary(lm.Parity.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Age.FB           <- data.frame(summary(lm.Age.FB.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Menopause        <- data.frame(summary(lm.Menopause.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.Menopause.Age    <- data.frame(summary(lm.Menopause.Age.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+df.VDYes            <- data.frame(summary(lm.VDYes.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
+
+df.Race             <- df.Race[-c(1),]
+df.Location         <- df.Location[-c(1),]
+df.BMI              <- df.BMI[-c(1),]
+df.Cig.Pack.Years   <- df.Cig.Pack.Years[-c(1),]
+df.Drinking         <- df.Drinking[-c(1),]
+df.Menarche         <- df.Menarche[-c(1),]
+df.Been.PregnantYes <- df.Been.PregnantYes[-c(1),]
+df.Times.Pregnant   <- df.Times.Pregnant[-c(1),]
+df.Parity           <- df.Parity[-c(1),]
+df.Age.FB           <- df.Age.FB[-c(1),]
+df.Menopause        <- df.Menopause[-c(1),]
+df.Menopause.Age    <- df.Menopause.Age[-c(1),]
+df.VDYes            <- df.VDYes[-c(1),]
+
+if( age.covariate ){
+  df.Race             <- df.Race[-c(2),]
+  df.Location         <- df.Location[-c(2),]
+  df.BMI              <- df.BMI[-c(2),]
+  df.Cig.Pack.Years   <- df.Cig.Pack.Years[-c(2),]
+  df.Drinking         <- df.Drinking[-c(2),]
+  df.Menarche         <- df.Menarche[-c(2),]
+  df.Been.PregnantYes <- df.Been.PregnantYes[-c(2),]
+  df.Times.Pregnant   <- df.Times.Pregnant[-c(2),]
+  df.Parity           <- df.Parity[-c(2),]
+  df.Age.FB           <- df.Age.FB[-c(2),]
+  df.Menopause        <- df.Menopause[-c(2),]
+  df.Menopause.Age    <- df.Menopause.Age[-c(2),]
+  df.VDYes            <- df.VDYes[-c(2),]
+  
+  DNAm.Age.Residual <- as.numeric(as.vector(df.cov.K["DNAm.Age.Residual",]))
+  sample.age        <- as.numeric(as.vector(df.cov.K["Age",]))
+  m                 <- glm(DNAm.Age.Residual ~ sample.age)
+  df.age            <- data.frame(summary(m)$coefficients[,c("Estimate","Pr(>|t|)")])
+  df.age            <- df.age[-c(1,3),]
+  
+  
+  df.sum <- rbind(df.Race, df.BMI, df.Cig.Pack.Years, df.Drinking, df.Menarche, 
+                  df.Times.Pregnant, df.Parity, df.Age.FB, df.VDYes, df.Menopause, 
+                  df.Menopause.Age, df.Been.PregnantYes, df.Location, df.age)
+}else{
+  df.sum <- rbind(df.Race, df.BMI, df.Cig.Pack.Years, df.Drinking, df.Menarche, 
+                  df.Times.Pregnant, df.Parity, df.Age.FB, df.VDYes, df.Menopause, 
+                  df.Menopause.Age, df.Been.PregnantYes, df.Location)
+}
+
+stargazer(df.sum, summary = FALSE)
 
 ##### Multi #####
-summary(lm.DNAm.Age)
-summary(lm.DNAm.Age.Residual)
+#stargazer(summary(lm.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")])
+stargazer(summary(lm.DNAm.Age.Residual)$coefficients[,c("Estimate","Pr(>|t|)")])
 
+
+           
