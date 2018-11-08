@@ -143,7 +143,8 @@ result.T <- sapply(result.T, anti.trafo)
 residual.K <- result.K - sample.ages.K 
 mean.error.K <- mean(residual.K)
 stdev.error.K <- sd(residual.K)
-
+cor.test(sample.ages.K,result.K, method = "pearson")
+median(residual.K)
 p <- ggplot(data.frame(res = residual.K), aes(x=res)) +
   geom_histogram(binwidth = 5, color="black", fill="white") +
   scale_y_continuous(
@@ -165,11 +166,11 @@ p <- ggplot(data.frame(res = residual.K), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_K.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "TissueStudies/residual_hist_K.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_K.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_K.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.K, 
      result.K, 
      main="Methlyation Age vs Sample Age in Normal Tissue", 
@@ -217,11 +218,11 @@ p <- ggplot(data.frame(res = residual.N), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_N.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "TissueStudies/residual_hist_N.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_N.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_N.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.N, 
      result.N, 
      main="Methlyation Age vs Sample Age in Adjacent Normal Tissue", 
@@ -269,11 +270,11 @@ p <- ggplot(data.frame(res = residual.T), aes(x=res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_T.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "TissueStudies/residual_hist_T.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_T.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_T.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.T, 
      result.T, 
      main="Methlyation Age vs Sample Age in Tumor Tissue", 
@@ -371,11 +372,11 @@ p <- ggplot(df.KT, aes(x = res)) +
   )
 
 
-png( paste(model.dir, "residual_hist_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "TissueStudies/residual_hist_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "MethAgevsSampleAge_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
+png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
 plot(sample.ages.K, 
      result.K, 
      main="Methlyation Age vs Sample Age in Normal and Tumor Tissue", 
