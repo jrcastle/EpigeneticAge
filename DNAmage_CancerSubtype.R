@@ -1123,41 +1123,41 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
     label = paste("Median Accel. (ER/PR+ Her2+) = ", round(median.error.Tpp,  digits = 1), sep = ""), 
     color = "deepskyblue4"
   ) + 
+  #annotate(
+  #  "text", x = 85, y = 0.0245, 
+  #  label = paste("St. Dev Accel. (ER/PR+ Her2+) = ", round(stdev.error.Tpp, digits = 1), sep = ""), 
+  #  color = "deepskyblue4"
+  #) +
   annotate(
-    "text", x = 85, y = 0.0245, 
-    label = paste("St. Dev Accel. (ER/PR+ Her2+) = ", round(stdev.error.Tpp, digits = 1), sep = ""), 
-    color = "deepskyblue4"
-  ) +
-  annotate(
-    "text", x = 85, y = 0.0225, 
+    "text", x = 85, y = 0.024, 
     label = paste("Median Accel. (ER/PR+ Her2-) = ", round(median.error.Tpn,  digits = 1), sep = ""), 
     color = "darkorange3"
   ) + 
+  #annotate(
+  #  "text", x = 85, y = 0.021, 
+  #  label = paste("St. Dev Accel. (ER/PR+ Her2-) = ", round(stdev.error.Tpn, digits = 1), sep = ""), 
+  #  color = "darkorange3"
+  #) +
   annotate(
-    "text", x = 85, y = 0.021, 
-    label = paste("St. Dev Accel. (ER/PR+ Her2-) = ", round(stdev.error.Tpn, digits = 1), sep = ""), 
-    color = "darkorange3"
-  ) +
-  annotate(
-    "text", x = 85, y = 0.019,  
+    "text", x = 85, y = 0.022,  
     label = paste("Median Accel. (ER/PR- Her2+) = ", round(median.error.Tnp,  digits = 1), sep = ""), 
     color = "seagreen4"
   ) + 
+  #annotate(
+  #  "text", x = 85, y = 0.0175,
+  #  label = paste("St. Dev Accel. (ER/PR- Her2+) = ", round(stdev.error.Tnp, digits = 1), sep = ""), 
+  #  color = "seagreen4"
+  #) +
   annotate(
-    "text", x = 85, y = 0.0175,
-    label = paste("St. Dev Accel. (ER/PR- Her2+) = ", round(stdev.error.Tnp, digits = 1), sep = ""), 
-    color = "seagreen4"
-  ) +
-  annotate(
-    "text", x = 85, y = 0.0155,  
+    "text", x = 85, y = 0.020,  
     label = paste("Median Accel. (ER/PR- Her2-) = ", round(median.error.Tnn,  digits = 1), sep = ""), 
     color = "firebrick3"
   ) + 
-  annotate(
-    "text", x = 85, y = 0.014,
-    label = paste("St. Dev Accel. (ER/PR- Her2-) = ", round(stdev.error.Tnn, digits = 1), sep = ""), 
-    color = "firebrick3"
-  ) +
+  #annotate(
+  #  "text", x = 85, y = 0.014,
+  #  label = paste("St. Dev Accel. (ER/PR- Her2-) = ", round(stdev.error.Tnn, digits = 1), sep = ""), 
+  #  color = "firebrick3"
+  #) +
   geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
   theme_bw() + 
   theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
@@ -1227,31 +1227,31 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
     label = paste("Median Accel. (3-5) = ", round(median.error.g3.5,  digits = 1), sep = ""), 
     color = "gray16"
   ) + 
+  #annotate(
+  #  "text", x = 90, y = 0.030, 
+  #  label = paste("St. Dev Accel. (3-5) = ", round(stdev.error.g3.5, digits = 1), sep = ""), 
+  #  color = "gray16"
+  #) +
   annotate(
     "text", x = 90, y = 0.030, 
-    label = paste("St. Dev Accel. (3-5) = ", round(stdev.error.g3.5, digits = 1), sep = ""), 
-    color = "gray16"
-  ) +
-  annotate(
-    "text", x = 90, y = 0.027, 
     label = paste("Median Accel. (6-7) = ", round(median.error.g6.7,  digits = 1), sep = ""), 
     color = "pink4"
   ) + 
+  #annotate(
+  #  "text", x = 90, y = 0.025, 
+  #  label = paste("St. Dev Accel. (6-7) = ", round(stdev.error.g6.7, digits = 1), sep = ""), 
+  #  color = "pink4"
+  #) +
   annotate(
-    "text", x = 90, y = 0.025, 
-    label = paste("St. Dev Accel. (6-7) = ", round(stdev.error.g6.7, digits = 1), sep = ""), 
-    color = "pink4"
-  ) +
-  annotate(
-    "text", x = 90, y = 0.022,  
+    "text", x = 90, y = 0.028,  
     label = paste("Median Accel. (8-9) = ", round(median.error.g8.9,  digits = 1), sep = ""), 
     color = "paleturquoise4"
   ) + 
-  annotate(
-    "text", x = 90, y = 0.020,
-    label = paste("St. Dev Accel. (8-9) = ", round(stdev.error.g8.9, digits = 1), sep = ""), 
-    color = "paleturquoise4"
-  ) +
+  #annotate(
+  #  "text", x = 90, y = 0.020,
+  #  label = paste("St. Dev Accel. (8-9) = ", round(stdev.error.g8.9, digits = 1), sep = ""), 
+  #  color = "paleturquoise4"
+  #) +
   geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
   theme_bw() + 
   theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
@@ -1320,21 +1320,21 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
     label = paste("Median Accel. (II) = ", round(median.error.sII,  digits = 1), sep = ""), 
     color = "darkslategrey"
   ) + 
+  #annotate(
+  #  "text", x = 90, y = 0.028, 
+  #  label = paste("St. Dev Accel. (II) = ", round(stdev.error.sII, digits = 1), sep = ""), 
+  #  color = "darkslategrey"
+  #) +
   annotate(
     "text", x = 90, y = 0.028, 
-    label = paste("St. Dev Accel. (II) = ", round(stdev.error.sII, digits = 1), sep = ""), 
-    color = "darkslategrey"
-  ) +
-  annotate(
-    "text", x = 90, y = 0.025, 
     label = paste("Median Accel. (III & IV) = ", round(median.error.sIII.IV,  digits = 1), sep = ""), 
     color = "firebrick3"
   ) + 
-  annotate(
-    "text", x = 90, y = 0.023, 
-    label = paste("St. Dev Accel. (III & IV) = ", round(stdev.error.sIII.IV, digits = 1), sep = ""), 
-    color = "firebrick3"
-  ) +
+  #annotate(
+  #  "text", x = 90, y = 0.023, 
+  #  label = paste("St. Dev Accel. (III & IV) = ", round(stdev.error.sIII.IV, digits = 1), sep = ""), 
+  #  color = "firebrick3"
+  #) +
   #annotate(
   #  "text", x = 90, y = 0.051,  
   #  label = paste("Median Accel. (IV) = ", round(median.error.sIV,  digits = 1), sep = ""), 

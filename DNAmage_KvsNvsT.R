@@ -298,6 +298,9 @@ dev.off()
 ##########################################################################
 # MERGED RESIDUAL PLOT 
 ##########################################################################
+median.error.K <- median(residual.K)
+median.error.N <- median(residual.N)
+median.error.T <- median(residual.T)
 
 tmp.K <- data.frame(residual.K)
 tmp.K$type <- "K"
@@ -317,53 +320,61 @@ rm(tmp.N)
 rm(tmp.T)
 gc()
 
-p <- ggplot(df.KT, aes(x = res)) +
-  #geom_histogram(binwidth = 5, alpha = .5) +
-  #scale_fill_manual(name = "ttype", values = c("red","blue"), labels=c("K", "T")) + 
-  geom_histogram(data=subset(df.KT, ttype == 'K'), aes(fill = "K"), binwidth = 5, alpha = 1) +
-  geom_histogram(data=subset(df.KT, ttype == 'T'), aes(fill = "T"), binwidth = 5, alpha = 0.8) +
-  geom_histogram(data=subset(df.KT, ttype == 'N'), aes(fill = "N"), binwidth = 5, alpha = 0.8) +
-  scale_fill_manual(name = "Tissue Type", values = c("darkorange3", "black", "deepskyblue4"), labels=c("K", "N", "T")) +
+p <- ggplot(df.KT, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
+  #geom_histogram(data=subset(df.KT, ttype == 'K'), aes(fill = "K"), binwidth = 5, alpha = 1) +
+  #geom_histogram(data=subset(df.KT, ttype == 'T'), aes(fill = "T"), binwidth = 5, alpha = 0.8) +
+  #geom_histogram(data=subset(df.KT, ttype == 'N'), aes(fill = "N"), binwidth = 5, alpha = 0.8) +
+  geom_freqpoly(size = 1.2, binwidth = 20) +
+  scale_linetype_manual(
+    name = "Tissue Type", 
+    values = c("solid", "dashed", "twodash"),
+    labels = c("K", "N", "T")
+  ) + 
+  scale_color_manual(
+    name = "Tissue Type", 
+    values = c("black","darkorange3","deepskyblue4"), 
+    labels = c("K", "N", "T")
+  ) +
   scale_y_continuous(
     expand=c(0, 0),
-    limits = c(0, 33)
+    limits = c(0, 0.05)
   ) + 
-  labs(x = "DNAm Age Acceleration") + 
-  labs(y = "Frequency") + 
-  labs(title = "Prediction Residuals in Normal and Tumor Tissue") + 
+  labs(x = "DNAm Age Acceleration [Years]") + 
+  labs(y = "Frequency [Arbitrary Units]") + 
+  labs(title = "DNAm Age Acceleration for Tissue Types") + 
   annotate(
-    "text", x = 100, y = 25, 
-    label = paste("Mean Residual (K) = ", round(mean.error.K, digits = 1), sep = ""), 
-    color = "darkorange3"
-  ) + 
-  annotate(
-    "text", x = 100, y = 24, 
-    label = paste("St. Dev Residual (K) = ", round(stdev.error.K, digits = 1), sep = ""), 
-    color = "darkorange3"
-  ) +
-  annotate(
-    "text", x = 100, y = 22, 
-    label = paste("Mean Residual (N) = ", round(mean.error.N, digits = 1), sep = ""), 
+    "text", x = 130, y = 0.037, 
+    label = paste("Median Residual (K) = ", round(median.error.K, digits = 1), sep = ""), 
     color = "black"
   ) + 
+  #annotate(
+  #  "text", x = 100, y = 24, 
+  #  label = paste("St. Dev Residual (K) = ", round(stdev.error.K, digits = 1), sep = ""), 
+  #  color = "darkorange3"
+  #) +
   annotate(
-    "text", x = 100, y = 21, 
-    label = paste("St. Dev Residual (N) = ", round(stdev.error.N, digits = 1), sep = ""), 
-    color = "black"
-  ) +
+    "text", x = 130, y = 0.034, 
+    label = paste("Median Residual (N) = ", round(median.error.N, digits = 1), sep = ""), 
+    color = "darkorange3"
+  ) + 
+  #annotate(
+  #  "text", x = 100, y = 21, 
+  #  label = paste("St. Dev Residual (N) = ", round(stdev.error.N, digits = 1), sep = ""), 
+  #  color = "black"
+  #) +
   annotate(
-    "text", x = 100, y = 19, 
-    label = paste("Mean Residual (T) = ", round(mean.error.T, digits = 1), sep = ""), 
+    "text", x = 130, y = 0.031, 
+    label = paste("Median Residual (T) = ", round(median.error.T, digits = 1), sep = ""), 
     color = "deepskyblue4"
   ) + 
-  annotate(
-    "text", x = 100, y = 18, 
-    label = paste("St. Dev Residual (T) = ", round(stdev.error.T, digits = 1), sep = ""), 
-    color = "deepskyblue4"
-  ) +
+  #annotate(
+  #  "text", x = 100, y = 18, 
+  #  label = paste("St. Dev Residual (T) = ", round(stdev.error.T, digits = 1), sep = ""), 
+  #  color = "deepskyblue4"
+  #) +
   geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
   theme_bw() + 
-  theme(legend.position=c(0.8, 0.9)) +
+  theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
