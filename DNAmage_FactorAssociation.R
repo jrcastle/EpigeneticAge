@@ -565,7 +565,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
   annotate("text", x = 0.75, y = 74, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.0+1, label = paste("n = ", length(DNAm.Age.AfrAmer), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.1+1, label = paste("n = ", length(DNAm.Age.White), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -573,7 +573,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/Race-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/Race-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -585,7 +585,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
   annotate("text", x = 0.75, y = 23, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.Residual.0+1, label = paste("n = ", length(DNAm.Age.Residual.AfrAmer), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.Residual.1+1, label = paste("n = ", length(DNAm.Age.Residual.White), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -593,7 +593,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/Race-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/Race-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -656,7 +656,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
   annotate("text", x = 0.75, y = 74, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.0+1, label = paste("n = ", length(DNAm.Age.Rural), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.1+1, label = paste("n = ", length(DNAm.Age.Urban), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -664,7 +664,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/Location-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/Location-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -676,7 +676,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
   annotate("text", x = 0.75, y = 23, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.Residual.0+1, label = paste("n = ", length(DNAm.Age.Residual.Rural), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.Residual.1+1, label = paste("n = ", length(DNAm.Age.Residual.Urban), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -684,7 +684,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/Location-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/Location-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -718,7 +718,7 @@ p <- ggplot(df.tmp, aes(x=BMI, y=DNAm.Age)) +
   annotate("text", x = 17, y = 72, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
   annotate("text", x = 17, y = 70, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 17, y = 68, label = paste("n = ", length(DNAm.Age), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -726,7 +726,7 @@ p <- ggplot(df.tmp, aes(x=BMI, y=DNAm.Age)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/BMI-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/BMI-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -737,7 +737,7 @@ p <- ggplot(df.tmp, aes(x = BMI, y = DNAm.Age.Residual)) +
   annotate("text", x = 17, y = 15, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
   annotate("text", x = 17, y = 13, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 17, y = 11, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -745,7 +745,7 @@ p <- ggplot(df.tmp, aes(x = BMI, y = DNAm.Age.Residual)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/BMI-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/BMI-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -780,7 +780,7 @@ p <- ggplot(df.tmp, aes(x=Cig.Pack.Years, y=DNAm.Age)) +
   annotate("text", x = 27, y = 70, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
   annotate("text", x = 27, y = 68, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 27, y = 66, label = paste("n = ", length(DNAm.Age), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -788,7 +788,7 @@ p <- ggplot(df.tmp, aes(x=Cig.Pack.Years, y=DNAm.Age)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/CigPackYears-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/CigPackYears-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -799,7 +799,7 @@ p <- ggplot(df.tmp, aes(x = Cig.Pack.Years, y = DNAm.Age.Residual)) +
   annotate("text", x = 27, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
   annotate("text", x = 27, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 27, y = 16, label = paste("n = ", length(DNAm.Age), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -807,7 +807,7 @@ p <- ggplot(df.tmp, aes(x = Cig.Pack.Years, y = DNAm.Age.Residual)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/CigPackYears-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/CigPackYears-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -867,7 +867,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
   annotate("text", x = 0.75, y = 78, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.0+1, label = paste("n = ", length(DNAm.Age.DrinkingNo), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.1+1, label = paste("n = ", length(DNAm.Age.DrinkingYes), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -875,7 +875,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/Drinking-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/Drinking-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -887,7 +887,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
   annotate("text", x = 0.75, y = 23, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.Residual.0+1, label = paste("n = ", length(DNAm.Age.Residual.DrinkingNo), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.Residual.1+1, label = paste("n = ", length(DNAm.Age.Residual.DrinkingYes), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -895,7 +895,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/Drinking-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/Drinking-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -930,7 +930,7 @@ p <- ggplot(df.tmp, aes(x=Menarche, y=DNAm.Age)) +
   annotate("text", x = 16, y = 75, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
   annotate("text", x = 16, y = 73, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 16, y = 71, label = paste("n = ", length(DNAm.Age), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -938,7 +938,7 @@ p <- ggplot(df.tmp, aes(x=Menarche, y=DNAm.Age)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/MenarcheAge-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/MenarcheAge-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -949,7 +949,7 @@ p <- ggplot(df.tmp, aes(x = Menarche, y = DNAm.Age.Residual)) +
   annotate("text", x = 16, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
   annotate("text", x = 16, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 16, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -957,7 +957,7 @@ p <- ggplot(df.tmp, aes(x = Menarche, y = DNAm.Age.Residual)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/MenarcheAge-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/MenarcheAge-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1017,7 +1017,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
   annotate("text", x = 0.75, y = 74, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.0+1, label = paste("n = ", length(DNAm.Age.Been.PregnantNo), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.1+1, label = paste("n = ", length(DNAm.Age.Been.PregnantYes), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1025,7 +1025,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/HaveYouBeenPregnant-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/HaveYouBeenPregnant-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1037,7 +1037,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
   annotate("text", x = 0.75, y = 23, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.Residual.0+1, label = paste("n = ", length(DNAm.Age.Been.PregnantNo), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.Residual.1+1, label = paste("n = ", length(DNAm.Age.Been.PregnantYes), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1045,7 +1045,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/HaveYouBeenPregnant-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/HaveYouBeenPregnant-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1080,7 +1080,7 @@ p <- ggplot(df.tmp, aes(x=Times.Pregnant, y=DNAm.Age)) +
   annotate("text", x = 6, y = 76, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
   annotate("text", x = 6, y = 74, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 6, y = 72, label = paste("n = ", length(DNAm.Age), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1088,7 +1088,7 @@ p <- ggplot(df.tmp, aes(x=Times.Pregnant, y=DNAm.Age)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/TimesPregnant-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/TimesPregnant-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1099,7 +1099,7 @@ p <- ggplot(df.tmp, aes(x = Times.Pregnant, y = DNAm.Age.Residual)) +
   annotate("text", x = 6, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
   annotate("text", x = 6, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 6, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1107,7 +1107,7 @@ p <- ggplot(df.tmp, aes(x = Times.Pregnant, y = DNAm.Age.Residual)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/TimesPregnant-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/TimesPregnant-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1142,7 +1142,7 @@ p <- ggplot(df.tmp, aes(x=Parity, y=DNAm.Age)) +
   annotate("text", x = 3.5, y = 75, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
   annotate("text", x = 3.5, y = 73, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 3.5, y = 71, label = paste("n = ", length(DNAm.Age), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1150,7 +1150,7 @@ p <- ggplot(df.tmp, aes(x=Parity, y=DNAm.Age)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/Parity-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/Parity-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1161,7 +1161,7 @@ p <- ggplot(df.tmp, aes(x = Parity, y = DNAm.Age.Residual)) +
   annotate("text", x = 3.5, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
   annotate("text", x = 3.5, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 3.5, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1169,7 +1169,7 @@ p <- ggplot(df.tmp, aes(x = Parity, y = DNAm.Age.Residual)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/Parity-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/Parity-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1204,7 +1204,7 @@ p <- ggplot(df.tmp, aes(x=Age.FB, y=DNAm.Age)) +
   annotate("text", x = 40, y = 75, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
   annotate("text", x = 40, y = 73, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 40, y = 71, label = paste("n = ", length(DNAm.Age), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1212,7 +1212,7 @@ p <- ggplot(df.tmp, aes(x=Age.FB, y=DNAm.Age)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/AgeAtFirstBirth-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/AgeAtFirstBirth-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1223,7 +1223,7 @@ p <- ggplot(df.tmp, aes(x = Age.FB, y = DNAm.Age.Residual)) +
   annotate("text", x = 40, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
   annotate("text", x = 40, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 40, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1231,7 +1231,7 @@ p <- ggplot(df.tmp, aes(x = Age.FB, y = DNAm.Age.Residual)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/AgeAtFirstBirth-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/AgeAtFirstBirth-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1297,7 +1297,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
   annotate("text", x = 0.75, y = 74, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.0+1, label = paste("n = ", length(DNAm.Age.MenopausePre), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.1+1, label = paste("n = ", length(DNAm.Age.MenopausePost), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1305,7 +1305,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/MenopauseStatus-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/MenopauseStatus-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1317,7 +1317,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
   annotate("text", x = 0.75, y = 23, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.Residual.0+1, label = paste("n = ", length(DNAm.Age.MenopausePre), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.Residual.1+1, label = paste("n = ", length(DNAm.Age.MenopausePost), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1325,7 +1325,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/MenopauseStatus-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/MenopauseStatus-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1360,7 +1360,7 @@ p <- ggplot(df.tmp, aes(x=Age.Menopause, y=DNAm.Age)) +
   annotate("text", x = 33, y = 75, label = paste("Spearman Rho: ", round(DNAm.Age.Rho, digits = 3), sep = "")) +
   annotate("text", x = 33, y = 73, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 33, y = 71, label = paste("n = ", length(DNAm.Age), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1368,7 +1368,7 @@ p <- ggplot(df.tmp, aes(x=Age.Menopause, y=DNAm.Age)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/MenopauseAge-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/MenopauseAge-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1379,7 +1379,7 @@ p <- ggplot(df.tmp, aes(x = Age.Menopause, y = DNAm.Age.Residual)) +
   annotate("text", x = 33, y = 20, label = paste("Spearman Rho: ", round(DNAm.Age.Residual.Rho, digits = 3), sep = "")) +
   annotate("text", x = 33, y = 18, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 33, y = 16, label = paste("n = ", length(DNAm.Age.Residual), sep = "")) +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1387,7 +1387,7 @@ p <- ggplot(df.tmp, aes(x = Age.Menopause, y = DNAm.Age.Residual)) +
     plot.title = element_text(hjust = 0.5)
   )
 
-png( paste(model.dir, "FactorAssociation/MenopauseAge-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/MenopauseAge-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1447,7 +1447,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
   annotate("text", x = 0.75, y = 74, label = paste("p value: ", round(DNAm.Age.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.0+1, label = paste("n = ", length(DNAm.Age.VDNo), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.1+1, label = paste("n = ", length(DNAm.Age.VDYes), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1455,7 +1455,7 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/VDUse-DNAmAge.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/VDUse-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 
@@ -1467,7 +1467,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
   annotate("text", x = 0.75, y = 23, label = paste("p value: ", round(DNAm.Age.Residual.pval, digits = 4), sep = "")) +
   annotate("text", x = 1, y = Median.DNAm.Age.Residual.0+1, label = paste("n = ", length(DNAm.Age.VDNo), sep = ""), col = "blue") +
   annotate("text", x = 2, y = Median.DNAm.Age.Residual.1+1, label = paste("n = ", length(DNAm.Age.VDYes), sep = ""), col = "blue") +
-  theme_bw() + 
+  theme_bw(base_size = 22) + 
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
@@ -1475,7 +1475,7 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     plot.title = element_text(hjust = 0.5)
   ); p
 
-png( paste(model.dir, "FactorAssociation/VDUse-DNAmAgeResidual.png", sep = '') )
+png( paste(model.dir, "FactorAssociation/VDUse-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
 dev.off()
 

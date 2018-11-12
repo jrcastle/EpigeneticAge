@@ -373,7 +373,7 @@ p <- ggplot(df.KT, aes(x = res, stat(density), color = ttype, linetype = ttype))
   #  color = "deepskyblue4"
   #) +
   geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw() + 
+  theme_bw(base_size = 15) + 
   theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 

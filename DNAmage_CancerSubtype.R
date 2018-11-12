@@ -1119,7 +1119,7 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
   labs(y = "Frequency [Arbitrary Units]") + 
   labs(title = "DNAm Age Acceleration for Cancer Subtypes") + 
   annotate(
-    "text", x = 85, y = 0.026, 
+    "text", x = 85, y = 0.025, 
     label = paste("Median Accel. (ER/PR+ Her2+) = ", round(median.error.Tpp,  digits = 1), sep = ""), 
     color = "deepskyblue4"
   ) + 
@@ -1129,7 +1129,7 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
   #  color = "deepskyblue4"
   #) +
   annotate(
-    "text", x = 85, y = 0.024, 
+    "text", x = 85, y = 0.023, 
     label = paste("Median Accel. (ER/PR+ Her2-) = ", round(median.error.Tpn,  digits = 1), sep = ""), 
     color = "darkorange3"
   ) + 
@@ -1139,7 +1139,7 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
   #  color = "darkorange3"
   #) +
   annotate(
-    "text", x = 85, y = 0.022,  
+    "text", x = 85, y = 0.021,  
     label = paste("Median Accel. (ER/PR- Her2+) = ", round(median.error.Tnp,  digits = 1), sep = ""), 
     color = "seagreen4"
   ) + 
@@ -1149,7 +1149,7 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
   #  color = "seagreen4"
   #) +
   annotate(
-    "text", x = 85, y = 0.020,  
+    "text", x = 85, y = 0.019,  
     label = paste("Median Accel. (ER/PR- Her2-) = ", round(median.error.Tnn,  digits = 1), sep = ""), 
     color = "firebrick3"
   ) + 
@@ -1159,7 +1159,7 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
   #  color = "firebrick3"
   #) +
   geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw() + 
+  theme_bw(base_size = 15) +
   theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
@@ -1253,7 +1253,7 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
   #  color = "paleturquoise4"
   #) +
   geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw() + 
+  theme_bw(base_size = 15) +
   theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
@@ -1346,7 +1346,7 @@ p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)
   #  color = "paleturquoise4"
   #) +
   geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw() + 
+  theme_bw(base_size = 15) + 
   theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
   theme(
     axis.ticks.length=unit(-0.25, "cm"), 
