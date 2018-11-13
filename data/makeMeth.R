@@ -76,31 +76,35 @@ dataframe.name = do.call(c, list(dataframe.name, as.character(cov.selected[which
 ########################################################################################
 # COVARIATES
 ########################################################################################
-Age            <- as.numeric(as.character(cov.selected$Age))
-Race           <- as.character(cov.selected$Race)
-Batch          <- as.character(cov.selected$Batch)
-Sampleid       <- as.character(cov.selected$Sample.id)
+Age             <- as.numeric(as.character(cov.selected$Age))
+Race            <- as.character(cov.selected$Race)
+Batch           <- as.character(cov.selected$Batch)
+Sampleid        <- as.character(cov.selected$Sample.id)
                          
-BMI            <- as.numeric(as.character(cov.selected$BMI))
-Location       <- as.character(cov.selected$Location)
-Smoking        <- as.character(cov.selected$Current.Smoker)
-Cig.Pack.Years <- as.numeric(as.character(cov.selected$Cigarette.Pack.Years))
-Drinking       <- as.character(cov.selected$Currently.Drink)
-Menarche       <- as.numeric(as.character(cov.selected$Menarche))
-Menopause      <- as.character(cov.selected$Menstrual.Status)
-Menopause.Age  <- as.numeric(as.character(cov.selected$Age.at.menopause))
-Been.Pregnant  <- as.character(cov.selected$Have.You.Been.Pregnant.)
-Times.Pregnant <- as.numeric(as.character(cov.selected$How.Many.Times.))
-Age.FB         <- as.numeric(as.character(cov.selected$Age.at.First.Birth))
-Parity         <- as.numeric(as.character(cov.selected$Number.of.Live.Births))
-VD             <- as.character(cov.selected$Vitaminuse)
-Cancer.subtype <- as.character(cov.selected$Cancer.subtypes)
-Cancer.grade   <- as.character(cov.selected$GradeBin)
-Cancer.stage   <- as.character(cov.selected$Stage)
-ERPRposHer2pos <- as.numeric(as.character(cov.selected$ERPRposHer2pos))
-ERPRposHer2neg <- as.numeric(as.character(cov.selected$ERPRposHer2neg))
-ERPRnegHer2pos <- as.numeric(as.character(cov.selected$ERPRnegHer2pos))
-ERPRnegHer2neg <- as.numeric(as.character(cov.selected$ERPRnegHer2neg))
+BMI             <- as.numeric(as.character(cov.selected$BMI))
+Location        <- as.character(cov.selected$Location)
+Smoking         <- as.character(cov.selected$Current.Smoker)
+Cig.Pack.Years  <- as.numeric(as.character(cov.selected$Cigarette.Pack.Years))
+Drinking        <- as.character(cov.selected$Currently.Drink)
+Menarche        <- as.numeric(as.character(cov.selected$Menarche))
+Menopause       <- as.character(cov.selected$Menstrual.Status)
+Menopause.Age   <- as.numeric(as.character(cov.selected$Age.at.menopause))
+Been.Pregnant   <- as.character(cov.selected$Have.You.Been.Pregnant.)
+Times.Pregnant  <- as.numeric(as.character(cov.selected$How.Many.Times.))
+Age.FB          <- as.numeric(as.character(cov.selected$Age.at.First.Birth))
+Parity          <- as.numeric(as.character(cov.selected$Number.of.Live.Births))
+VD              <- as.character(cov.selected$Vitaminuse)
+Cancer.subtype  <- as.character(cov.selected$Cancer.subtypes)
+Cancer.gradeBin <- as.character(cov.selected$GradeBin)
+Cancer.grade    <- as.character(cov.selected$Grade)
+Cancer.stage    <- as.character(cov.selected$Stage)
+ERpos           <- as.numeric(as.character(cov.selected$ERpos))
+PRpos           <- as.numeric(as.character(cov.selected$PRpos))
+Her2pos         <- as.numeric(as.character(cov.selected$Her2pos))
+ERPRposHer2pos  <- as.numeric(as.character(cov.selected$ERPRposHer2pos))
+ERPRposHer2neg  <- as.numeric(as.character(cov.selected$ERPRposHer2neg))
+ERPRnegHer2pos  <- as.numeric(as.character(cov.selected$ERPRnegHer2pos))
+ERPRnegHer2neg  <- as.numeric(as.character(cov.selected$ERPRnegHer2neg))
 
 #Age.FB    <- ifelse(cov.selected$Age.at.First.Birth < 25, 1,
 #                    ifelse(cov.selected$Age.at.First.Birth < 30, 2,
@@ -117,13 +121,22 @@ df.selected <- data.frame(Age, Race, Batch)
 X           <- model.matrix(~Age + Race + Batch, df.selected)
 
 if(tissue.type == "T"){
-  df.selected <- data.frame(Age, Race, Batch, Cancer.subtype, Cancer.grade, Cancer.stage, ERPRposHer2pos, ERPRposHer2neg, ERPRnegHer2pos, ERPRnegHer2neg)
-  X           <- model.matrix(~Age + Race + Batch + Cancer.subtype + Cancer.grade + Cancer.stage + ERPRposHer2pos + ERPRposHer2neg + ERPRnegHer2pos + ERPRnegHer2neg, df.selected)
+  df.selected <- data.frame(Age, Race, Batch, Cancer.subtype, Cancer.grade, 
+                            Cancer.stage, ERPRposHer2pos, ERPRposHer2neg, ERPRnegHer2pos, ERPRnegHer2neg)
+  X           <- model.matrix(~Age + Race + Batch + Cancer.subtype + Cancer.grade + 
+                              Cancer.stage + ERPRposHer2pos + ERPRposHer2neg + ERPRnegHer2pos + ERPRnegHer2neg, 
+                              df.selected)
 }
 
 if(tissue.type == "K"){
-  df.selected <- data.frame(Age, Race, Batch, BMI, Smoking, Cig.Pack.Years, Drinking, Menarche, Menopause, Menopause.Age, Been.Pregnant, Times.Pregnant, Age.FB, Parity, VD, Location)
-  X           <- model.matrix(~Age + Race + Batch + BMI + Smoking + Cig.Pack.Years + Drinking + Menarche + Menopause + Menopause.Age + Been.Pregnant + Times.Pregnant + Age.FB + Parity + VD + Location, df.selected)
+  df.selected <- data.frame(Age, Race, Batch, BMI, Smoking, 
+                            Cig.Pack.Years, Drinking, Menarche, Menopause, Menopause.Age, 
+                            Been.Pregnant, Times.Pregnant, Age.FB, Parity, VD, 
+                            Location)
+  X           <- model.matrix(~Age + Race + Batch + BMI + Smoking + 
+                              Cig.Pack.Years + Drinking + Menarche + Menopause + Menopause.Age + 
+                              Been.Pregnant + Times.Pregnant + Age.FB + Parity + VD + 
+                              Location, df.selected)
 }
 
 X           <- t(X)

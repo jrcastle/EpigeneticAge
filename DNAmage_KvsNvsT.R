@@ -1,19 +1,19 @@
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
+library(RColorBrewer)
 
 rm(list=ls()); gc();
 
-seed      <- "123"
-model.dir <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
-
+seed        <- "123"
+model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
 meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
+cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
 meth.file.N <- paste("data/meth_N_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+cov.file.N  <- paste("data/cov_N_seed", seed, ".txt", sep = "")
 meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
 
-cov.file.K <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
-cov.file.N <- paste("data/cov_N_seed", seed, ".txt", sep = "")
-cov.file.T <- paste("data/cov_T_seed", seed, ".txt", sep = "")
-
+model.residual = FALSE
 
 ###########################################################################################
 # AGE TRANSFORMATION FUNCTIONS
@@ -30,10 +30,10 @@ anti.trafo = function(x, adult.age=20){
 
 
 ###########################################################################################
-# LOAD METH/COV DATA AND PREP FOR PREDICTION
+# LOAD METH/COV DATA AND PREDICT
 ###########################################################################################
 
-##### METH K ####
+##### METH ####
 meth.data.K <- read.table(meth.file.K, header = TRUE, sep = '\t')
 n.samples.K <- dim(meth.data.K)[[2]] - 1
 x <- c(1)
@@ -45,7 +45,6 @@ colnames(df) <- colnames(meth.data.K)
 meth.data.K <- rbind(meth.data.K, df)
 row.names(meth.data.K) <- NULL
 
-##### METH N ####
 meth.data.N <- read.table(meth.file.N, header = TRUE, sep = '\t')
 n.samples.N <- dim(meth.data.N)[[2]] - 1
 x <- c(1)
@@ -57,7 +56,6 @@ colnames(df) <- colnames(meth.data.N)
 meth.data.N <- rbind(meth.data.N, df)
 row.names(meth.data.N) <- NULL
 
-##### METH T ####
 meth.data.T <- read.table(meth.file.T, header = TRUE, sep = '\t')
 n.samples.T <- dim(meth.data.T)[[2]] - 1
 x <- c(1)
@@ -69,78 +67,69 @@ colnames(df) <- colnames(meth.data.T)
 meth.data.T <- rbind(meth.data.T, df)
 row.names(meth.data.T) <- NULL
 
-##### SAMPLE AGES K #####
-sample.ages.K <- read.table(cov.file.K, header = TRUE, row.names = 1, sep = '\t')
-sample.ages.K <- as.numeric(as.vector(sample.ages.K["Age",]))
+meth.data.N <- meth.data.N[ -c(1) ]
+meth.data.T <- meth.data.T[ -c(1) ]
+meth <- cbind(meth.data.K, meth.data.N, meth.data.T)
+rm(meth.data.K, meth.data.N, meth.data.T); gc()
 
-##### SAMPLE AGES N #####
-sample.ages.N <- read.table(cov.file.N, header = TRUE, row.names = 1, sep = '\t')
-sample.ages.N <- as.numeric(as.vector(sample.ages.N["Age",]))
+##### COV #####
+cov.K <- read.table(cov.file.K, header = TRUE, row.names = 1, sep = '\t')
+cov.N <- read.table(cov.file.N, header = TRUE, row.names = 1, sep = '\t')
+cov.T <- read.table(cov.file.T, header = TRUE, row.names = 1, sep = '\t')
 
-##### SAMPLE AGES T #####
-sample.ages.T <- read.table(cov.file.T, header = TRUE, row.names = 1, sep = '\t')
-sample.ages.T <- as.numeric(as.vector(sample.ages.T["Age",]))
+K.samples <- colnames(cov.K)
+N.samples <- colnames(cov.N)
+T.samples <- colnames(cov.T)
 
+covariates <- unique(c(rownames(cov.K), rownames(cov.N), rownames(cov.T)))
+for(i in covariates){
+  if (!(i %in% row.names(cov.K))) {cov.K[i,] <- NA}
+  if (!(i %in% row.names(cov.N))) {cov.N[i,] <- NA}
+  if (!(i %in% row.names(cov.T))) {cov.T[i,] <- NA}
+}
 
-###########################################################################################
-# MODEL COEFFICIENTS 
-###########################################################################################
+cov.K <- cov.K[ order(row.names(cov.K)), ]
+cov.N <- cov.N[ order(row.names(cov.N)), ]
+cov.T <- cov.T[ order(row.names(cov.T)), ]
+
+cov <- cbind(cov.K, cov.N, cov.T)
+rm(cov.K, cov.N, cov.T); gc()
+
+##### PREDICT #####
 clock.cpg.coef <- read.csv(paste(model.dir, "model_coefficients.csv", sep = ''), stringsAsFactors = FALSE)
 clock.cpg.coef <- clock.cpg.coef[ c("model.coefficients.name", "model.coefficients.x") ]
 clock.cpg.coef[clock.cpg.coef$model.coefficients.name == "(Intercept)", "model.coefficients.name"] <- "Intercept"
 
-##### SORT K #####
-meth.data.K <- meth.data.K[tolower(order(meth.data.K$position)),]
+meth <- meth[tolower(order(meth$position)),]
 clock.cpg.coef <- clock.cpg.coef[order(clock.cpg.coef$model.coefficients.name),]
-meth.data.K$position == clock.cpg.coef$model.coefficients.name
+meth$position == clock.cpg.coef$model.coefficients.name
 
-##### SORT N #####
-meth.data.N <- meth.data.N[tolower(order(meth.data.N$position)),]
-clock.cpg.coef <- clock.cpg.coef[order(clock.cpg.coef$model.coefficients.name),]
-meth.data.N$position == clock.cpg.coef$model.coefficients.name
-
-##### SORT T #####
-meth.data.T <- meth.data.T[tolower(order(meth.data.T$position)),]
-clock.cpg.coef <- clock.cpg.coef[order(clock.cpg.coef$model.coefficients.name),]
-meth.data.T$position == clock.cpg.coef$model.coefficients.name
-
-
-
-
-
-###########################################################################################
-# PREDICT
-###########################################################################################
-
-##### K #####
-meth.data.K$position <- NULL
-X <- data.matrix(meth.data.K)
+meth$position <- NULL
+X    <- data.matrix(meth)
 beta <- data.matrix(clock.cpg.coef$model.coefficients.x)
 
-result.K <- t(X) %*% beta
-result.K <- sapply(result.K, anti.trafo)
+result <- t(X) %*% beta
+result <- sapply(result, anti.trafo)
 
-##### N #####
-meth.data.N$position <- NULL
-X <- data.matrix(meth.data.N)
-beta <- data.matrix(clock.cpg.coef$model.coefficients.x)
+ages <- as.numeric(as.vector(cov["Age",]))
+res  <- result - ages
+if(model.residual){
+  res <- lm(result ~ ages)$residuals
+}
 
-result.N <- t(X) %*% beta
-result.N <- sapply(result.N, anti.trafo)
+##### STORE RESULTS IN COV #####
+cov["DNAm Age",] <- result
+cov["DNAm Age Residual",] <- res
 
-##### T #####
-meth.data.T$position <- NULL
-X <- data.matrix(meth.data.T)
-beta <- data.matrix(clock.cpg.coef$model.coefficients.x)
-
-result.T <- t(X) %*% beta
-result.T <- sapply(result.T, anti.trafo)
+##### RESIDUALS #####
+residual.K <- as.numeric(as.vector(cov["DNAm Age Residual", K.samples]))
+residual.N <- as.numeric(as.vector(cov["DNAm Age Residual", N.samples]))
+residual.T <- as.numeric(as.vector(cov["DNAm Age Residual", T.samples]))
 
 
 ##########################################################################
 # K PLOTS 
 ##########################################################################
-residual.K <- result.K - sample.ages.K 
 mean.error.K <- mean(residual.K)
 stdev.error.K <- sd(residual.K)
 cor.test(sample.ages.K,result.K, method = "pearson")
@@ -193,7 +182,6 @@ dev.off()
 ##########################################################################
 # N PLOTS 
 ##########################################################################
-residual.N <- result.N - sample.ages.N
 mean.error.N <- mean(residual.N)
 stdev.error.N <- sd(residual.N)
 
@@ -245,7 +233,6 @@ dev.off()
 ##########################################################################
 # T PLOTS 
 ##########################################################################
-residual.T <- result.T - sample.ages.T
 mean.error.T <- mean(residual.T)
 stdev.error.T <- sd(residual.T)
 
@@ -321,9 +308,6 @@ rm(tmp.T)
 gc()
 
 p <- ggplot(df.KT, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
-  #geom_histogram(data=subset(df.KT, ttype == 'K'), aes(fill = "K"), binwidth = 5, alpha = 1) +
-  #geom_histogram(data=subset(df.KT, ttype == 'T'), aes(fill = "T"), binwidth = 5, alpha = 0.8) +
-  #geom_histogram(data=subset(df.KT, ttype == 'N'), aes(fill = "N"), binwidth = 5, alpha = 0.8) +
   geom_freqpoly(size = 1.2, binwidth = 20) +
   scale_linetype_manual(
     name = "Tissue Type", 
@@ -335,6 +319,10 @@ p <- ggplot(df.KT, aes(x = res, stat(density), color = ttype, linetype = ttype))
     values = c("black","darkorange3","deepskyblue4"), 
     labels = c("K", "N", "T")
   ) +
+  #scale_x_continuous(
+  #  expand=c(0, 0),
+  #  limits = c(-60, 200)
+  #) +
   scale_y_continuous(
     expand=c(0, 0),
     limits = c(0, 0.05)
