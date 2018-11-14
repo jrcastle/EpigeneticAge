@@ -1,8 +1,8 @@
+rm(list=ls()); gc();
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
 library(RColorBrewer)
-
-rm(list=ls()); gc();
+source("plot_functions.R")
 
 seed        <- "123"
 model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
@@ -122,288 +122,99 @@ cov["DNAm Age",] <- result
 cov["DNAm Age Residual",] <- res
 
 ##### RESIDUALS #####
+result.K <- as.numeric(as.vector(cov["DNAm Age", K.samples]))
+result.N <- as.numeric(as.vector(cov["DNAm Age", N.samples]))
+result.T <- as.numeric(as.vector(cov["DNAm Age", T.samples]))
+
 residual.K <- as.numeric(as.vector(cov["DNAm Age Residual", K.samples]))
 residual.N <- as.numeric(as.vector(cov["DNAm Age Residual", N.samples]))
 residual.T <- as.numeric(as.vector(cov["DNAm Age Residual", T.samples]))
 
-
-##########################################################################
-# K PLOTS 
-##########################################################################
-mean.error.K <- mean(residual.K)
-stdev.error.K <- sd(residual.K)
-cor.test(sample.ages.K,result.K, method = "pearson")
-median(residual.K)
-p <- ggplot(data.frame(res = residual.K), aes(x=res)) +
-  geom_histogram(binwidth = 5, color="black", fill="white") +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 33)
-  ) + 
-  labs(x = "DNAm Age Acceleration") + 
-  labs(y = "Frequency") + 
-  labs(title = "Prediction Residuals in Normal Tissue") + 
-  annotate("text", x = -16, y = 32, label = paste("Median Residual = ", round(mean.error.K, digits = 1), sep = "")) + 
-  annotate("text", x = -16, y = 30.5, label = paste("St. Dev Residual = ", round(stdev.error.K, digits = 1), sep = "")) +
-  geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dotted") + 
-  theme_bw() + 
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
-
-
-png( paste(model.dir, "TissueStudies/residual_hist_K.png", sep = ''), width = 500, height = 500, units = "px" )
-p
-dev.off()
-
-png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_K.png", sep = ''), width = 500, height = 500, units = "px" )
-plot(sample.ages.K, 
-     result.K, 
-     main="Methlyation Age vs Sample Age in Normal Tissue", 
-     xlab="Sample Age ", 
-     ylab="Methylation Age ", 
-     pch=19,
-     xlim=c(15,87), 
-     xaxs="i",
-     ylim=c(15,87), 
-     yaxs="i",
-     tck = 0.02
-) 
-abline(lm(result.K~sample.ages.K), col="black") # regression line (y~x) 
-abline(a=0, b=1, col = "red", lty = 2)
-rsq <- summary(lm(result.K~sample.ages.K))$r.squared
-text(24,80, paste("r^2 = ", round(rsq, digits = 4), sep = ""))
-dev.off()
-
-
-##########################################################################
-# N PLOTS 
-##########################################################################
-mean.error.N <- mean(residual.N)
-stdev.error.N <- sd(residual.N)
-
-p <- ggplot(data.frame(res = residual.N), aes(x=res)) +
-  geom_histogram(binwidth = 5, color="black", fill="white") +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 15)
-  ) + 
-  labs(x = "DNAm Age Acceleration") + 
-  labs(y = "Frequency") + 
-  labs(title = "Prediction Residuals in Adjacent Normal Tissue") + 
-  annotate("text", x = -21, y = 14, label = paste("Median Residual = ", round(mean.error.N, digits = 1), sep = "")) + 
-  annotate("text", x = -21, y = 13, label = paste("St. Dev Residual = ", round(stdev.error.N, digits = 1), sep = "")) +
-  geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dotted") + 
-  theme_bw() + 
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
-
-
-png( paste(model.dir, "TissueStudies/residual_hist_N.png", sep = ''), width = 500, height = 500, units = "px" )
-p
-dev.off()
-
-png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_N.png", sep = ''), width = 500, height = 500, units = "px" )
-plot(sample.ages.N, 
-     result.N, 
-     main="Methlyation Age vs Sample Age in Adjacent Normal Tissue", 
-     xlab="Sample Age ", 
-     ylab="Methylation Age ", 
-     pch=19,
-     xlim=c(15,87), 
-     xaxs="i",
-     ylim=c(15,87), 
-     yaxs="i",
-     tck = 0.02
-) 
-abline(lm(result.N~sample.ages.N), col="black") # regression line (y~x) 
-abline(a=0, b=1, col = "red", lty = 2)
-rsq <- summary(lm(result.N~sample.ages.N))$r.squared
-text(24,80, paste("r^2 = ", round(rsq, digits = 4), sep = ""))
-dev.off()
-
-
-##########################################################################
-# T PLOTS 
-##########################################################################
-mean.error.T <- mean(residual.T)
-stdev.error.T <- sd(residual.T)
-
-p <- ggplot(data.frame(res = residual.T), aes(x=res)) +
-  geom_histogram(binwidth = 10, color="black", fill="white") +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 33)
-  ) + 
-  labs(x = "DNAm Age Acceleration") + 
-  labs(y = "Frequency") + 
-  labs(title = "Prediction Residuals in Tumor Tissue") + 
-  annotate("text", x = 100, y = 32, label = paste("Median Residual = ", round(mean.error.T, digits = 1), sep = "")) + 
-  annotate("text", x = 100, y = 30.5, label = paste("St. Dev Residual = ", round(stdev.error.T, digits = 1), sep = "")) +
-  geom_vline(xintercept = 0, color = "red", size = 1, linetype = "dotted") + 
-  theme_bw() + 
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
-
-
-png( paste(model.dir, "TissueStudies/residual_hist_T.png", sep = ''), width = 500, height = 500, units = "px" )
-p
-dev.off()
-
-png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_T.png", sep = ''), width = 500, height = 500, units = "px" )
-plot(sample.ages.T, 
-     result.T, 
-     main="Methlyation Age vs Sample Age in Tumor Tissue", 
-     xlab="Sample Age ", 
-     ylab="Methylation Age ", 
-     pch=19,
-     xlim=c(15,87), 
-     xaxs="i",
-     ylim=c(15,87), 
-     yaxs="i",
-     tck = 0.02
-) 
-abline(lm(result.T~sample.ages.T), col="black") # regression line (y~x) 
-abline(a=0, b=1, col = "red", lty = 2)
-rsq <- summary(lm(result.T~sample.ages.T))$r.squared
-text(24,80, paste("r^2 = ", round(rsq, digits = 4), sep = ""))
-dev.off()
-
-
+age.K <- as.numeric(as.vector(cov["Age", K.samples]))
+age.N <- as.numeric(as.vector(cov["Age", N.samples]))
+age.T <- as.numeric(as.vector(cov["Age", T.samples]))
 
 ##########################################################################
 # MERGED RESIDUAL PLOT 
 ##########################################################################
-median.error.K <- median(residual.K)
-median.error.N <- median(residual.N)
-median.error.T <- median(residual.T)
-
-tmp.K <- data.frame(residual.K)
+tmp.K <- data.frame(age.K, result.K, residual.K)
 tmp.K$type <- "K"
-colnames(tmp.K) <- c("res", "ttype")
+colnames(tmp.K) <- c("Chrono.age", "DNAm.age", "res", "ttype")
 
-tmp.N <- data.frame(residual.N)
+tmp.N <- data.frame(age.N, result.N, residual.N)
 tmp.N$type <- "N"
-colnames(tmp.N) <- c("res", "ttype")
+colnames(tmp.N) <- c("Chrono.age", "DNAm.age", "res", "ttype")
 
-tmp.T <- data.frame(residual.T)
+tmp.T <- data.frame(age.T, result.T, residual.T)
 tmp.T$type <- "T"
-colnames(tmp.T) <- c("res", "ttype")
+colnames(tmp.T) <- c("Chrono.age", "DNAm.age", "res", "ttype")
 
-df.KT <- rbind(tmp.K, tmp.N, tmp.T)
-rm(tmp.K)
-rm(tmp.N)
-rm(tmp.T)
-gc()
+df.KNT <- rbind(tmp.K, tmp.N, tmp.T)
+rm(tmp.K); rm(tmp.N); rm(tmp.T); gc()
 
-p <- ggplot(df.KT, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
-  geom_freqpoly(size = 1.2, binwidth = 20) +
-  scale_linetype_manual(
-    name = "Tissue Type", 
-    values = c("solid", "dashed", "twodash"),
-    labels = c("K", "N", "T")
-  ) + 
-  scale_color_manual(
-    name = "Tissue Type", 
-    values = c("black","darkorange3","deepskyblue4"), 
-    labels = c("K", "N", "T")
-  ) +
-  #scale_x_continuous(
-  #  expand=c(0, 0),
-  #  limits = c(-60, 200)
-  #) +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 0.05)
-  ) + 
-  labs(x = "DNAm Age Acceleration [Years]") + 
-  labs(y = "Frequency [Arbitrary Units]") + 
-  labs(title = "DNAm Age Acceleration for Tissue Types") + 
-  annotate(
-    "text", x = 130, y = 0.037, 
-    label = paste("Median Residual (K) = ", round(median.error.K, digits = 1), sep = ""), 
-    color = "black"
-  ) + 
-  #annotate(
-  #  "text", x = 100, y = 24, 
-  #  label = paste("St. Dev Residual (K) = ", round(stdev.error.K, digits = 1), sep = ""), 
-  #  color = "darkorange3"
-  #) +
-  annotate(
-    "text", x = 130, y = 0.034, 
-    label = paste("Median Residual (N) = ", round(median.error.N, digits = 1), sep = ""), 
-    color = "darkorange3"
-  ) + 
-  #annotate(
-  #  "text", x = 100, y = 21, 
-  #  label = paste("St. Dev Residual (N) = ", round(stdev.error.N, digits = 1), sep = ""), 
-  #  color = "black"
-  #) +
-  annotate(
-    "text", x = 130, y = 0.031, 
-    label = paste("Median Residual (T) = ", round(median.error.T, digits = 1), sep = ""), 
-    color = "deepskyblue4"
-  ) + 
-  #annotate(
-  #  "text", x = 100, y = 18, 
-  #  label = paste("St. Dev Residual (T) = ", round(stdev.error.T, digits = 1), sep = ""), 
-  #  color = "deepskyblue4"
-  #) +
-  geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw(base_size = 15) + 
-  theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
-
+##### HISTOGRAM #####
+p <- accel.hist.plot(
+  df.KNT, 
+  bw = 20, 
+  legname = "Tissue Type", 
+  linetypes =  c("solid", "dashed", "twodash"),
+  colors = c("black","darkorange3","deepskyblue4"),
+  labels = c("K", "N", "T"),
+  x.label = "DNAm Age Acceleration [Years]", 
+  y.label = "Frequency [Arbitrary Units]", 
+  title = "DNAm Age Acceleration for Tissue Types",
+  annot.x = 110, 
+  annot.y = 0.037,
+  annot.sep = 0.003, 
+  x.min = -50, 
+  x.max = 150,
+  y.min = 0, 
+  y.max = 0.05, 
+  leg.x = 0.8, 
+  leg.y = 0.87
+); p
 
 png( paste(model.dir, "TissueStudies/residual_hist_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
-png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
-plot(sample.ages.K, 
-     result.K, 
-     main="Methlyation Age vs Sample Age in Normal and Tumor Tissue", 
-     xlab="Sample Age ", 
-     ylab="Methylation Age ", 
-     pch=19,
-     xlim=c(15,100), 
-     xaxs="i",
-     ylim=c(15,200), 
-     yaxs="i",
-     tck = 0.02,
-     col = "darkorange3"
-) 
-points(sample.ages.T, result.T, col = "deepskyblue4")
-abline(lm(result.K~sample.ages.K), col="darkorange3") # regression line (y~x) 
-points(sample.ages.N, result.N, col = "black", pch = 19)
-legend(
-  20, 190, 
-  title = "Tissue Type",
-  legend = c("K", "N", "T"), 
-  col = c("darkorange3", "black", "deepskyblue4"), 
-  lty = c(0,0), 
-  pch = c(19,19, 1), 
-  bg='white', 
-  bty = "n"
-)
+##### BAR PLOT #####
+r.list <- list()
+r.list[[1]] <- residual.K
+r.list[[2]] <- residual.N
+r.list[[3]] <- residual.T
+p <- accel.box.plot(df.KNT, residuals = r.list, width = 0.75); p
+
+png( paste(model.dir, "TissueStudies/boxplot_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
+p
 dev.off()
 
+##### DNAm AGE vs CHRONOLOGICAL AGE #####
+p <- DNAmAge.ChronoAge.plot(
+  df.KNT, 
+  legname = "Tissue Type", 
+  colors = c("darkorange3", "black", "deepskyblue4"), 
+  labels = c("K", "N", "T"), 
+  x.label = "Chronological Age [Years]", 
+  y.label = "DNAm Age [Years]", 
+  title = "DNAm Age vs Chronological Age",
+  x.min = 0, 
+  x.max = 90,
+  y.min = 0, 
+  y.max = 185, 
+  leg.x = 0.15, 
+  leg.y = 0.87
+); p
+
+png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+
+
+##########################################################################
+# STATISTICAL TESTS
+##########################################################################
 wilcox.test(residual.K, mu=0, conf.int = TRUE)
 wilcox.test(residual.N, mu=0, conf.int = TRUE)
 wilcox.test(residual.T, mu=0, conf.int = TRUE)

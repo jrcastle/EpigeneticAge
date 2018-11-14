@@ -1,9 +1,8 @@
+rm(list=ls()); gc();
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
 library(moments)
 library(stargazer)
-
-rm(list=ls()); gc();
 
 seed        <- "123"
 model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')

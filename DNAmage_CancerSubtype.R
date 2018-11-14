@@ -1,8 +1,8 @@
+rm(list=ls()); gc();
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
 library(RColorBrewer)
-
-rm(list=ls()); gc();
+source("plot_functions.R")
 
 seed        <- "123"
 model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
@@ -181,189 +181,8 @@ residual.sIII.IV <- as.numeric(as.vector(cov["DNAm Age Residual", stageIII.IV.sa
 
 
 ##########################################################################
-# MERGED SUBTYPE RESIDUAL PLOT 
+# MERGED SUBTYPE RESIDUAL PLOT
 ##########################################################################
-median.error.LumA = median(residual.LumA)
-median.error.LumB = median(residual.LumB)
-median.error.TrpN = median(residual.TrpN)
-
-tmp.LumA <- data.frame(residual.LumA)
-tmp.LumA$type <- "Luminal A"
-colnames(tmp.LumA) <- c("res", "ttype")
-
-tmp.LumB <- data.frame(residual.LumB)
-tmp.LumB$type <- "Luminal B"
-colnames(tmp.LumB) <- c("res", "ttype")
-
-tmp.TrpN <- data.frame(residual.TrpN)
-tmp.TrpN$type <- "Triple Negative"
-colnames(tmp.TrpN) <- c("res", "ttype")
-
-df.ABN <- rbind(tmp.LumA, tmp.LumB, tmp.TrpN)
-rm(tmp.LumA); rm(tmp.LumB); rm(tmp.TrpN); gc();
-
-
-p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
-  geom_freqpoly(size = 1.2, binwidth = 20) +
-  scale_linetype_manual(
-    name = "Cancer Subtype", 
-    values = c("solid", "dashed", "twodash")
-  ) + 
-  scale_color_manual(
-    name = "Cancer Subtype", 
-    values = c("deepskyblue4","darkorange3","seagreen4"), 
-    breaks = c("Luminal A", "Luminal B", "Triple Negative")
-  ) +
-  scale_x_continuous(
-    expand=c(0, 0),
-    limits = c(-40, 125)
-  ) +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 0.05)
-  ) + 
-  labs(x = "DNAm Age Acceleration") + 
-  labs(y = "Frequency") + 
-  labs(title = "Prediction Residuals for Cancer Subtypes") + 
-  annotate(
-    "text", x = 90, y = 0.037, 
-    label = paste("Median Residual (LumA) = ", round(median.error.LumA,  digits = 1), sep = ""), 
-    color = "deepskyblue4"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.035, 
-    label = paste("St. Dev Residual (LumA) = ", round(stdev.error.LumA, digits = 1), sep = ""), 
-    color = "deepskyblue4"
-  ) +
-  annotate(
-    "text", x = 90, y = 0.032, 
-    label = paste("Median Residual (LumB) = ", round(median.error.LumB,  digits = 1), sep = ""), 
-    color = "darkorange3"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.030, 
-    label = paste("St. Dev Residual (LumB) = ", round(stdev.error.LumB, digits = 1), sep = ""), 
-    color = "darkorange3"
-  ) +
-  annotate(
-    "text", x = 90, y = 0.027,  
-    label = paste("Median Residual (TrpN) = ", round(median.error.TrpN,  digits = 1), sep = ""), 
-    color = "seagreen4"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.025,
-    label = paste("St. Dev Residual (TrpN) = ", round(stdev.error.TrpN, digits = 1), sep = ""), 
-    color = "seagreen4"
-  ) +
-  geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw() + 
-  theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.9)) +
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
-
-
-png( paste(model.dir, "CancerStudies/residual_hist_CancerSub.png", sep = ''), width = 500, height = 500, units = "px" )
-p
-dev.off()
-
-
-##########################################################################
-# MERGED SUBTYPE RESIDUAL PLOT V2
-##########################################################################
-median.error.Tpp = median(residual.Tpp)
-median.error.Tpn = median(residual.Tpn)
-median.error.Tnp = median(residual.Tnp)
-median.error.Tnn = median(residual.Tnn)
-
-tmp.Tpp <- data.frame(residual.Tpp)
-tmp.Tpp$type <- "1. ER/PR+ Her2+"
-colnames(tmp.Tpp) <- c("res", "ttype")
-
-tmp.Tpn <- data.frame(residual.Tpn)
-tmp.Tpn$type <- "2. ER/PR+ Her2-"
-colnames(tmp.Tpn) <- c("res", "ttype")
-
-tmp.Tnp <- data.frame(residual.Tnp)
-tmp.Tnp$type <- "3. ER/PR- Her2+"
-colnames(tmp.Tnp) <- c("res", "ttype")
-
-tmp.Tnn <- data.frame(residual.Tnn)
-tmp.Tnn$type <- "4. ER/PR- Her2-"
-colnames(tmp.Tnn) <- c("res", "ttype")
-
-df.ABN <- rbind(tmp.Tpp, tmp.Tpn, tmp.Tnp, tmp.Tnn)
-rm(tmp.Tpp); rm(tmp.Tpn); rm(tmp.Tnp); rm(tmp.Tnn); gc();
-
-p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
-  geom_freqpoly(size = 1.2, binwidth = 25) +
-  scale_linetype_manual(
-    name = "Cancer Subtype", 
-    values = c("solid", "dashed", "twodash", "longdash"),
-    breaks =  c("1. ER/PR+ Her2+", "2. ER/PR+ Her2-", "3. ER/PR- Her2+", "4. ER/PR- Her2-")
-  ) + 
-  scale_color_manual(
-    name = "Cancer Subtype", 
-    values = c("deepskyblue4","darkorange3","seagreen4", "firebrick3"), 
-    breaks = c("1. ER/PR+ Her2+", "2. ER/PR+ Her2-", "3. ER/PR- Her2+", "4. ER/PR- Her2-")
-  ) +
-  scale_x_continuous(
-    expand=c(0, 0),
-    limits = c(-40, 125)
-  ) +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 0.035)
-  ) + 
-  labs(x = "DNAm Age Acceleration [Years]") + 
-  labs(y = "Frequency [Arbitrary Units]") + 
-  labs(title = "DNAm Age Acceleration for Cancer Subtypes") + 
-  annotate(
-    "text", x = 85, y = 0.025, 
-    label = paste("Median Accel. (ER/PR+ Her2+) = ", round(median.error.Tpp,  digits = 1), sep = ""), 
-    color = "deepskyblue4"
-  ) + 
-  annotate(
-    "text", x = 85, y = 0.023, 
-    label = paste("Median Accel. (ER/PR+ Her2-) = ", round(median.error.Tpn,  digits = 1), sep = ""), 
-    color = "darkorange3"
-  ) + 
-  annotate(
-    "text", x = 85, y = 0.021,  
-    label = paste("Median Accel. (ER/PR- Her2+) = ", round(median.error.Tnp,  digits = 1), sep = ""), 
-    color = "seagreen4"
-  ) + 
-  annotate(
-    "text", x = 85, y = 0.019,  
-    label = paste("Median Accel. (ER/PR- Her2-) = ", round(median.error.Tnn,  digits = 1), sep = ""), 
-    color = "firebrick3"
-  ) + 
-  geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw(base_size = 15) +
-  theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
-
-
-png( paste(model.dir, "CancerStudies/1_residual_hist_CancerSub.png", sep = ''), width = 500, height = 500, units = "px" )
-p
-dev.off()
-
-
-##########################################################################
-# MERGED SUBTYPE RESIDUAL PLOT V3
-##########################################################################
-median.error.H2p   <- median(residual.H2p)
-median.error.EPpHn <- median(residual.EPpHn)
-median.error.EPnHn <- median(residual.EPnHn)
-min(residual.EPnHn)
 tmp.H2p <- data.frame(residual.H2p)
 tmp.H2p$type <- "1. Her2+"
 colnames(tmp.H2p) <- c("res", "ttype")
@@ -379,56 +198,40 @@ colnames(tmp.EPnHn) <- c("res", "ttype")
 df.ABN <- rbind(tmp.H2p, tmp.EPpHn, tmp.EPnHn)
 rm(tmp.H2p); rm(tmp.EPpHn); rm(tmp.EPnHn); gc();
 
-p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
-  geom_freqpoly(size = 1.2, binwidth = 25) +
-  scale_linetype_manual(
-    name = "Cancer Subtype", 
-    values = c("solid", "dashed", "twodash"),
-    breaks =  c("1. Her2+", "2. ER/PR+ Her2-", "3. ER- PR- Her2-")
-  ) + 
-  scale_color_manual(
-    name = "Cancer Subtype", 
-    values = c("deepskyblue4","darkorange3","seagreen4"), 
-    breaks = c("1. Her2+", "2. ER/PR+ Her2-", "3. ER- PR- Her2-")
-  ) +
-  scale_x_continuous(
-    expand=c(0, 0),
-    limits = c(-45, 125)
-  ) +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 0.035)
-  ) + 
-  labs(x = "DNAm Age Acceleration [Years]") + 
-  labs(y = "Frequency [Arbitrary Units]") + 
-  labs(title = "DNAm Age Acceleration for Cancer Subtypes") + 
-  annotate(
-    "text", x = 85, y = 0.025, 
-    label = paste("Median Accel. (Her2+) = ", round(median.error.H2p,  digits = 1), sep = ""), 
-    color = "deepskyblue4"
-  ) + 
-  annotate(
-    "text", x = 85, y = 0.023, 
-    label = paste("Median Accel. (ER/PR+ Her2-) = ", round(median.error.EPpHn,  digits = 1), sep = ""), 
-    color = "darkorange3"
-  ) + 
-  annotate(
-    "text", x = 85, y = 0.021,  
-    label = paste("Median Accel. (ER- PR- Her2-) = ", round(median.error.EPnHn,  digits = 1), sep = ""), 
-    color = "seagreen4"
-  ) +
-  geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw(base_size = 15) +
-  theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  ); p
+##### HISTOGRAM #####
+p <- accel.hist.plot(
+  df.ABN, 
+  bw = 25, 
+  legname = "Cancer Subtype", 
+  linetypes = c("solid", "dashed", "twodash"), 
+  colors = c("deepskyblue4","darkorange3","seagreen4"), 
+  labels = c("1. Her2+", "2. ER/PR+ Her2-", "3. ER- PR- Her2-"), 
+  x.label = "DNAm Age Acceleration [Years]", 
+  y.label = "Frequency [Arbitrary Units]", 
+  title = "DNAm Age Acceleration for Cancer Subtypes",
+  annot.x = 85, 
+  annot.y = 0.025,
+  annot.sep = 0.002, 
+  x.min = -45, 
+  x.max = 125,
+  y.min = 0, 
+  y.max = 0.035, 
+  leg.x = 0.8, 
+  leg.y = 0.87
+); p
 
+png( paste(model.dir, "CancerStudies/1_residual_hist_CancerSub.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
 
-png( paste(model.dir, "CancerStudies/1.5_residual_hist_CancerSub.png", sep = ''), width = 500, height = 500, units = "px" )
+##### BAR PLOT #####
+r.list <- list()
+r.list[[1]] <- residual.H2p
+r.list[[2]] <- residual.EPpHn
+r.list[[3]] <- residual.EPnHn
+p <- accel.box.plot(df.ABN, residuals = r.list, width = 0.6); p
+
+png( paste(model.dir, "CancerStudies/boxplot_subtype.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
@@ -436,10 +239,6 @@ dev.off()
 ##########################################################################
 # MERGED GRADE PLOT
 ##########################################################################
-median.error.g3.5 <- median(residual.g3.5)
-median.error.g6.7 <- median(residual.g6.7)
-median.error.g8.9 <- median(residual.g8.9)
-
 tmp.g3.5 <- data.frame(residual.g3.5)
 tmp.g3.5$type <- "Grade 3-5"
 colnames(tmp.g3.5) <- c("res", "ttype")
@@ -455,55 +254,40 @@ colnames(tmp.g8.9) <- c("res", "ttype")
 df.ABN <- rbind(tmp.g3.5, tmp.g6.7, tmp.g8.9)
 rm(tmp.g3.5); rm(tmp.g6.7); rm(tmp.g8.9); gc();
 
-p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
-  geom_freqpoly(size = 1.2, binwidth = 20) +
-  scale_linetype_manual(
-    name = "Tumor Grade", 
-    values = c("solid", "dashed", "twodash"),
-    labels = c("Grade 3-5", "Grade 6-7", "Grade 8-9")
-  ) + 
-  scale_color_manual(
-    name = "Tumor Grade", 
-    values = c("gray16","pink4","paleturquoise4"), 
-    labels = c("Grade 3-5", "Grade 6-7", "Grade 8-9")
-  ) +
-  scale_x_continuous(
-    expand=c(0, 0),
-    limits = c(-40, 125)
-  ) +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 0.045)
-  ) + 
-  labs(x = "DNAm Age Acceleration [Years]") + 
-  labs(y = "Frequency [Arbitrary Units]") + 
-  labs(title = "DNAm Age Acceleration for Tumor Grades") + 
-  annotate(
-    "text", x = 90, y = 0.032, 
-    label = paste("Median Accel. (3-5) = ", round(median.error.g3.5,  digits = 1), sep = ""), 
-    color = "gray16"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.030, 
-    label = paste("Median Accel. (6-7) = ", round(median.error.g6.7,  digits = 1), sep = ""), 
-    color = "pink4"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.028,  
-    label = paste("Median Accel. (8-9) = ", round(median.error.g8.9,  digits = 1), sep = ""), 
-    color = "paleturquoise4"
-  ) + 
-  geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw(base_size = 15) +
-  theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  ); p
+##### HISTOGRAM #####
+p <- accel.hist.plot(
+  df.ABN, 
+  bw = 20, 
+  legname = "Tumor Grade", 
+  linetypes = c("solid", "dashed", "twodash"), 
+  colors = c("gray16", "pink4", "paleturquoise4"), 
+  labels = c("Grade 3-5", "Grade 6-7", "Grade 8-9"), 
+  x.label = "DNAm Age Acceleration [Years]", 
+  y.label = "Frequency [Arbitrary Units]", 
+  title = "DNAm Age Acceleration for Tumor Grades",
+  annot.x = 90, 
+  annot.y = 0.032,
+  annot.sep = 0.002, 
+  x.min = -40, 
+  x.max = 125,
+  y.min = 0, 
+  y.max = 0.045, 
+  leg.x = 0.8, 
+  leg.y = 0.87
+); p
 
 png( paste(model.dir, "CancerStudies/2_residual_hist_TumorGrade.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+##### BAR PLOT #####
+r.list <- list()
+r.list[[1]] <- residual.g3.5
+r.list[[2]] <- residual.g6.7
+r.list[[3]] <- residual.g8.9
+p <- accel.box.plot(df.ABN, residuals = r.list, width = 0.6); p
+
+png( paste(model.dir, "CancerStudies/boxplot_grade.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
@@ -511,12 +295,6 @@ dev.off()
 ##########################################################################
 # MERGED GRADE PLOT VERSION 2
 ##########################################################################
-median.error.g3.5 <- median(residual.g3.5)
-median.error.g6   <- median(residual.g6)
-median.error.g7   <- median(residual.g7)
-median.error.g8   <- median(residual.g8)
-median.error.g9   <- median(residual.g9)
-
 tmp.g3.5 <- data.frame(residual.g3.5)
 tmp.g3.5$type <- "Grade 3-5"
 colnames(tmp.g3.5) <- c("res", "ttype")
@@ -537,69 +315,45 @@ tmp.g9 <- data.frame(residual.g9)
 tmp.g9$type <- "Grade 9"
 colnames(tmp.g9) <- c("res", "ttype")
 
-
 df.ABN <- rbind(tmp.g3.5, tmp.g6, tmp.g7, tmp.g8, tmp.g9)
 rm(tmp.g3.5); rm(tmp.g6); rm(tmp.g7); rm(tmp.g8); rm(tmp.g9); gc();
 
-p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
-  geom_freqpoly(size = 1.2, binwidth = 25) +
-  scale_linetype_manual(
-    name = "Tumor Grade", 
-    values = c("solid", "dashed", "twodash", "longdash", "dotted"),
-    labels = c("Grade 3-5", "Grade 6", "Grade 7", "Grade 8", "Grade 9")
-  ) + 
-  scale_color_manual(
-    name = "Tumor Grade", 
-    values = c("gray16", "pink4", "paleturquoise4", "red", "blue"), 
-    labels = c("Grade 3-5", "Grade 6", "Grade 7", "Grade 8", "Grade 9")
-  ) +
-  scale_x_continuous(
-    expand=c(0, 0),
-    limits = c(-40, 125)
-  ) +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 0.045)
-  ) + 
-  labs(x = "DNAm Age Acceleration [Years]") + 
-  labs(y = "Frequency [Arbitrary Units]") + 
-  labs(title = "DNAm Age Acceleration for Tumor Grades") + 
-  annotate(
-    "text", x = 90, y = 0.030, 
-    label = paste("Median Accel. (3-5) = ", round(median.error.g3.5,  digits = 1), sep = ""), 
-    color = "gray16"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.028, 
-    label = paste("Median Accel. (6) = ", round(median.error.g6,  digits = 1), sep = ""), 
-    color = "pink4"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.026,  
-    label = paste("Median Accel. (7) = ", round(median.error.g7,  digits = 1), sep = ""), 
-    color = "paleturquoise4"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.024,  
-    label = paste("Median Accel. (8) = ", round(median.error.g8,  digits = 1), sep = ""), 
-    color = "red"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.022,  
-    label = paste("Median Accel. (9) = ", round(median.error.g9,  digits = 1), sep = ""), 
-    color = "blue"
-  ) + 
-  geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw(base_size = 15) +
-  theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.85)) +
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  ); p
+##### HISTOGRAM #####
+p <- accel.hist.plot(
+  df.ABN, 
+  bw = 20, 
+  legname = "Tumor Grade", 
+  linetypes = c("solid", "dashed", "twodash", "longdash", "dotted"), 
+  colors = c("gray16", "pink4", "paleturquoise4", "red", "blue"), 
+  labels = c("Grade 3-5", "Grade 6", "Grade 7", "Grade 8", "Grade 9"), 
+  x.label = "DNAm Age Acceleration [Years]", 
+  y.label = "Frequency [Arbitrary Units]", 
+  title = "DNAm Age Acceleration for Tumor Grades",
+  annot.x = 90, 
+  annot.y = 0.03,
+  annot.sep = 0.002, 
+  x.min = -40, 
+  x.max = 125,
+  y.min = 0, 
+  y.max = 0.045, 
+  leg.x = 0.8, 
+  leg.y = 0.85
+)
 
 png( paste(model.dir, "CancerStudies/2.5_residual_hist_TumorGradeV2.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+##### BAR PLOT #####
+r.list <- list()
+r.list[[1]] <- residual.g3.5
+r.list[[2]] <- residual.g6
+r.list[[3]] <- residual.g7
+r.list[[4]] <- residual.g8
+r.list[[5]] <- residual.g9
+p <- accel.box.plot(df.ABN, residuals = r.list, width = 0.6)
+
+png( paste(model.dir, "CancerStudies/boxplot_gradeV2.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
@@ -626,50 +380,42 @@ colnames(tmp.sIII.IV) <- c("res", "ttype")
 df.ABN <- rbind(tmp.sII, tmp.sIII.IV)
 rm(tmp.sII); rm(tmp.sIII.IV); gc();
 
-p <- ggplot(df.ABN, aes(x = res, stat(density), color = ttype, linetype = ttype)) +
-  geom_freqpoly(size = 1.2, binwidth = 20) +
-  scale_linetype_manual(
-    name = "Tumor Stage", 
-    values = c("solid", "dashed"),
-    labels = c("Stage II", "Stage III & IV")
-  ) +
-  scale_color_manual(
-    name = "Tumor Stage", 
-    values = c("darkslategrey","firebrick3"), 
-    labels = c("Stage II", "Stage III & IV")
-  ) +
-  scale_x_continuous(
-    expand=c(0, 0),
-    limits = c(-40, 125)
-  ) +
-  scale_y_continuous(
-    expand=c(0, 0),
-    limits = c(0, 0.04)
-  ) + 
-  labs(x = "DNAm Age Acceleration [Years]") + 
-  labs(y = "Frequency [Arbitrary Units]") + 
-  labs(title = "DNAm Age Acceleration for Tumor Stages") + 
-  annotate(
-    "text", x = 90, y = 0.030, 
-    label = paste("Median Accel. (II) = ", round(median.error.sII,  digits = 1), sep = ""), 
-    color = "darkslategrey"
-  ) + 
-  annotate(
-    "text", x = 90, y = 0.028, 
-    label = paste("Median Accel. (III & IV) = ", round(median.error.sIII.IV,  digits = 1), sep = ""), 
-    color = "firebrick3"
-  ) + 
-  geom_vline(xintercept = 0, color = "black", size = 1, linetype = "dotted") + 
-  theme_bw(base_size = 15) + 
-  theme(legend.key.width = unit(3, "line"), legend.position=c(0.8, 0.87)) +
-  theme(
-    axis.ticks.length=unit(-0.25, "cm"), 
-    axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  ); p
+unique(df.ABN$ttype)
+df.ABN[df.ABN$ttype == "Stage II","res"]
+
+##### HISTOGRAM #####
+p <- accel.hist.plot(
+  df.ABN, 
+  bw = 20, 
+  legname = "Tumor Stage", 
+  linetypes = c("solid", "dashed"), 
+  colors = c("darkslategrey","firebrick3"), 
+  labels = c("Stage II", "Stage III & IV"), 
+  x.label = "DNAm Age Acceleration [Years]", 
+  y.label = "Frequency [Arbitrary Units]", 
+  title = "DNAm Age Acceleration for Tumor Stages",
+  annot.x = 85, 
+  annot.y = 0.03,
+  annot.sep = 0.002, 
+  x.min = -40, 
+  x.max = 125,
+  y.min = 0, 
+  y.max = 0.04, 
+  leg.x = 0.8, 
+  leg.y = 0.87
+)
 
 png( paste(model.dir, "CancerStudies/3_residual_hist_TumorStage.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+##### BAR PLOT #####
+r.list <- list()
+r.list[[1]] <- residual.sII
+r.list[[2]] <- residual.sIII.IV
+p <- accel.box.plot(df.ABN, residuals = r.list, width = 0.6)
+
+png( paste(model.dir, "CancerStudies/boxplot_stage.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
