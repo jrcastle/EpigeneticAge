@@ -1,15 +1,15 @@
 library("impute")
 setwd("/home/jrca253/EpigeneticAge/data")
 
-meth.file.in  = "meth_N_CGNumber.csv"
-meth.file.out = "meth_N_CGNumber_imputed.csv"
+meth.file.in  = "meth_K_WhiteBlackDiffMethCpGs.txt"
+meth.file.out = "meth_K_WhiteBlackDiffMethCpGs_imputed.txt"
 
 
 ###########################################################################################
 # LOAD DATA AND TRANSFORM INTO A MATRIX
 ###########################################################################################
 print(paste("Loading ", meth.file.in, " ...", sep = ""))
-meth.df.in = read.table(meth.file.in, header = TRUE, sep = ',')
+meth.df.in = read.table(meth.file.in, header = TRUE, sep = '\t')
 meth.matrix.in <- meth.df.in[ c(2:ncol(meth.df.in)) ]
 meth.matrix.in <- data.matrix(meth.matrix.in)
 
@@ -27,5 +27,5 @@ meth.df.out <- meth.df.out[ colnames(meth.df.in) ]
 # SAVE
 ###########################################################################################
 print(paste("Saving ", meth.file.out, " ...", sep = ""))
-write.table(meth.df.out, meth.file.out, sep = ",", row.names=FALSE)
+write.table(meth.df.out, meth.file.out, sep = "\t", row.names=FALSE)
 

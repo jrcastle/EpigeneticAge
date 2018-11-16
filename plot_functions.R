@@ -7,13 +7,12 @@ DNAmAge.ChronoAge.plot = function(df.ttype, legname, colors, labels, x.label, y.
                                   x.min = 0, x.max = 100, y.min = 0, y.max = 100, leg.x = 0.8, 
                                   leg.y = 0.87){
   
-  
   p <- ggplot(df.ttype, aes(x = Chrono.age, y = DNAm.age, color = ttype)) +
     geom_point() + 
     scale_color_manual(
       name = legname, 
       values = colors, 
-      labels = labels
+      breaks = labels
     ) +
     scale_x_continuous(
       expand=c(0, 0),
@@ -115,7 +114,8 @@ accel.hist.plot = function(df.ttype, bw = 20, legname, linetypes, colors, labels
 #######################################################################################
 # AGE ACCELERATION BOX PLOT
 #######################################################################################
-accel.box.plot = function(df.ttype, residuals, width = 0.75, pos.col = "blue", neg.col = "red", leg.x = 0.25, leg.y = 0.87){
+accel.box.plot = function(df.ttype, residuals, width = 0.75, pos.col = "blue", neg.col = "red", 
+                          x.label = "", y.label = "", title = "", leg.x = 0.25, leg.y = 0.87){
 
   w = width
   df.list <- list()
@@ -137,7 +137,7 @@ accel.box.plot = function(df.ttype, residuals, width = 0.75, pos.col = "blue", n
   }
 
   p <- ggplot(df.ttype, aes(x=ttype, y=res)) +
-    geom_boxplot(width = w) +
+    geom_boxplot(aes(x=ttype, y=res), data = df.ttype, width = w) +
     geom_hline(yintercept = 0, color = "gray", size = 1, linetype = "dashed")
   for( i in df.list ){
     p <- p + geom_segment(aes(x = x0, y = y0, xend = x1, yend = y1, color = clr), data = i)
@@ -153,12 +153,13 @@ accel.box.plot = function(df.ttype, residuals, width = 0.75, pos.col = "blue", n
     values = c(pos.col, neg.col), 
     labels = c("+", "-")
   ) +
-  geom_boxplot(width = w, alpha = 0.2) +
-  labs(x = "Tumor Stage") + 
-  labs(y = "DNAm Age Acceleration [Years]") + 
-  labs(title = "DNAm Age Acceleration for Tumor Stages") + 
+  geom_boxplot(aes(x=ttype, y=res), data = df.ttype, width = w, alpha = 0.2) +
+  labs(x = x.label) + 
+  labs(y = y.label) + 
+  labs(title = title) + 
   theme_bw(base_size = 15) +
   theme(
+    legend.background = element_rect(color = "transparent", fill = "transparent"),
     legend.key.width = unit(1, "line"), 
     legend.position=c(leg.x, leg.y),
     axis.ticks.length=unit(-0.25, "cm"), 

@@ -150,6 +150,7 @@ tmp.T$type <- "T"
 colnames(tmp.T) <- c("Chrono.age", "DNAm.age", "res", "ttype")
 
 df.KNT <- rbind(tmp.K, tmp.N, tmp.T)
+df.KNT$ttype <- factor(df.KNT$ttype, levels = c("K","N","T"))
 rm(tmp.K); rm(tmp.N); rm(tmp.T); gc()
 
 ##### HISTOGRAM #####
@@ -183,7 +184,14 @@ r.list <- list()
 r.list[[1]] <- residual.K
 r.list[[2]] <- residual.N
 r.list[[3]] <- residual.T
-p <- accel.box.plot(df.KNT, residuals = r.list, width = 0.75); p
+p <- accel.box.plot(
+  df.KNT, 
+  residuals = r.list, 
+  width = 0.75,
+  x.label = "Tissue Type", 
+  y.label = "DNAm Age Acceleration [Years]",
+  title = "DNAm Age Accelerati for Tissue Types"
+); p
 
 png( paste(model.dir, "TissueStudies/boxplot_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
 p
@@ -193,7 +201,7 @@ dev.off()
 p <- DNAmAge.ChronoAge.plot(
   df.KNT, 
   legname = "Tissue Type", 
-  colors = c("darkorange3", "black", "deepskyblue4"), 
+  colors = c("black","darkorange3","deepskyblue4"), 
   labels = c("K", "N", "T"), 
   x.label = "Chronological Age [Years]", 
   y.label = "DNAm Age [Years]", 
@@ -215,7 +223,14 @@ dev.off()
 ##########################################################################
 # STATISTICAL TESTS
 ##########################################################################
+
+##### ALLOW OUTLIERS #####
 wilcox.test(residual.K, mu=0, conf.int = TRUE)
 wilcox.test(residual.N, mu=0, conf.int = TRUE)
 wilcox.test(residual.T, mu=0, conf.int = TRUE)
 
+
+##### REMOVE OUTLIERS #####
+wilcox.test(residual.K[ !(residual.K %in% boxplot.stats(residual.K)$out) ], mu=0)
+wilcox.test(residual.N[ !(residual.N %in% boxplot.stats(residual.N)$out) ], mu=0)
+wilcox.test(residual.T[ !(residual.T %in% boxplot.stats(residual.T)$out) ], mu=0)

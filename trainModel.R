@@ -2,8 +2,10 @@ setwd("/home/jrca253/EpigeneticAge")
 library(glmnet)
 library(ggplot2)
 
-cov.train  <- "data/cov_K_train.txt"
-meth.train <- "data/meth_K_cpgs_in_KNT_imputed_train.txt"
+#cov.train  <- "data/cov_K_train.txt"
+cov.train  <- "data/cov_K.txt"
+#meth.train <- "data/meth_K_cpgs_in_KNT_imputed_train.txt"
+meth.train <- "data/meth_K_WhiteBlackDiffMethCpGs_imputed.txt"
 
 alpha     <- 0.5
 adult.age <- 20
