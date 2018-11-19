@@ -214,6 +214,15 @@ p <- DNAmAge.ChronoAge.plot(
   leg.y = 0.87
 ); p
 
+if( model.residual ){
+  p <- p + 
+    geom_abline(
+      slope = lm(result ~ ages)$coefficients[[2]], 
+      intercept = lm(result ~ ages)$coefficients[[1]],
+      linetype = "dotted"
+    )
+}
+
 png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()

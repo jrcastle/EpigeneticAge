@@ -138,6 +138,15 @@ Her2p.samples      <- rownames(tmp[ which(tmp$Her2pos == 1), ])
 ERPRpHer2n.samples <- rownames(tmp[ which( (tmp$ERpos == 1 | tmp$PRpos == 1) & tmp$Her2pos == 0), ])
 ERPRnHer2n.samples <- rownames(tmp[ which(tmp$ERpos == 0 & tmp$PRpos == 0 & tmp$Her2pos == 0), ])
 
+Her2p.White.samples      <- rownames(tmp[ which(tmp$Her2pos == 1 & tmp$RaceWhite == 1 ), ])
+ERPRpHer2n.White.samples <- rownames(tmp[ which( (tmp$ERpos == 1 | tmp$PRpos == 1) & tmp$Her2pos == 0 & tmp$RaceWhite == 1), ])
+ERPRnHer2n.White.samples <- rownames(tmp[ which(tmp$ERpos == 0 & tmp$PRpos == 0 & tmp$Her2pos == 0 & tmp$RaceWhite == 1), ])
+
+Her2p.Black.samples      <- rownames(tmp[ which(tmp$Her2pos == 1 & tmp$RaceWhite == 0 ), ])
+ERPRpHer2n.Black.samples <- rownames(tmp[ which( (tmp$ERpos == 1 | tmp$PRpos == 1) & tmp$Her2pos == 0 & tmp$RaceWhite == 0), ])
+ERPRnHer2n.Black.samples <- rownames(tmp[ which(tmp$ERpos == 0 & tmp$PRpos == 0 & tmp$Her2pos == 0 & tmp$RaceWhite == 0), ])
+
+
 ##### DIVIDE SAMPLES BY TUMOR GRADE #####
 grade3.5.samples <- rownames(tmp[ which(tmp$Cancer.gradeBin6to7 == 0 & tmp$Cancer.gradeBin8to9 == 0), ])
 grade6.7.samples <- rownames(tmp[ which(tmp$Cancer.gradeBin6to7 == 1), ])
@@ -167,6 +176,14 @@ age.H2p     <- as.numeric(as.vector(cov["Age", Her2p.samples]))
 age.EPpHn   <- as.numeric(as.vector(cov["Age", ERPRpHer2n.samples]))
 age.EPnHn   <- as.numeric(as.vector(cov["Age", ERPRnHer2n.samples]))
 
+age.White.H2p     <- as.numeric(as.vector(cov["Age", Her2p.White.samples]))
+age.White.EPpHn   <- as.numeric(as.vector(cov["Age", ERPRpHer2n.White.samples]))
+age.White.EPnHn   <- as.numeric(as.vector(cov["Age", ERPRnHer2n.White.samples]))
+
+age.Black.H2p     <- as.numeric(as.vector(cov["Age", Her2p.Black.samples]))
+age.Black.EPpHn   <- as.numeric(as.vector(cov["Age", ERPRpHer2n.Black.samples]))
+age.Black.EPnHn   <- as.numeric(as.vector(cov["Age", ERPRnHer2n.Black.samples]))
+
 age.g3.5    <- as.numeric(as.vector(cov["Age", grade3.5.samples]))
 age.g6.7    <- as.numeric(as.vector(cov["Age", grade6.7.samples]))
 age.g8.9    <- as.numeric(as.vector(cov["Age", grade8.9.samples]))
@@ -191,6 +208,14 @@ result.Tnn     <- as.numeric(as.vector(cov["DNAm Age", ERPRnegHer2neg.samples]))
 result.H2p     <- as.numeric(as.vector(cov["DNAm Age", Her2p.samples]))
 result.EPpHn   <- as.numeric(as.vector(cov["DNAm Age", ERPRpHer2n.samples]))
 result.EPnHn   <- as.numeric(as.vector(cov["DNAm Age", ERPRnHer2n.samples]))
+
+result.White.H2p     <- as.numeric(as.vector(cov["DNAm Age", Her2p.White.samples]))
+result.White.EPpHn   <- as.numeric(as.vector(cov["DNAm Age", ERPRpHer2n.White.samples]))
+result.White.EPnHn   <- as.numeric(as.vector(cov["DNAm Age", ERPRnHer2n.White.samples]))
+
+result.Black.H2p     <- as.numeric(as.vector(cov["DNAm Age", Her2p.Black.samples]))
+result.Black.EPpHn   <- as.numeric(as.vector(cov["DNAm Age", ERPRpHer2n.Black.samples]))
+result.Black.EPnHn   <- as.numeric(as.vector(cov["DNAm Age", ERPRnHer2n.Black.samples]))
 
 result.g3.5    <- as.numeric(as.vector(cov["DNAm Age", grade3.5.samples]))
 result.g6.7    <- as.numeric(as.vector(cov["DNAm Age", grade6.7.samples]))
@@ -217,6 +242,14 @@ residual.Tnn     <- as.numeric(as.vector(cov["DNAm Age Residual", ERPRnegHer2neg
 residual.H2p     <- as.numeric(as.vector(cov["DNAm Age Residual", Her2p.samples]))
 residual.EPpHn   <- as.numeric(as.vector(cov["DNAm Age Residual", ERPRpHer2n.samples]))
 residual.EPnHn   <- as.numeric(as.vector(cov["DNAm Age Residual", ERPRnHer2n.samples]))
+
+residual.White.H2p     <- as.numeric(as.vector(cov["DNAm Age Residual", Her2p.White.samples]))
+residual.White.EPpHn   <- as.numeric(as.vector(cov["DNAm Age Residual", ERPRpHer2n.White.samples]))
+residual.White.EPnHn   <- as.numeric(as.vector(cov["DNAm Age Residual", ERPRnHer2n.White.samples]))
+
+residual.Black.H2p     <- as.numeric(as.vector(cov["DNAm Age Residual", Her2p.Black.samples]))
+residual.Black.EPpHn   <- as.numeric(as.vector(cov["DNAm Age Residual", ERPRpHer2n.Black.samples]))
+residual.Black.EPnHn   <- as.numeric(as.vector(cov["DNAm Age Residual", ERPRnHer2n.Black.samples]))
 
 residual.g3.5    <- as.numeric(as.vector(cov["DNAm Age Residual", grade3.5.samples]))
 residual.g6.7    <- as.numeric(as.vector(cov["DNAm Age Residual", grade6.7.samples]))
@@ -286,7 +319,7 @@ p <- accel.box.plot(
   residuals = r.list,
   x.label = "Subtype", 
   y.label = "DNAm Age Acceleration [Years]",
-  title = "DNAm Age Accelerati for Cancer Subtypes",
+  title = "DNAm Age Acceleration for Cancer Subtypes",
   width = 0.6,
   leg.x = 0.74,
   leg.y = 0.92
@@ -315,6 +348,182 @@ p <- DNAmAge.ChronoAge.plot(
 ); p
 
 png( paste(model.dir, "CancerStudies/subtype_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+
+##########################################################################
+# MERGED SUBTYPE RESIDUAL PLOT (White/Black)
+##########################################################################
+tmp.H2p <- data.frame(age.White.H2p, result.White.H2p, residual.White.H2p)
+tmp.H2p$type <- "Her2+"
+colnames(tmp.H2p) <- c("Chrono.age", "DNAm.age", "res", "ttype")
+
+tmp.EPpHn <- data.frame(age.White.EPpHn, result.White.EPpHn, residual.White.EPpHn)
+tmp.EPpHn$type <- "ER/PR+ Her2-"
+colnames(tmp.EPpHn) <- c("Chrono.age", "DNAm.age", "res", "ttype")
+
+tmp.EPnHn <- data.frame(age.White.EPnHn, result.White.EPnHn, residual.White.EPnHn)
+tmp.EPnHn$type <- "ER- PR- Her2-"
+colnames(tmp.EPnHn) <- c("Chrono.age", "DNAm.age", "res", "ttype")
+
+df.ABN <- rbind(tmp.H2p, tmp.EPpHn, tmp.EPnHn)
+rm(tmp.H2p); rm(tmp.EPpHn); rm(tmp.EPnHn); gc();
+df.ABN$ttype <- factor(df.ABN$ttype, levels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"))
+
+##### HISTOGRAM #####
+p <- accel.hist.plot(
+  df.ABN, 
+  bw = 25, 
+  legname = "Cancer Subtype", 
+  linetypes = c("solid", "dashed", "twodash"), 
+  colors = c("deepskyblue4","darkorange3","seagreen4"), 
+  labels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"), 
+  x.label = "DNAm Age Acceleration [Years]", 
+  y.label = "Frequency [Arbitrary Units]", 
+  title = "DNAm Age Acceleration for Cancer Subtypes in White Samples",
+  annot.x = 85, 
+  annot.y = 0.025,
+  annot.sep = 0.002, 
+  x.min = -45, 
+  x.max = 125,
+  y.min = 0, 
+  y.max = 0.035, 
+  leg.x = 0.8, 
+  leg.y = 0.87
+); p
+
+png( paste(model.dir, "CancerStudies/subtype_white_histogram.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+##### BAR PLOT #####
+r.list <- list()
+r.list[[1]] <- residual.White.H2p
+r.list[[2]] <- residual.White.EPpHn
+r.list[[3]] <- residual.White.EPnHn
+p <- accel.box.plot(
+  df.ABN, 
+  residuals = r.list,
+  x.label = "Subtype", 
+  y.label = "DNAm Age Acceleration [Years]",
+  title = "DNAm Age Acceleration for Cancer Subtypes in White Samples",
+  width = 0.6,
+  leg.x = 0.74,
+  leg.y = 0.92
+); p
+
+png( paste(model.dir, "CancerStudies/subtype_white_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+
+##### DNAm AGE vs CHRONOLOGICAL AGE #####
+p <- DNAmAge.ChronoAge.plot(
+  df.ABN, 
+  legname = "Cancer Subtype", 
+  colors = c("deepskyblue4","darkorange3","seagreen4"), 
+  labels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"), 
+  x.label = "Chronological Age [Years]", 
+  y.label = "DNAm Age [Years]", 
+  title = "DNAm Age vs Chronological Age in White Samples",
+  x.min = 0, 
+  x.max = 90,
+  y.min = 0, 
+  y.max = 185, 
+  leg.x = 0.2, 
+  leg.y = 0.87
+); p
+
+png( paste(model.dir, "CancerStudies/subtype_white_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+
+##########################################################################
+# MERGED SUBTYPE RESIDUAL PLOT (White/Black)
+##########################################################################
+tmp.H2p <- data.frame(age.Black.H2p, result.Black.H2p, residual.Black.H2p)
+tmp.H2p$type <- "Her2+"
+colnames(tmp.H2p) <- c("Chrono.age", "DNAm.age", "res", "ttype")
+
+tmp.EPpHn <- data.frame(age.Black.EPpHn, result.Black.EPpHn, residual.Black.EPpHn)
+tmp.EPpHn$type <- "ER/PR+ Her2-"
+colnames(tmp.EPpHn) <- c("Chrono.age", "DNAm.age", "res", "ttype")
+
+tmp.EPnHn <- data.frame(age.Black.EPnHn, result.Black.EPnHn, residual.Black.EPnHn)
+tmp.EPnHn$type <- "ER- PR- Her2-"
+colnames(tmp.EPnHn) <- c("Chrono.age", "DNAm.age", "res", "ttype")
+
+df.ABN <- rbind(tmp.H2p, tmp.EPpHn, tmp.EPnHn)
+rm(tmp.H2p); rm(tmp.EPpHn); rm(tmp.EPnHn); gc();
+df.ABN$ttype <- factor(df.ABN$ttype, levels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"))
+
+##### HISTOGRAM #####
+p <- accel.hist.plot(
+  df.ABN, 
+  bw = 25, 
+  legname = "Cancer Subtype", 
+  linetypes = c("solid", "dashed", "twodash"), 
+  colors = c("deepskyblue4","darkorange3","seagreen4"), 
+  labels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"), 
+  x.label = "DNAm Age Acceleration [Years]", 
+  y.label = "Frequency [Arbitrary Units]", 
+  title = "DNAm Age Acceleration for Cancer Subtypes in Black Samples",
+  annot.x = 85, 
+  annot.y = 0.025,
+  annot.sep = 0.002, 
+  x.min = -45, 
+  x.max = 125,
+  y.min = 0, 
+  y.max = 0.035, 
+  leg.x = 0.8, 
+  leg.y = 0.87
+); p
+
+png( paste(model.dir, "CancerStudies/subtype_black_histogram.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+##### BAR PLOT #####
+r.list <- list()
+r.list[[1]] <- residual.Black.H2p
+r.list[[2]] <- residual.Black.EPpHn
+r.list[[3]] <- residual.Black.EPnHn
+p <- accel.box.plot(
+  df.ABN, 
+  residuals = r.list,
+  x.label = "Subtype", 
+  y.label = "DNAm Age Acceleration [Years]",
+  title = "DNAm Age Acceleration for Cancer Subtypes in Black Samples",
+  width = 0.6,
+  leg.x = 0.74,
+  leg.y = 0.92
+); p
+
+png( paste(model.dir, "CancerStudies/subtype_black_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
+p
+dev.off()
+
+
+##### DNAm AGE vs CHRONOLOGICAL AGE #####
+p <- DNAmAge.ChronoAge.plot(
+  df.ABN, 
+  legname = "Cancer Subtype", 
+  colors = c("deepskyblue4","darkorange3","seagreen4"), 
+  labels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"), 
+  x.label = "Chronological Age [Years]", 
+  y.label = "DNAm Age [Years]", 
+  title = "DNAm Age vs Chronological Age in Black Samples",
+  x.min = 0, 
+  x.max = 90,
+  y.min = 0, 
+  y.max = 185, 
+  leg.x = 0.2, 
+  leg.y = 0.87
+); p
+
+png( paste(model.dir, "CancerStudies/subtype_black_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
 p
 dev.off()
 
@@ -374,7 +583,7 @@ p <- accel.box.plot(
   width = 0.6,
   x.label = "Grade", 
   y.label = "DNAm Age Acceleration [Years]",
-  title = "DNAm Age Accelerati for Tumor Grades"
+  title = "DNAm Age Acceleration for Tumor Grades"
 ); p
 
 png( paste(model.dir, "CancerStudies/grade_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
@@ -468,7 +677,7 @@ p <- accel.box.plot(
   width = 0.6,
   x.label = "Grade", 
   y.label = "DNAm Age Acceleration [Years]",
-  title = "DNAm Age Accelerati for Tumor Grades",
+  title = "DNAm Age Acceleration for Tumor Grades",
   leg.y = 0.9
 )
 
@@ -552,7 +761,7 @@ p <- accel.box.plot(
   width = 0.6,
   x.label = "Stage", 
   y.label = "DNAm Age Acceleration [Years]",
-  title = "DNAm Age Accelerati for Cancer Stages",
+  title = "DNAm Age Acceleration for Cancer Stages",
   leg.x = 0.75
 )
 
@@ -606,7 +815,7 @@ r <- sqrt(summary(lm(grades.with.stages~stages.with.grades))$r.squared)
 text(0.5,9.5, paste("r = ", round(r, digits = 4), sep = ""))
 dev.off()
 
-max(residual.sIII.IV)
+
 ##########################################################################
 # STATISTICAL TESTS
 ##########################################################################
@@ -622,6 +831,12 @@ wilcox.test(residual.Tnn,     mu=0, conf.int = TRUE)
 wilcox.test(residual.H2p,     mu=0, conf.int = TRUE)
 wilcox.test(residual.EPpHn,   mu=0, conf.int = TRUE)
 wilcox.test(residual.EPnHn,   mu=0, conf.int = TRUE)
+wilcox.test(residual.White.H2p,     mu=0, conf.int = TRUE)
+wilcox.test(residual.White.EPpHn,   mu=0, conf.int = TRUE)
+wilcox.test(residual.White.EPnHn,   mu=0, conf.int = TRUE)
+wilcox.test(residual.Black.H2p,     mu=0, conf.int = TRUE)
+wilcox.test(residual.Black.EPpHn,   mu=0, conf.int = TRUE)
+wilcox.test(residual.Black.EPnHn,   mu=0, conf.int = TRUE)
 wilcox.test(residual.g3.5,    mu=0, conf.int = TRUE)
 wilcox.test(residual.g6.7,    mu=0, conf.int = TRUE)
 wilcox.test(residual.g8.9,    mu=0, conf.int = TRUE)
@@ -631,9 +846,12 @@ wilcox.test(residual.g8,      mu=0, conf.int = TRUE)
 wilcox.test(residual.g9,      mu=0, conf.int = TRUE)
 wilcox.test(residual.sII,     mu=0, conf.int = TRUE)
 wilcox.test(residual.sIII.IV, mu=0, conf.int = TRUE)
-#wilcox.test(residual.sIV,  mu=0, conf.int = TRUE)
 
+
+#wilcox.test(residual.sIV,  mu=0, conf.int = TRUE)
+median(residual.sIII.IV)
 mean(residual.sIII.IV[ !(residual.sIII.IV %in% boxplot.stats(residual.sIII.IV)$out) ])
+
 ##### REMOVE OUTLIERS #####
 wilcox.test(residual.LumA[ !(residual.LumA %in% boxplot.stats(residual.LumA)$out) ],          mu=0, conf.int = TRUE)
 wilcox.test(residual.LumB[ !(residual.LumB %in% boxplot.stats(residual.LumB)$out) ],          mu=0, conf.int = TRUE)
