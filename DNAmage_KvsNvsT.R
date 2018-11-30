@@ -2,6 +2,7 @@ rm(list=ls()); gc();
 setwd("/Users/jrca253/Documents/EpigeneticAge/test_code")
 library(ggplot2)
 library(RColorBrewer)
+library(car)
 source("plot_functions.R")
 
 seed        <- "123"
@@ -80,6 +81,10 @@ cov.T <- read.table(cov.file.T, header = TRUE, row.names = 1, sep = '\t')
 K.samples <- colnames(cov.K)
 N.samples <- colnames(cov.N)
 T.samples <- colnames(cov.T)
+
+cov.K['Tissue.Type',] = "K"
+cov.N['Tissue.Type',] = "N"
+cov.T['Tissue.Type',] = "T"
 
 covariates <- unique(c(rownames(cov.K), rownames(cov.N), rownames(cov.T)))
 for(i in covariates){
@@ -243,3 +248,48 @@ wilcox.test(residual.T, mu=0, conf.int = TRUE)
 wilcox.test(residual.K[ !(residual.K %in% boxplot.stats(residual.K)$out) ], mu=0)
 wilcox.test(residual.N[ !(residual.N %in% boxplot.stats(residual.N)$out) ], mu=0)
 wilcox.test(residual.T[ !(residual.T %in% boxplot.stats(residual.T)$out) ], mu=0)
+
+##### LEVINE'S TEST #####
+res.K <- residual.K[ !(residual.K %in% boxplot.stats(residual.K)$out) ]
+res.N <- residual.N[ !(residual.N %in% boxplot.stats(residual.N)$out) ]
+res.T <- residual.T[ !(residual.T %in% boxplot.stats(residual.T)$out) ]
+
+# K-N
+y <- c(res.K, res.N)
+grp <- as.factor( c(rep("K", length(res.K)), rep("N", length(res.N))) )
+leveneTest(y, grp)
+
+# N-T
+y <- c(res.N, res.T)
+grp <- as.factor( c(rep("N", length(res.N)), rep("T", length(res.T))) )
+leveneTest(y, grp)
+
+# K-T
+y <- c(res.K, res.T)
+grp <- as.factor( c(rep("K", length(res.K)), rep("T", length(res.T))) )
+leveneTest(y, grp)
+
+##### ONE-WAY ANOVA #####
+ag.K <- age.K[ !(residual.K %in% boxplot.stats(residual.K)$out) ]
+ag.N <- age.N[ !(residual.N %in% boxplot.stats(residual.N)$out) ]
+ag.T <- age.T[ !(residual.T %in% boxplot.stats(residual.T)$out) ]
+
+tmp.K <- data.frame(res.K, ag.K)
+tmp.K$ttype <- "K"
+colnames(tmp.K) <- c("res", "age", "ttype")
+
+tmp.N <- data.frame(res.N, ag.N)
+tmp.N$ttype <- "N"
+colnames(tmp.N) <- c("res", "age", "ttype")
+
+tmp.T <- data.frame(res.T, ag.T)
+tmp.T$ttype <- "T"
+colnames(tmp.T) <- c("res", "age", "ttype")
+
+df.merge <- rbind(tmp.K, tmp.N, tmp.T)
+df.merge$age <- as.factor(df.merge$age)
+df.merge$ttype <- as.factor(df.merge$ttype)
+rm(tmp.K, tmp.N, tmp.T); gc()
+
+fit <- aov(res ~ age + ttype, data = df.merge)
+TukeyHSD(fit, which = 'ttype')

@@ -9,6 +9,11 @@ model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
 meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
 cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
 
+#seed        <- ""
+#model.dir   <- "WhiteBlack_DiffMethAnalysis/ElasticNet/"
+#meth.file.K <- "data/meth_K_WhiteBlackDiffMethCpGs_imputed_vali_ClockCpGs.txt"
+#cov.file.K  <- "data/cov_K_vali_seed123.txt"
+
 age.covariate  = TRUE
 model.residual = TRUE
 
@@ -139,7 +144,7 @@ if( age.covariate ){
   lm.DNAm.Age <- glm(DNAm.Age ~ 
                      Race + 
                      BMI + 
-                     Cig.Pack.Years + 
+                     #Cig.Pack.Years + 
                      Drinking + 
                      Menarche + 
                      Been.PregnantYes + 
@@ -156,7 +161,7 @@ if( age.covariate ){
   lm.DNAm.Age <- glm(DNAm.Age ~ 
                      Race + 
                      BMI + 
-                     Cig.Pack.Years + 
+                     #Cig.Pack.Years + 
                      Drinking + 
                      Menarche + 
                      Been.PregnantYes + 
@@ -174,7 +179,7 @@ if( age.covariate ){
   lm.DNAm.Age.Residual <- lm(DNAm.Age.Residual ~ 
                              Race + 
                              BMI + 
-                             Cig.Pack.Years + 
+                             #Cig.Pack.Years + 
                              Drinking + 
                              Menarche + 
                              Been.PregnantYes + 
@@ -191,7 +196,7 @@ if( age.covariate ){
   lm.DNAm.Age.Residual <- lm(DNAm.Age.Residual ~ 
                              Race + 
                              BMI + 
-                             Cig.Pack.Years + 
+                             #Cig.Pack.Years + 
                              Drinking + 
                              Menarche + 
                              Been.PregnantYes + 
@@ -204,6 +209,7 @@ if( age.covariate ){
                              Location
                             )
 }
+
 
 ##########################################################################
 # DNAm Age Univariate Analysis
@@ -1540,20 +1546,20 @@ if( age.covariate ){
   df.age     <- df.age[-c(1,3),]
   
   
-  df.sum <- rbind(df.Race, df.BMI, df.Cig.Pack.Years, df.Drinking, df.Menarche, 
+  df.sum <- rbind(df.Race, df.BMI, df.Drinking, df.Menarche, 
                   df.Times.Pregnant, df.Parity, df.Age.FB, df.VDYes, df.Menopause, 
                   df.Menopause.Age, df.Been.PregnantYes, df.Location, df.age)
   
-  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Cigarette pack years", "Current alcohol consumption (yes vs no)",
+  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Age at menarche", "Times pregnant", "Parity", "Age at first birth", "Multivitamin use (yes vs no)", 
                         "Menopause status (post vs pre)", "Age at menopause",    "Have you been pregnant (yes vs no)", 
                         "Location (urban vs rural)", "Chronological age")
 }else{
-  df.sum <- rbind(df.Race, df.BMI, df.Cig.Pack.Years, df.Drinking, df.Menarche, 
+  df.sum <- rbind(df.Race, df.BMI, df.Drinking, df.Menarche, 
                   df.Times.Pregnant, df.Parity, df.Age.FB, df.VDYes, df.Menopause, 
                   df.Menopause.Age, df.Been.PregnantYes, df.Location)
   
-  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Cigarette pack years", "Current alcohol consumption (yes vs no)",
+  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Age at menarche", "Times pregnant", "Parity", "Age at first birth", "Multivitamin use (yes vs no)", 
                         "Menopause status (post vs pre)", "Age at menopause",    "Have you been pregnant (yes vs no)", 
                         "Location (urban vs rural)")
@@ -1613,20 +1619,20 @@ if( age.covariate ){
   df.age            <- df.age[-c(1,3),]
   
   
-  df.sum <- rbind(df.Race, df.BMI, df.Cig.Pack.Years, df.Drinking, df.Menarche, 
+  df.sum <- rbind(df.Race, df.BMI, df.Drinking, df.Menarche, 
                   df.Times.Pregnant, df.Parity, df.Age.FB, df.VDYes, df.Menopause, 
                   df.Menopause.Age, df.Been.PregnantYes, df.Location, df.age)
   
-  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Cigarette pack years", "Current alcohol consumption (yes vs no)",
+  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Age at menarche", "Times pregnant", "Parity", "Age at first birth", "Multivitamin use (yes vs no)", 
                         "Menopause status (post vs pre)", "Age at menopause",    "Have you been pregnant (yes vs no)", 
                         "Location (urban vs rural)", "Chronological age")
 }else{
-  df.sum <- rbind(df.Race, df.BMI, df.Cig.Pack.Years, df.Drinking, df.Menarche, 
+  df.sum <- rbind(df.Race, df.BMI, df.Drinking, df.Menarche, 
                   df.Times.Pregnant, df.Parity, df.Age.FB, df.VDYes, df.Menopause, 
                   df.Menopause.Age, df.Been.PregnantYes, df.Location)
   
-  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Cigarette pack years", "Current alcohol consumption (yes vs no)",
+  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Age at menarche", "Times pregnant", "Parity", "Age at first birth", "Multivitamin use (yes vs no)", 
                         "Menopause status (post vs pre)", "Age at menopause",    "Have you been pregnant (yes vs no)", 
                         "Location (urban vs rural)")
@@ -1645,11 +1651,11 @@ df.sum <- data.frame(summary(lm.DNAm.Age)$coefficients[,c("Estimate","Pr(>|t|)")
 df.sum <- df.sum[-c(1),]
 colnames(df.sum) <- c("Coef", "pval")
 if(age.covariate){
-  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Cigarette pack years", "Current alcohol consumption (yes vs no)",
+  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Age at menarche", "Times pregnant", "Parity", "Age at first birth", "Multivitamin use (yes vs no)", 
                         "Menopause status (post vs pre)", "Location (urban vs rural)", "Chronological age")
 }else{
-  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Cigarette pack years", "Current alcohol consumption (yes vs no)",
+  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Age at menarche", "Times pregnant", "Parity", "Age at first birth", "Multivitamin use (yes vs no)", 
                         "Menopause status (post vs pre)", "Location (urban vs rural)")
 }
@@ -1661,13 +1667,14 @@ df.sum <- data.frame(summary(lm.DNAm.Age.Residual)$coefficients[,c("Estimate","P
 df.sum <- df.sum[-c(1),]
 colnames(df.sum) <- c("Coef", "pval")
 if(age.covariate){
-  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Cigarette pack years", "Current alcohol consumption (yes vs no)",
+  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                       "Age at menarche", "Times pregnant", "Parity", "Age at first birth", "Multivitamin use (yes vs no)", 
                       "Menopause status (post vs pre)", "Location (urban vs rural)", "Chronological age")
 }else{
-  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Cigarette pack years", "Current alcohol consumption (yes vs no)",
+  rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Age at menarche", "Times pregnant", "Parity", "Age at first birth", "Multivitamin use (yes vs no)", 
                         "Menopause status (post vs pre)", "Location (urban vs rural)")
 }
 
 stargazer(df.sum, summary = FALSE)
+
