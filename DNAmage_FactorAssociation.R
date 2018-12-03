@@ -575,7 +575,9 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/Race-DNAmAge.png", sep = ''), width = 500, height = 500 )
@@ -595,7 +597,9 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/Race-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
@@ -666,7 +670,9 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/Location-DNAmAge.png", sep = ''), width = 500, height = 500 )
@@ -686,7 +692,9 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/Location-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
@@ -728,7 +736,9 @@ p <- ggplot(df.tmp, aes(x=BMI, y=DNAm.Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   )
 
 png( paste(model.dir, "FactorAssociation/BMI-DNAmAge.png", sep = ''), width = 500, height = 500 )
@@ -747,7 +757,9 @@ p <- ggplot(df.tmp, aes(x = BMI, y = DNAm.Age.Residual)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   )
 
 png( paste(model.dir, "FactorAssociation/BMI-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
@@ -790,7 +802,9 @@ p <- ggplot(df.tmp, aes(x=Cig.Pack.Years, y=DNAm.Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   )
 
 png( paste(model.dir, "FactorAssociation/CigPackYears-DNAmAge.png", sep = ''), width = 500, height = 500 )
@@ -809,7 +823,9 @@ p <- ggplot(df.tmp, aes(x = Cig.Pack.Years, y = DNAm.Age.Residual)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   )
 
 png( paste(model.dir, "FactorAssociation/CigPackYears-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
@@ -877,7 +893,9 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/Drinking-DNAmAge.png", sep = ''), width = 500, height = 500 )
@@ -897,7 +915,9 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/Drinking-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
@@ -940,8 +960,10 @@ p <- ggplot(df.tmp, aes(x=Menarche, y=DNAm.Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/MenarcheAge-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
@@ -959,8 +981,10 @@ p <- ggplot(df.tmp, aes(x = Menarche, y = DNAm.Age.Residual)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/MenarcheAge-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
@@ -1027,7 +1051,9 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/HaveYouBeenPregnant-DNAmAge.png", sep = ''), width = 500, height = 500 )
@@ -1047,7 +1073,9 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/HaveYouBeenPregnant-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
@@ -1090,8 +1118,10 @@ p <- ggplot(df.tmp, aes(x=Times.Pregnant, y=DNAm.Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/TimesPregnant-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
@@ -1109,8 +1139,10 @@ p <- ggplot(df.tmp, aes(x = Times.Pregnant, y = DNAm.Age.Residual)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/TimesPregnant-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
@@ -1152,8 +1184,10 @@ p <- ggplot(df.tmp, aes(x=Parity, y=DNAm.Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/Parity-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
@@ -1171,8 +1205,10 @@ p <- ggplot(df.tmp, aes(x = Parity, y = DNAm.Age.Residual)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/Parity-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
@@ -1214,8 +1250,10 @@ p <- ggplot(df.tmp, aes(x=Age.FB, y=DNAm.Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/AgeAtFirstBirth-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
@@ -1233,8 +1271,10 @@ p <- ggplot(df.tmp, aes(x = Age.FB, y = DNAm.Age.Residual)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/AgeAtFirstBirth-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
@@ -1307,7 +1347,9 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/MenopauseStatus-DNAmAge.png", sep = ''), width = 500, height = 500 )
@@ -1327,7 +1369,9 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/MenopauseStatus-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
@@ -1370,8 +1414,10 @@ p <- ggplot(df.tmp, aes(x=Age.Menopause, y=DNAm.Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/MenopauseAge-DNAmAge.png", sep = ''), width = 500, height = 500 )
 p
@@ -1389,8 +1435,10 @@ p <- ggplot(df.tmp, aes(x = Age.Menopause, y = DNAm.Age.Residual)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
-  )
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
+  ); p
 
 png( paste(model.dir, "FactorAssociation/MenopauseAge-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
 p
@@ -1457,7 +1505,9 @@ p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/VDUse-DNAmAge.png", sep = ''), width = 500, height = 500 )
@@ -1477,7 +1527,9 @@ p <- ggplot(df.tmp.Res, aes(x=ttype, y=Res)) +
     axis.ticks.length=unit(-0.25, "cm"), 
     axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
     axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm")), 
-    plot.title = element_text(hjust = 0.5)
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()
   ); p
 
 png( paste(model.dir, "FactorAssociation/VDUse-DNAmAgeResidual.png", sep = ''), width = 500, height = 500 )
