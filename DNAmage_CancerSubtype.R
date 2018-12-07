@@ -87,9 +87,7 @@ for(i in covariates){
 cov.K <- cov.K[ order(row.names(cov.K)), ]
 cov.N <- cov.N[ order(row.names(cov.N)), ]
 cov.T <- cov.T[ order(row.names(cov.T)), ]
-
-cov <- cbind(cov.K, cov.N, cov.T)
-rm(cov.K, cov.N, cov.T); gc()
+cov   <- cbind(cov.K, cov.N, cov.T)
 
 ##### PREDICT #####
 clock.cpg.coef <- read.csv(paste(model.dir, "model_coefficients.csv", sep = ''), stringsAsFactors = FALSE)
@@ -305,7 +303,7 @@ p <- accel.hist.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_histogram.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_histogram.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -317,15 +315,15 @@ r.list[[3]] <- residual.EPnHn
 p <- accel.box.plot(
   df.ABN, 
   residuals = r.list,
-  x.label = "Subtype", 
-  y.label = "DNAm Age Acceleration [Years]",
-  title = "DNAm Age Acceleration for Cancer Subtypes",
+  x.label = "Breast Cancer Molecular Subtype", 
+  y.label = "Epigenetic Age Acceleration [Years]",
+  title = "",
   width = 0.6,
-  leg.x = 0.74,
-  leg.y = 0.92
+  leg.x = 0.77,
+  leg.y = 0.93
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -347,7 +345,7 @@ p <- DNAmAge.ChronoAge.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_scatterplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -393,7 +391,7 @@ p <- accel.hist.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_white_histogram.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_white_histogram.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -413,7 +411,7 @@ p <- accel.box.plot(
   leg.y = 0.92
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_white_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_white_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -435,7 +433,7 @@ p <- DNAmAge.ChronoAge.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_white_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_white_scatterplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -481,7 +479,7 @@ p <- accel.hist.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_black_histogram.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_black_histogram.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -501,7 +499,7 @@ p <- accel.box.plot(
   leg.y = 0.92
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_black_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_black_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -523,7 +521,7 @@ p <- DNAmAge.ChronoAge.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "CancerStudies/subtype_black_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/subtype_black_scatterplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -568,7 +566,7 @@ p <- accel.hist.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "CancerStudies/grade_histogram.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/grade_histogram.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -586,7 +584,7 @@ p <- accel.box.plot(
   title = "DNAm Age Acceleration for Tumor Grades"
 ); p
 
-png( paste(model.dir, "CancerStudies/grade_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/grade_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -607,7 +605,7 @@ p <- DNAmAge.ChronoAge.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "CancerStudies/grade_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/grade_scatterplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -660,7 +658,7 @@ p <- accel.hist.plot(
   leg.y = 0.85
 )
 
-png( paste(model.dir, "CancerStudies/gradeV2_histogram.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/gradeV2_histogram.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -675,13 +673,14 @@ p <- accel.box.plot(
   df.ABN, 
   residuals = r.list, 
   width = 0.6,
-  x.label = "Grade", 
-  y.label = "DNAm Age Acceleration [Years]",
-  title = "DNAm Age Acceleration for Tumor Grades",
-  leg.y = 0.9
+  x.label = "Tumor Grade (SBR)", 
+  y.label = "Epigenetic Age Acceleration [Years]",
+  title = "",
+  leg.x = 0.24,
+  leg.y = 0.93
 )
 
-png( paste(model.dir, "CancerStudies/gradeV2_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/gradeV2_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -702,7 +701,7 @@ p <- DNAmAge.ChronoAge.plot(
   leg.y = 0.85
 ); p
 
-png( paste(model.dir, "CancerStudies/gradeV2_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/gradeV2_scatterplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -747,7 +746,7 @@ p <- accel.hist.plot(
   leg.y = 0.87
 )
 
-png( paste(model.dir, "CancerStudies/stage_histogram.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/stage_histogram.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -759,13 +758,14 @@ p <- accel.box.plot(
   df.ABN, 
   residuals = r.list, 
   width = 0.6,
-  x.label = "Stage", 
-  y.label = "DNAm Age Acceleration [Years]",
-  title = "DNAm Age Acceleration for Cancer Stages",
-  leg.x = 0.75
+  x.label = "Tumor Stage", 
+  y.label = "Epigenetic Age Acceleration [Years]",
+  title = "",
+  leg.x = 0.77,
+  leg.y = 0.93
 )
 
-png( paste(model.dir, "CancerStudies/stage_boxplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/stage_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -786,7 +786,7 @@ p <- DNAmAge.ChronoAge.plot(
   leg.y = 0.85
 ); p
 
-png( paste(model.dir, "CancerStudies/stage_scatterplot.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/stage_scatterplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
 dev.off()
 
@@ -796,7 +796,7 @@ dev.off()
 stages.with.grades <- c(4, 2, 4, 2, 2, 3, 2, 4, 2, 3, 2, 3, 2, 2, 2, 4, 4)
 grades.with.stages <- c(8, 9, 7, 7, 6, 9, 6, 9, 7, 8, 6, 8, 6, 7, 9, 9, 8)
 
-png( paste(model.dir, "CancerStudies/grade-stage.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "CancerStudies/grade-stage.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 plot(stages.with.grades, 
      grades.with.stages, 
      main="Tumor Grade-Stage Association", 

@@ -180,7 +180,7 @@ p <- accel.hist.plot(
   leg.y = 0.87
 ); p
 
-png( paste(model.dir, "TissueStudies/residual_hist_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "TissueStudies/residual_hist_KNT.tiff", sep = ''),  width = 2100, height = 2100, units = "px",res = 300 )
 p
 dev.off()
 
@@ -198,7 +198,7 @@ p <- accel.box.plot(
   title = "DNAm Age Accelerati for Tissue Types"
 ); p
 
-png( paste(model.dir, "TissueStudies/boxplot_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "TissueStudies/boxplot_KNT.tiff", sep = ''),  width = 2100, height = 2100, units = "px",res = 300 )
 p
 dev.off()
 
@@ -228,7 +228,7 @@ if( model.residual ){
     )
 }
 
-png( paste(model.dir, "TissueStudies/MethAgevsSampleAge_KNT.png", sep = ''), width = 500, height = 500, units = "px" )
+tiff( paste(model.dir, "TissueStudies/MethAgevsSampleAge_KNT.tiff", sep = ''),  width = 2100, height = 2100, units = "px",res = 300 )
 p
 dev.off()
 
@@ -293,3 +293,13 @@ rm(tmp.K, tmp.N, tmp.T); gc()
 
 fit <- aov(res ~ age + ttype, data = df.merge)
 TukeyHSD(fit, which = 'ttype')
+
+
+##### TTest #####
+res.K <- as.numeric(lm(result.K ~ age.K)$residuals)
+res.N <- as.numeric(lm(result.N ~ age.N)$residuals)
+res.T <- as.numeric(lm(result.T ~ age.T)$residuals)
+mean(res.K)
+mean(res.T)
+t.test(res.K, res.T, var.equal = FALSE)
+res.K
