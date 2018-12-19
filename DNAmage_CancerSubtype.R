@@ -320,7 +320,8 @@ p <- accel.box.plot(
   title = "",
   width = 0.6,
   leg.x = 0.77,
-  leg.y = 0.93
+  leg.y = 0.93,
+  text.size = 18
 ); p
 
 tiff( paste(model.dir, "CancerStudies/subtype_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
@@ -676,8 +677,10 @@ p <- accel.box.plot(
   x.label = "Tumor Grade (SBR)", 
   y.label = "Epigenetic Age Acceleration [Years]",
   title = "",
-  leg.x = 0.24,
-  leg.y = 0.93
+  leg.x = 0.12,
+  leg.y = 0.93,
+  show.leg = FALSE,
+  text.size = 18
 )
 
 tiff( paste(model.dir, "CancerStudies/gradeV2_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
@@ -762,7 +765,9 @@ p <- accel.box.plot(
   y.label = "Epigenetic Age Acceleration [Years]",
   title = "",
   leg.x = 0.77,
-  leg.y = 0.93
+  leg.y = 0.93,
+  show.leg = FALSE,
+  text.size = 18
 )
 
 tiff( paste(model.dir, "CancerStudies/stage_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)

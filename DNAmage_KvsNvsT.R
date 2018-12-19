@@ -14,7 +14,7 @@ cov.file.N  <- paste("data/cov_N_seed", seed, ".txt", sep = "")
 meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
 cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
 
-model.residual = FALSE
+model.residual = TRUE
 
 ###########################################################################################
 # AGE TRANSFORMATION FUNCTIONS
@@ -119,12 +119,14 @@ result <- sapply(result, anti.trafo)
 ages <- as.numeric(as.vector(cov["Age",]))
 res  <- result - ages
 if(model.residual){
-  res <- lm(result ~ ages)$residuals
+  res2 <- lm(result ~ ages)$residuals
+  cov["DNAm Age Model Residual",] <- res2
 }
 
 ##### STORE RESULTS IN COV #####
 cov["DNAm Age",] <- result
 cov["DNAm Age Residual",] <- res
+
 
 ##### RESIDUALS #####
 result.K <- as.numeric(as.vector(cov["DNAm Age", K.samples]))
@@ -166,14 +168,14 @@ p <- accel.hist.plot(
   linetypes =  c("solid", "dashed", "twodash"),
   colors = c("black","darkorange3","deepskyblue4"),
   labels = c("K", "N", "T"),
-  x.label = "DNAm Age Acceleration [Years]", 
+  x.label = "Epigenetic Age Acceleration [Years]", 
   y.label = "Frequency [Arbitrary Units]", 
-  title = "DNAm Age Acceleration for Tissue Types",
+  title = "Tissue-specific Epigenetic Age Acceleration",
   annot.x = 110, 
   annot.y = 0.037,
   annot.sep = 0.003, 
   x.min = -50, 
-  x.max = 150,
+  x.max = 149,
   y.min = 0, 
   y.max = 0.05, 
   leg.x = 0.8, 
@@ -194,8 +196,10 @@ p <- accel.box.plot(
   residuals = r.list, 
   width = 0.75,
   x.label = "Tissue Type", 
-  y.label = "DNAm Age Acceleration [Years]",
-  title = "DNAm Age Accelerati for Tissue Types"
+  y.label = "Epigenetic Age Acceleration [Years]",
+  title = "Epigenetic Age Acceleration for Tissue Types",
+  leg.x = 0.1, 
+  leg.y = 0.95
 ); p
 
 tiff( paste(model.dir, "TissueStudies/boxplot_KNT.tiff", sep = ''),  width = 2100, height = 2100, units = "px",res = 300 )
@@ -207,10 +211,11 @@ p <- DNAmAge.ChronoAge.plot(
   df.KNT, 
   legname = "Tissue Type", 
   colors = c("black","darkorange3","deepskyblue4"), 
+  symbol.shapes = c(16, 1, 15),
   labels = c("K", "N", "T"), 
   x.label = "Chronological Age [Years]", 
-  y.label = "DNAm Age [Years]", 
-  title = "DNAm Age vs Chronological Age",
+  y.label = "Epigenetic Age [Years]", 
+  title = "Epigenetic Age vs Chronological Age",
   x.min = 0, 
   x.max = 90,
   y.min = 0, 
@@ -296,10 +301,16 @@ TukeyHSD(fit, which = 'ttype')
 
 
 ##### TTest #####
-res.K <- as.numeric(lm(result.K ~ age.K)$residuals)
-res.N <- as.numeric(lm(result.N ~ age.N)$residuals)
-res.T <- as.numeric(lm(result.T ~ age.T)$residuals)
-mean(res.K)
-mean(res.T)
-t.test(res.K, res.T, var.equal = FALSE)
-res.K
+if(model.residual){
+
+  res.K <- as.numeric(as.vector(cov["DNAm Age Model Residual", which(cov["Tissue.Type",] == "K")]))
+  res.N <- as.numeric(as.vector(cov["DNAm Age Model Residual", which(cov["Tissue.Type",] == "N")]))
+  res.T <- as.numeric(as.vector(cov["DNAm Age Model Residual", which(cov["Tissue.Type",] == "T")]))
+
+  res.K <- res.K[ !(res.K %in% boxplot.stats(res.K)$out) ]
+  res.N <- res.N[ !(res.N %in% boxplot.stats(res.N)$out) ]
+  res.T <- res.T[ !(res.T %in% boxplot.stats(res.T)$out) ]
+
+  t.test(res.N, res.T, var.equal = FALSE)
+
+}

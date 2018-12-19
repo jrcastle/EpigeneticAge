@@ -184,22 +184,23 @@ p <- accel.box.plot(
   width = 0.6,
   x.label = "Race", 
   y.label = "Epigenetic Age Acceleration [Years]",
-  title = "",
-  leg.x = 0.24,
-  leg.y = 0.93
-) + 
-  annotate(
-    "text", x = 0.75, y = 18, 
-    label = "Her2+ Samples"
-  ) + 
-  annotate(
-    "text", x = 0.75, y = 15, 
-    label = paste("beta = ", round(df.Her2p.lm[3,1],  digits = 3), sep = "") 
-  ) + 
-  annotate(
-    "text", x = 0.75, y = 12, 
-    label = paste("p = ", round(df.Her2p.lm[3,4],  digits = 3), sep = "")
-  ); p
+  title = "Her2+",
+  leg.x = 0.12,
+  leg.y = 0.95
+) 
+#p <- p +
+#  annotate(
+#    "text", x = 0.75, y = 18, 
+#    label = "Her2+ Samples"
+#  ) + 
+#  annotate(
+#    "text", x = 0.75, y = 15, 
+#    label = paste("beta = ", round(df.Her2p.lm[3,1],  digits = 3), sep = "") 
+#  ) + 
+#  annotate(
+#    "text", x = 0.75, y = 12, 
+#    label = paste("p = ", round(df.Her2p.lm[3,4],  digits = 3), sep = "")
+#  ); p
 
 tiff( paste(model.dir, "CancerStudies/WhiteBlack_Her2p.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
@@ -226,22 +227,24 @@ p <- accel.box.plot(
   width = 0.6,
   x.label = "Race", 
   y.label = "Epigenetic Age Acceleration [Years]",
-  title = "",
+  title = "ER/PR+ Her2-",
   leg.x = 0.24,
-  leg.y = 0.93
-) + 
-  annotate(
-    "text", x = 2.25, y = 70, 
-    label = "ER/PR+ Her2- Samples"
-  ) + 
-  annotate(
-    "text", x = 2.25, y = 66, 
-    label = paste("beta = ", round(df.EPpHn.lm[3,1],  digits = 3), sep = "") 
-  ) + 
-  annotate(
-    "text", x = 2.25, y = 62, 
-    label = paste("p = ", round(df.EPpHn.lm[3,4],  digits = 3), sep = "")
-  ); p
+  leg.y = 0.93,
+  show.leg = FALSE
+)  
+#p <- p +
+#  annotate(
+#    "text", x = 2.25, y = 70, 
+#    label = "ER/PR+ Her2- Samples"
+#  ) + 
+#  annotate(
+#    "text", x = 2.25, y = 66, 
+#    label = paste("beta = ", round(df.EPpHn.lm[3,1],  digits = 3), sep = "") 
+#  ) + 
+#  annotate(
+#    "text", x = 2.25, y = 62, 
+#    label = paste("p = ", round(df.EPpHn.lm[3,4],  digits = 3), sep = "")
+#  ); p
 
 tiff( paste(model.dir, "CancerStudies/WhiteBlack_EPpHn.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
@@ -268,22 +271,24 @@ p <- accel.box.plot(
   width = 0.6,
   x.label = "Race", 
   y.label = "Epigenetic Age Acceleration [Years]",
-  title = "",
+  title = "ER- PR- Her2-",
   leg.x = 0.24,
-  leg.y = 0.93
-) + 
-  annotate(
-    "text", x = 2.25, y = 70, 
-    label = "ER- PR- Her2- Samples"
-  ) + 
-  annotate(
-    "text", x = 2.25, y = 66, 
-    label = paste("beta = ", round(df.EPnHn.lm[3,1],  digits = 3), sep = "") 
-  ) + 
-  annotate(
-    "text", x = 2.25, y = 62, 
-    label = paste("p = ", round(df.EPnHn.lm[3,4],  digits = 3), sep = "")
-  ); p
+  leg.y = 0.93,
+  show.leg = FALSE
+) 
+#p <- p + 
+#  annotate(
+#    "text", x = 2.25, y = 70, 
+#    label = "ER- PR- Her2- Samples"
+#  ) + 
+#  annotate(
+#    "text", x = 2.25, y = 66, 
+#    label = paste("beta = ", round(df.EPnHn.lm[3,1],  digits = 3), sep = "") 
+#  ) + 
+#  annotate(
+#    "text", x = 2.25, y = 62, 
+#    label = paste("p = ", round(df.EPnHn.lm[3,4],  digits = 3), sep = "")
+#  ); p
 
 tiff( paste(model.dir, "CancerStudies/WhiteBlack_EPnHn.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
