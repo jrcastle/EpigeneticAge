@@ -2,11 +2,12 @@
 import pandas as pd
 import numpy as np
 
-meth_file  = "meth_T_AllCpGs.txt"
+meth_file  = "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp3.txt"
+#dict_file  = "CHR-POS_to_CGNumber_dict.txt"
 dict_file  = "CHR-POS_to_CGNumber_850k_dict.txt"
 overlap21k = False
 
-print "Loading POS_to_CGNumber_dict.txt ..."
+print "Loading CHR-POS_to_CGNumber_dict.txt ..."
 df_CHR_POS_to_CGNumber = pd.read_table(
     dict_file,
     header = 0,

@@ -1,13 +1,13 @@
 #!/home/jrca253/anaconda2/bin/python
 import pandas as pd
 
-meth_file_K = "meth_K.txt"
-meth_file_N = "meth_N.txt"
-meth_file_T = "meth_T.txt"
+meth_file_K = "meth_K_gt10R_AddMissHorvCpGs.txt"
+meth_file_N = "meth_N_gt10R_AddMissHorvCpGs.txt"
+meth_file_T = "meth_T_gt10R_AddMissHorvCpGs.txt"
 
-out_file_K = "meth_K_cpgs_in_KNT.txt"
-out_file_N = "meth_N_cpgs_in_KNT.txt"
-out_file_T = "meth_T_cpgs_in_KNT.txt"
+out_file_K = "meth_K_gt10R_AddMissHorvCpGs_KNT.txt"
+out_file_N = "meth_N_gt10R_AddMissHorvCpGs_KNT.txt"
+out_file_T = "meth_T_gt10R_AddMissHorvCpGs_KNT.txt"
 
 
 ##### READ IN METH DATA #####
@@ -38,7 +38,7 @@ print "Reducing " + meth_file_K + " ..."
 df_Kfinal = df_K.loc[ df_K['position'].isin(df_N['position']) & df_K['position'].isin(df_T['position']) ]
 print "Reducing " + meth_file_N + " ..."
 df_Nfinal = df_N.loc[ df_N['position'].isin(df_K['position']) & df_N['position'].isin(df_T['position']) ]
-print "nReducing " + meth_file_T + " ..."
+print "Reducing " + meth_file_T + " ..."
 df_Tfinal = df_T.loc[ df_T['position'].isin(df_K['position']) & df_T['position'].isin(df_N['position']) ]
 
 print"\n\nK:"

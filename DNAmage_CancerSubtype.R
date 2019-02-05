@@ -270,16 +270,16 @@ tmp.H2p$type <- "Her2+"
 colnames(tmp.H2p) <- c("Chrono.age", "DNAm.age", "res", "ttype")
 
 tmp.EPpHn <- data.frame(age.EPpHn, result.EPpHn, residual.EPpHn)
-tmp.EPpHn$type <- "ER/PR+ Her2-"
+tmp.EPpHn$type <- "HR+, Her2-"
 colnames(tmp.EPpHn) <- c("Chrono.age", "DNAm.age", "res", "ttype")
 
 tmp.EPnHn <- data.frame(age.EPnHn, result.EPnHn, residual.EPnHn)
-tmp.EPnHn$type <- "ER- PR- Her2-"
+tmp.EPnHn$type <- "Triple Negative"
 colnames(tmp.EPnHn) <- c("Chrono.age", "DNAm.age", "res", "ttype")
 
 df.ABN <- rbind(tmp.H2p, tmp.EPpHn, tmp.EPnHn)
 rm(tmp.H2p); rm(tmp.EPpHn); rm(tmp.EPnHn); gc();
-df.ABN$ttype <- factor(df.ABN$ttype, levels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"))
+df.ABN$ttype <- factor(df.ABN$ttype, levels = c("Her2+", "HR+, Her2-", "Triple Negative"))
 
 ##### HISTOGRAM #####
 p <- accel.hist.plot(
@@ -288,7 +288,7 @@ p <- accel.hist.plot(
   legname = "Cancer Subtype", 
   linetypes = c("solid", "dashed", "twodash"), 
   colors = c("deepskyblue4","darkorange3","seagreen4"), 
-  labels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"), 
+  labels = c("Her2+", "HR+, Her2-", "Triple Negative"), 
   x.label = "DNAm Age Acceleration [Years]", 
   y.label = "Frequency [Arbitrary Units]", 
   title = "DNAm Age Acceleration for Cancer Subtypes",
@@ -322,7 +322,29 @@ p <- accel.box.plot(
   leg.x = 0.77,
   leg.y = 0.93,
   text.size = 18
-); p
+) + 
+  scale_y_continuous(
+    expand=c(0, 0),
+    limits = c(-35, 105)
+  ) +
+  annotate(
+    "text", x = 1, y = -30, size = 6,
+    label = paste("n = ", length(residual.H2p), sep = '')
+  ) + 
+  annotate(
+    "text", x = 2, y = -30, size = 6,
+    label = paste("n = ", length(residual.EPpHn), sep = '')
+  ) + 
+  annotate(
+    "text", x = 3, y = -30, size = 6,
+    label = paste("n = ", length(residual.EPnHn), sep = '')
+  ) + 
+  annotate(
+    "text", x = 0.55, y = 100, 
+    label = "a)", 
+    size = 6,
+    fontface = 2
+  ) 
 
 tiff( paste(model.dir, "CancerStudies/subtype_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
@@ -334,7 +356,7 @@ p <- DNAmAge.ChronoAge.plot(
   df.ABN, 
   legname = "Cancer Subtype", 
   colors = c("deepskyblue4","darkorange3","seagreen4"), 
-  labels = c("Her2+", "ER/PR+ Her2-", "ER- PR- Her2-"), 
+  labels = c("Her2+", "HR+, Her2-", "Triple Negative"), 
   x.label = "Chronological Age [Years]", 
   y.label = "DNAm Age [Years]", 
   title = "DNAm Age vs Chronological Age",
@@ -681,7 +703,37 @@ p <- accel.box.plot(
   leg.y = 0.93,
   show.leg = FALSE,
   text.size = 18
-)
+) +
+  scale_y_continuous(
+    expand=c(0, 0),
+    limits = c(-35, 105)
+  ) +
+  annotate(
+    "text", x = 1, y = -30, size = 6,
+    label = paste("n = ", length(residual.g3.5), sep = '')
+  ) + 
+  annotate(
+    "text", x = 2, y = -30, size = 6,
+    label = paste("n = ", length(residual.g6), sep = '')
+  ) +
+  annotate(
+    "text", x = 3, y = -30, size = 6,
+    label = paste("n = ", length(residual.g7), sep = '')
+  ) + 
+  annotate(
+    "text", x = 4, y = -30, size = 6,
+    label = paste("n = ", length(residual.g8), sep = '')
+  ) +
+  annotate(
+    "text", x = 5, y = -30, size = 6,
+    label = paste("n = ", length(residual.g9), sep = '')
+  ) +
+  annotate(
+    "text", x = 0.65, y = 100, 
+    label = "b)", 
+    size = 6,
+    fontface = 2
+  ) 
 
 tiff( paste(model.dir, "CancerStudies/gradeV2_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
@@ -761,14 +813,32 @@ p <- accel.box.plot(
   df.ABN, 
   residuals = r.list, 
   width = 0.6,
-  x.label = "Tumor Stage", 
+  x.label = "Cancer Stage", 
   y.label = "Epigenetic Age Acceleration [Years]",
   title = "",
   leg.x = 0.77,
   leg.y = 0.93,
   show.leg = FALSE,
   text.size = 18
-)
+) + 
+  scale_y_continuous(
+    expand=c(0, 0),
+    limits = c(-35, 75)
+  ) +
+  annotate(
+    "text", x = 1, y = -30, size = 6,
+    label = paste("n = ", length(residual.sII), sep = '')
+  ) + 
+  annotate(
+    "text", x = 2, y = -30, size = 6,
+    label = paste("n = ", length(residual.sIII.IV), sep = '')
+  ) +
+  annotate(
+    "text", x = 0.5, y = 71, 
+    label = "c)", 
+    size = 6,
+    fontface = 2
+  ) 
 
 tiff( paste(model.dir, "CancerStudies/stage_boxplot.tiff", sep = ''), width = 2100, height = 2100, units = "px", res = 300)
 p
@@ -855,7 +925,7 @@ wilcox.test(residual.sIII.IV, mu=0, conf.int = TRUE)
 
 #wilcox.test(residual.sIV,  mu=0, conf.int = TRUE)
 median(residual.sIII.IV)
-mean(residual.sIII.IV[ !(residual.sIII.IV %in% boxplot.stats(residual.sIII.IV)$out) ])
+mean(residual.EPpHn[ !(residual.EPpHn %in% boxplot.stats(residual.EPpHn)$out) ])
 
 ##### REMOVE OUTLIERS #####
 wilcox.test(residual.LumA[ !(residual.LumA %in% boxplot.stats(residual.LumA)$out) ],          mu=0, conf.int = TRUE)

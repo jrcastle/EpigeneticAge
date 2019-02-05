@@ -50,8 +50,8 @@ DNAmAge.ChronoAge.plot = function(df.ttype, legname, colors, symbol.shapes = "",
 # AGE ACCELERATION HISOGRAM
 #######################################################################################
 accel.hist.plot = function(df.ttype, bw = 20, legname, linetypes, colors, labels, x.label, y.label, title,
-                           annot.x = 90, annot.y = 0.03, annot.sep = 0.002, x.min = -40, x.max = 125, 
-                           y.min = 0, y.max = 0.04, leg.x = 0.8, leg.y = 0.87, text.size = 18){
+                           annot.x = 90, annot.y = 0.03, annot.sep = 0.002, annot.size = 3, x.min = -40, 
+                           x.max = 125, y.min = 0, y.max = 0.04, leg.x = 0.8, leg.y = 0.87, text.size = 18){
 
   
   types <- unique(df.ttype$ttype)
@@ -94,8 +94,9 @@ accel.hist.plot = function(df.ttype, bw = 20, legname, linetypes, colors, labels
     p <- p +   
       annotate(
         "text", x = annot.x, y = (annot.y - (i-1)*annot.sep), 
-        label = paste("Median Accel. ", "(", median.type[[i]], ") = ", round(med,  digits = 1), sep = ""), 
-        color = colors[i]
+        label = paste("Median EAA ", "(", median.type[[i]], ") = ", round(med,  digits = 1), "y", sep = ""), 
+        color = colors[i],
+        size = annot.size
       )
     i = i+1
   }
@@ -184,3 +185,128 @@ accel.box.plot = function(df.ttype, residuals, width = 0.75, pos.col = "blue", n
   
   p
 }
+
+
+#######################################################################################
+# DNAmAGERESIDUAL FACTOR ASSOCIATION BOX PLOT
+#######################################################################################
+DNAmAgeResRF.box.plot = function(df.tmp.Age, residuals, width = 0.75, pos.col = "blue", neg.col = "red", 
+                                 x.label = "", y.label = "", title = "", show.leg = TRUE, leg.x = 0.25, 
+                                 leg.y = 0.87, text.size = 18){
+  
+  w = width
+  df.list <- list()
+  
+  # Set up dataframes 
+  i <- 1
+  for(r in residuals){
+    r.sorted <- sort(r)
+    lower <- i - w/2
+    upper <- i + w/2
+    step  <- w/(length(r.sorted)-1)
+    x <- seq(lower, upper, step)
+    df <- data.frame(x, x, r.sorted)
+    colnames(df) <- c("x0", "x1", "y1")
+    df$y0 <- 0
+    df$clr <- "Positive Acceleration"
+    df[df$y1 < 0, "clr"] <- "Negative Acceleration"
+    df <- df[ c("x0", "x1", "y0", "y1", "clr") ]
+    df$clr <- factor( df$clr, levels = rev(unique(as.character(df$clr))) )
+    df.list[[i]] <- df
+    i <- i + 1
+  }
+  
+  p <- ggplot(df.tmp.Age, aes(x=ttype, y=Res)) +
+    geom_boxplot(aes(x=ttype, y=Res), data = df.tmp.Age, width = 1.05*width) +
+    geom_hline(yintercept = 0, color = "gray", size = 1, linetype = "dashed")
+  for( i in df.list ){
+    p <- p + geom_segment(aes(x = x0, y = y0, xend = x1, yend = y1, color = clr), data = i)
+  }
+  p <- p +   
+    scale_linetype_manual(
+      name = "", 
+      values = c("solid", "solid"),
+      labels = c(expression("EAA">=0), expression("EAA"<0))
+    ) + 
+    scale_color_manual(
+      name = "", 
+      values = c(pos.col, neg.col), 
+      labels = c(expression("EAA">=0), expression("EAA"<0))
+    ) +
+    geom_boxplot(aes(x=ttype, y=Res), data = df.tmp.Age, width = 1.05*width, alpha = 0.2) +
+    labs(x = x.label) + 
+    labs(y = y.label) + 
+    labs(title = title) + 
+    theme_bw(base_size = text.size) +
+    theme(
+      legend.background = element_rect(color = "transparent", fill = "transparent"),
+      legend.key.width = unit(1, "line"), 
+      legend.position=c(leg.x, leg.y),
+      axis.ticks.length=unit(-0.25, "cm"), 
+      axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm"), color = "black", size = text.size), 
+      axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm"), color = "black", size = text.size), 
+      plot.title = element_text(hjust = 0.5),
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank()
+    ) 
+  
+  if(!show.leg){ p <- p + theme(legend.position="none") }
+  
+  p
+}
+
+#######################################################################################
+# DNAmAGE FACTOR ASSOCIATION BOX PLOT
+#######################################################################################
+DNAmAgeRF.box.plot = function(df.tmp.Age, width = 0.75, pnt.col = "blue", pnt.shp = 1, 
+                              x.label = "", y.label = "", title = "", show.leg = TRUE, leg.x = 0.25, 
+                              leg.y = 0.87, text.size = 18){
+  
+  w = width
+    
+  age.list   <- c()
+  x.list     <- c()
+  
+  i = 1
+  for(t in unique(df.tmp.Age$ttype)){
+    ages  <- as.numeric(as.vector(df.tmp.Age[which(df.tmp.Age$ttype == t), "Age"]))
+    x     <- runif(length(ages), i-w/2, i+w/2)
+    
+    age.list   <- c(age.list, ages)
+    x.list     <- c(x.list, x)
+    
+    i = i+1
+  }
+  
+  df.ages <- data.frame(age.list, x.list)
+  colnames(df.ages) <- c("ages", "x")
+    
+  p <- ggplot(df.tmp.Age, aes(x=ttype, y=Age)) +
+    geom_boxplot(aes(x=ttype, y=Age), data = df.tmp.Age, width = 1.05*width) +
+    geom_point(data = df.ages, aes(x=x, y=ages), color = pnt.col, shape = pnt.shp) + 
+    geom_boxplot(aes(x=ttype, y=Age), data = df.tmp.Age, width = 1.05*width, alpha = 0.2) +
+    labs(x = x.label) + 
+    labs(y = y.label) + 
+    labs(title = title) + 
+    theme_bw(base_size = text.size) +
+    theme(
+      legend.background = element_rect(color = "transparent", fill = "transparent"),
+      legend.key.width = unit(1, "line"), 
+      legend.position=c(leg.x, leg.y),
+      axis.ticks.length=unit(-0.25, "cm"), 
+      axis.text.x = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm"), color = "black", size = text.size), 
+      axis.text.y = element_text(margin=unit(c(0.5,0.5,0.5,0.5), "cm"), color = "black", size = text.size), 
+      plot.title = element_text(hjust = 0.5),
+      panel.grid.major = element_blank(), 
+      panel.grid.minor = element_blank()
+    ) 
+  
+  if(!show.leg){ p <- p + theme(legend.position="none") }
+  
+  p
+}
+
+
+
+
+

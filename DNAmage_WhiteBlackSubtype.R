@@ -59,8 +59,8 @@ result <- t(X) %*% beta
 result <- sapply(result, anti.trafo)
 
 ages <- as.numeric(as.vector(cov["Age",]))
-res <- lm(result ~ ages)$residuals
-
+#res <- lm(result ~ ages)$residuals
+res <- result - ages
 
 ##### STORE RESULTS IN COV #####
 cov["DNAm Age",] <- result
@@ -125,12 +125,12 @@ if( length(outlier.Black.EPnHn) > 0) { age.Black.EPnHn <- age.Black.EPnHn[-outli
 
 ##### RESIDUALS #####
 if( length(outlier.White.H2p)   > 0) { residual.White.H2p     <- residual.White.H2p[-outlier.White.H2p] }
-if( length(outlier.White.EPpHn)   > 0) { residual.White.EPpHn   <- residual.White.EPpHn[-outlier.White.EPpHn] }
-if( length(outlier.White.EPnHn)   > 0) { residual.White.EPnHn   <- residual.White.EPnHn[-outlier.White.EPnHn] }
+if( length(outlier.White.EPpHn) > 0) { residual.White.EPpHn   <- residual.White.EPpHn[-outlier.White.EPpHn] }
+if( length(outlier.White.EPnHn) > 0) { residual.White.EPnHn   <- residual.White.EPnHn[-outlier.White.EPnHn] }
 
 if( length(outlier.Black.H2p)   > 0) { residual.Black.H2p     <- residual.Black.H2p[-outlier.Black.H2p] }
-if( length(outlier.Black.EPpHn)   > 0) { residual.Black.EPpHn   <- residual.Black.EPpHn[-outlier.Black.EPpHn] }
-if( length(outlier.Black.EPnHn)   > 0) { residual.Black.EPnHn   <- residual.Black.EPnHn[-outlier.Black.EPnHn] }
+if( length(outlier.Black.EPpHn) > 0) { residual.Black.EPpHn   <- residual.Black.EPpHn[-outlier.Black.EPpHn] }
+if( length(outlier.Black.EPnHn) > 0) { residual.Black.EPnHn   <- residual.Black.EPnHn[-outlier.Black.EPnHn] }
 
 
 ###########################################################################################
@@ -168,7 +168,7 @@ df.EPnHn.lm <- data.frame(summary(EPnHn.lm)$coefficients)
 # Her2+ Boxplot
 ###########################################################################################
 df1           <- data.frame(residual.White.H2p)
-df1$ttype     <- "White"
+df1$ttype     <- "Caucasian"
 colnames(df1) <- c("res", "ttype")
 df2           <- data.frame(residual.Black.H2p)
 df2$ttype     <- "African American"
@@ -186,8 +186,26 @@ p <- accel.box.plot(
   y.label = "Epigenetic Age Acceleration [Years]",
   title = "Her2+",
   leg.x = 0.12,
-  leg.y = 0.95
-) 
+  leg.y = 0.93
+) + 
+  scale_y_continuous(
+    expand=c(0, 0),
+    limits = c(-25, 50)
+  ) +
+  annotate(
+    "text", x = 1, y = -22, size = 6,
+    label = paste("n = ", length(residual.Black.H2p), sep = '')
+  ) + 
+  annotate(
+    "text", x = 2, y = -22, size = 6,
+    label = paste("n = ", length(residual.White.H2p), sep = '')
+  ) + 
+  annotate(
+    "text", x = 0.5, y = 48, 
+    label = "a)", 
+    size = 6,
+    fontface = 2
+  ) 
 #p <- p +
 #  annotate(
 #    "text", x = 0.75, y = 18, 
@@ -211,7 +229,7 @@ dev.off()
 #  EPpHn Boxplot
 ###########################################################################################
 df1           <- data.frame(residual.White.EPpHn)
-df1$ttype     <- "White"
+df1$ttype     <- "Caucasian"
 colnames(df1) <- c("res", "ttype")
 df2           <- data.frame(residual.Black.EPpHn)
 df2$ttype     <- "African American"
@@ -227,11 +245,29 @@ p <- accel.box.plot(
   width = 0.6,
   x.label = "Race", 
   y.label = "Epigenetic Age Acceleration [Years]",
-  title = "ER/PR+ Her2-",
+  title = "HR+, Her2-",
   leg.x = 0.24,
   leg.y = 0.93,
   show.leg = FALSE
-)  
+) + 
+  scale_y_continuous(
+    expand=c(0, 0),
+    limits = c(-30, 90)
+  ) +
+  annotate(
+    "text", x = 1, y = -25, size = 6,
+    label = paste("n = ", length(residual.Black.EPpHn), sep = '')
+  ) + 
+  annotate(
+    "text", x = 2, y = -25, size = 6,
+    label = paste("n = ", length(residual.White.EPpHn), sep = '')
+  ) +
+  annotate(
+    "text", x = 0.5, y = 87, 
+    label = "b)", 
+    size = 6,
+    fontface = 2
+  ) 
 #p <- p +
 #  annotate(
 #    "text", x = 2.25, y = 70, 
@@ -254,10 +290,10 @@ dev.off()
 ###########################################################################################
 #  EPnHn Boxplot
 ###########################################################################################
-df1           <- data.frame(residual.White.EPpHn)
-df1$ttype     <- "White"
+df1           <- data.frame(residual.White.EPnHn)
+df1$ttype     <- "Caucasian"
 colnames(df1) <- c("res", "ttype")
-df2           <- data.frame(residual.Black.EPpHn)
+df2           <- data.frame(residual.Black.EPnHn)
 df2$ttype     <- "African American"
 colnames(df2) <- c("res", "ttype")
 df.tmp.Age    <- rbind(df1, df2)
@@ -271,11 +307,30 @@ p <- accel.box.plot(
   width = 0.6,
   x.label = "Race", 
   y.label = "Epigenetic Age Acceleration [Years]",
-  title = "ER- PR- Her2-",
+  title = "Triple Negative",
   leg.x = 0.24,
   leg.y = 0.93,
   show.leg = FALSE
-) 
+) + 
+  scale_y_continuous(
+    expand=c(0, 0),
+    limits = c(-15, 45)
+  ) +
+  annotate(
+    "text", x = 1, y = -12, size = 6,
+    label = paste("n = ", length(residual.Black.EPnHn), sep = '')
+  ) + 
+  annotate(
+    "text", x = 2, y = -12, size = 6,
+    label = paste("n = ", length(residual.White.EPnHn), sep = '')
+  ) +
+  annotate(
+    "text", x = 0.5, y = 43, 
+    label = "c)", 
+    size = 6,
+    fontface = 2
+  ) 
+
 #p <- p + 
 #  annotate(
 #    "text", x = 2.25, y = 70, 
@@ -301,4 +356,3 @@ dev.off()
 summary(Her2p.lm)
 summary(EPpHn.lm)
 summary(EPnHn.lm)
-
