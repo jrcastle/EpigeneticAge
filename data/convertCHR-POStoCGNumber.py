@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-meth_file  = "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp3.txt"
+meth_file  = "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp4.txt"
 #dict_file  = "CHR-POS_to_CGNumber_dict.txt"
 dict_file  = "CHR-POS_to_CGNumber_850k_dict.txt"
 overlap21k = False

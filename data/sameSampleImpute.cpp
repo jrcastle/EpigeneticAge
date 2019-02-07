@@ -12,7 +12,7 @@ void sameSampleImpute(CharacterVector badCpGList, IntegerVector badCpGRows_, Dat
   int NCpGs = badCpGList.size();
   for(int i = 0; i < NCpGs; i++){
     
-    if( i % 5000 == 0 ) Rcout << "Imputing CpG " << i+1 << "/" << NCpGs << "\t(" << (int)(((float)i+1.)/(float)NCpGs) << "% complete)" << endl;
+    if( i % 5000 == 0 ) Rcout << "Imputing CpG " << i+1 << "/" << NCpGs << endl;
     int bad_cpg_row = badCpGRows_[i]-1;
     
     // Get Chr and bpPos of bad CpG

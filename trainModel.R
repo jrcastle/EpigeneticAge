@@ -3,12 +3,11 @@ library(glmnet)
 library(ggplot2)
 
 cov.train  <- "data/cov_K_train.txt"
-#meth.train <- "data/meth_K_cpgs_in_KNT_imputed_train.txt"
-meth.train <- "data/meth_K_WhiteBlackDiffMethCpGs_imputed_train.txt"
+meth.train <- "data/meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_train.txt"
 
 alpha     <- 0.5
 adult.age <- 20
-one.cv    <- TRUE
+one.cv    <- FALSE
 
 ##########################################################################
 # AGE TRANSFORM FUNCTION
@@ -72,35 +71,14 @@ save(lambda.glmnet.Training, file = "lambda.glmnet.Training.RData")
 
 
 ##########################################################################
-# DNA METHYLATION AGE PREDICTION
+# MODEL COEFFICIENTS
 ##########################################################################
-# Note: the version of R on the HPC does not support png
-# do not run the remainder of this code on the HPC
-q()
+fit.coefficients <- coef(glmnet.Training, s = lambda.glmnet.Training)
+fit.features <- rownames(fit.coefficients)
 
-result <- predict(glmnet.Training, meth.training.data, type="response", s=lambda.glmnet.Training)
-result <- sapply(result,transform.age.inverse)
+model.coefficients <- summary(fit.coefficients)
+indices <- model.coefficients[,1]
 
-
-##### QUICK CHECKS #####
-residual = age - result
-
-p <- ggplot(data.frame(res = residual), aes(x=res)) +
-  geom_histogram(binwidth = 1, color="black", fill="white") +
-  labs(x = "Sample Age - Meth Age") + 
-  labs(y = "Frequency") + 
-  labs(title = "Prediction Residuals") + 
-  theme_bw() + 
-  theme(plot.title = element_text(hjust = 0.5)) +
-  
-
-png("residual_hist_trainsample.png")
-p
-dev.off()
-
-png("MethAgevsSampleAge_trainsample.png")
-plot(age, result, main="Methlyation Age vs Sample Age", xlab="Sample Age ", ylab="Methylation Age ", pch=19) 
-abline(lm(result~age), col="red") # regression line (y~x) 
-rsq <- summary(lm(result~age))$r.squared
-text(23,70, paste("r^2 = ", round(rsq, digits = 4), sep = ""))
-
+model.coefficients$name = fit.features[indices]
+model.coefficients <- data.frame(model.coefficients$name, model.coefficients$x)
+write.table(model.coefficients, paste(model.dir, "model_coefficients.csv", sep = ''), sep = ",", row.names=FALSE)

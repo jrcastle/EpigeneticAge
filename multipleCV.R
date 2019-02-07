@@ -2,7 +2,7 @@ setwd("/home/jrca253/EpigeneticAge")
 library(glmnet)
 
 cov.train  = "data/cov_K_train.txt"
-meth.train = "data/meth_K_cpgs_in_KNT_imputed_train.txt"
+meth.train = "data/meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_train.txt"
 
 alpha <- 0.5
 adult.age <- 20

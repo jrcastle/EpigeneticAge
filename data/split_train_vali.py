@@ -7,7 +7,7 @@ train_fraction = 0.8
 vali_fraction  = 1.0 - train_fraction
 
 cov_filename  = "cov_K.txt"
-meth_filename = "meth_K_WhiteBlackDiffMethCpGs_imputed.txt" #"meth_K_cpgs_in_KNT_imputed.txt"
+meth_filename = "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL.txt"
 
 
 ##### LOAD DATA #####

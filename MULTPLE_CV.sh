@@ -1,5 +1,5 @@
 #!/bin/sh
-#sbatch --job-name=Train --partition=FatComp --mail-type ALL --mail-user jrca253@uky.edu ./MULTPLE_CV.sh
+#sbatch --job-name=MultCV --partition=FatComp --mail-type ALL --mail-user jrca253@uky.edu ./MULTPLE_CV.sh
 
 . /etc/profile.d/modules.sh
 echo "Job running on SLURM NODELIST: $SLURM_NODELIST "

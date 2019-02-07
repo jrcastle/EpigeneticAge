@@ -10,9 +10,9 @@ NEARBY.LIMIT      <- 2000 # bp
 BPDIST.WEIGHT     <- TRUE
 
 delim             <- '\t'
-meth.file.in      <- "meth_N_gt10R_AddMissHorvCpGs_KNT_KnnImp.txt"
-meth.file.out     <- "TEST.txt" # "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpHorv_CPP.txt"
-bad.cpg.list      <- "CpGsWithGt50pctMissingness_HorvathOnly_N.txt"
+meth.file.in      <- "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp.txt"
+meth.file.out     <- "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL.txt"
+bad.cpg.list      <- "CpGsWithGt50pctMissingness_K.txt"
 
 
 ###########################################################################################
