@@ -5,16 +5,50 @@ library(RColorBrewer)
 library(car)
 source("plot_functions.R")
 
-seed        <- "123"
-model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
-meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
-cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
-meth.file.N <- paste("data/meth_N_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
-cov.file.N  <- paste("data/cov_N_seed", seed, ".txt", sep = "")
-meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
-cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+MODEL          <- 4 # 1 = Old Model, 2 = New Model, 3 = Horvath Model
+NORMALIZE      <- FALSE
+OMIT.SSIMP     <- FALSE
+RM.NA          <- TRUE
+model.residual <- FALSE
 
-model.residual = TRUE
+if(MODEL == 1){
+  seed        <- "123"
+  model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
+  meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+  meth.file.N <- paste("data/meth_N_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.N  <- paste("data/cov_N_seed", seed, ".txt", sep = "")
+  meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+}
+if(MODEL == 2){
+  seed        <- "123"
+  model.dir   <- paste("gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_seed", seed, "/", sep = '')
+  meth.file.K <- paste("data/meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_vali_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+  meth.file.N <- paste("data/meth_N_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.N  <- paste("data/cov_N_seed", seed, ".txt", sep = "")
+  meth.file.T <- paste("data/meth_T_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+}
+if(MODEL == 3){
+  model.dir <- "HorvathClock/"
+  meth.file.K <- "data/meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_CGHorvathClock.txt"
+  cov.file.K  <- "data/cov_K.txt"
+  meth.file.N <- "data/meth_N_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_CGHorvathClock.txt"
+  cov.file.N  <- "data/cov_N_seed123.txt"
+  meth.file.T <- "data/meth_T_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_CGHorvathClock.txt"
+  cov.file.T  <- "data/cov_T_seed123.txt"
+}
+if(MODEL == 4){
+  model.dir <- "HorvathClock/"
+  meth.file.K <- "data/meth_K_gt10R_AddMissHorvCpGs_KNT_CGHorvClock.txt"
+  cov.file.K  <- "data/cov_K.txt"
+  meth.file.N <- "data/meth_N_gt10R_AddMissHorvCpGs_KNT_CGHorvClock.txt"
+  cov.file.N  <- "data/cov_N_seed123.txt"
+  meth.file.T <- "data/meth_T_gt10R_AddMissHorvCpGs_KNT_CGHorvClock.txt"
+  cov.file.T  <- "data/cov_T_seed123.txt"
+}
 
 ###########################################################################################
 # AGE TRANSFORMATION FUNCTIONS
@@ -34,8 +68,72 @@ anti.trafo = function(x, adult.age=20){
 # LOAD METH/COV DATA AND PREDICT
 ###########################################################################################
 
-##### METH ####
 meth.data.K <- read.table(meth.file.K, header = TRUE, sep = '\t')
+meth.data.N <- read.table(meth.file.N, header = TRUE, sep = '\t')
+meth.data.T <- read.table(meth.file.T, header = TRUE, sep = '\t')
+
+if((MODEL == 3 | MODEL == 4) & NORMALIZE){
+  source("~/Documents/EpigeneticAge/AF24_RCodeForNormalizingDNAMethylationData.txt")
+  library(dynamicTreeCut)
+  prbAnn21kdatMeth <- read.csv("~/Documents/EpigeneticAge/AF22_AdditionalProbeAnnotationFileForRTutorial.csv")
+  prbAnn21kdatMeth <- prbAnn21kdatMeth[which(prbAnn21kdatMeth$Name %in% meth.data.K$position),]
+  prbAnn21kdatMeth <- prbAnn21kdatMeth[order(prbAnn21kdatMeth$Name),] 
+  
+  meth.data.K      <- meth.data.K[order(meth.data.K$position),]
+  meth.data.N      <- meth.data.N[order(meth.data.N$position),]
+  meth.data.T      <- meth.data.T[order(meth.data.T$position),]
+  cpgs             <- as.character(meth.data.K$position)
+  
+  # K
+  df.tmp                <- t(meth.data.K[,-1])
+  colnames(df.tmp)      <- cpgs
+  meth.data.K           <- data.frame(t(BMIQcalibration(datM = df.tmp, 
+                                                        goldstandard.beta = prbAnn21kdatMeth$goldstandard2,
+                                                        plots = FALSE
+                                                        )))
+  meth.data.K$position  <- rownames(meth.data.K)
+  rownames(meth.data.K) <- NULL
+  meth.data.K           <- meth.data.K[,c(ncol(meth.data.K), 1:ncol(meth.data.K)-1)]
+  
+  # N
+  df.tmp                <- t(meth.data.N[,-1])
+  colnames(df.tmp)      <- cpgs
+  meth.data.N           <- data.frame(t(BMIQcalibration(datM = df.tmp, 
+                                                        goldstandard.beta = prbAnn21kdatMeth$goldstandard2,
+                                                        plots = FALSE
+                                                        )))
+  meth.data.N$position  <- rownames(meth.data.N)
+  rownames(meth.data.N) <- NULL
+  meth.data.N           <- meth.data.N[,c(ncol(meth.data.N), 1:ncol(meth.data.N)-1)]
+  
+  # T 
+  df.tmp                <- t(meth.data.T[,-1])
+  colnames(df.tmp)      <- cpgs
+  meth.data.T           <- data.frame(t(BMIQcalibration(datM = df.tmp, 
+                                                        goldstandard.beta = prbAnn21kdatMeth$goldstandard2,
+                                                        plots = FALSE
+                                                        )))
+  meth.data.T$position  <- rownames(meth.data.T)
+  rownames(meth.data.T) <- NULL
+  meth.data.T           <- meth.data.T[,c(ncol(meth.data.T), 1:ncol(meth.data.T)-1)]
+  
+}
+
+if(MODEL == 3 & OMIT.SSIMP){
+  bad.cpgs <- read.table("data/MissingHorvathClockCpGs_CGNumber.txt")
+  bad.cpgs <- as.character(bad.cpgs$V1)
+  meth.data.K[which(meth.data.K$position %in% bad.cpgs), c(2:ncol(meth.data.K))] <- 0
+  meth.data.N[which(meth.data.N$position %in% bad.cpgs), c(2:ncol(meth.data.N))] <- 0
+  meth.data.T[which(meth.data.T$position %in% bad.cpgs), c(2:ncol(meth.data.T))] <- 0
+}
+
+if(MODEL == 4 & RM.NA){
+  meth.data.K[is.na(meth.data.K)] <- 0
+  meth.data.N[is.na(meth.data.N)] <- 0
+  meth.data.T[is.na(meth.data.T)] <- 0
+}
+
+# K
 n.samples.K <- dim(meth.data.K)[[2]] - 1
 x <- c(1)
 x <- rep(x, n.samples.K)
@@ -46,7 +144,7 @@ colnames(df) <- colnames(meth.data.K)
 meth.data.K <- rbind(meth.data.K, df)
 row.names(meth.data.K) <- NULL
 
-meth.data.N <- read.table(meth.file.N, header = TRUE, sep = '\t')
+# N
 n.samples.N <- dim(meth.data.N)[[2]] - 1
 x <- c(1)
 x <- rep(x, n.samples.N)
@@ -57,7 +155,7 @@ colnames(df) <- colnames(meth.data.N)
 meth.data.N <- rbind(meth.data.N, df)
 row.names(meth.data.N) <- NULL
 
-meth.data.T <- read.table(meth.file.T, header = TRUE, sep = '\t')
+# T 
 n.samples.T <- dim(meth.data.T)[[2]] - 1
 x <- c(1)
 x <- rep(x, n.samples.T)
@@ -99,6 +197,7 @@ cov.T <- cov.T[ order(row.names(cov.T)), ]
 
 cov <- cbind(cov.K, cov.N, cov.T)
 rm(cov.K, cov.N, cov.T); gc()
+
 
 ##### PREDICT #####
 clock.cpg.coef <- read.csv(paste(model.dir, "model_coefficients.csv", sep = ''), stringsAsFactors = FALSE)
@@ -163,7 +262,7 @@ rm(tmp.K); rm(tmp.N); rm(tmp.T); gc()
 ##### HISTOGRAM #####
 p <- accel.hist.plot(
   df.KNT, 
-  bw = 20, 
+  bw = 20,
   legname = "Tissue Type", 
   linetypes =  c("solid", "dashed", "twodash"),
   colors = c("black","darkorange3","deepskyblue4"),
@@ -192,7 +291,7 @@ r.list <- list()
 r.list[[1]] <- residual.K
 r.list[[2]] <- residual.N
 r.list[[3]] <- residual.T
-p <- accel.box.plot(
+q <- accel.box.plot(
   df.KNT, 
   residuals = r.list, 
   width = 0.75,
@@ -201,10 +300,10 @@ p <- accel.box.plot(
   title = "Epigenetic Age Acceleration for Tissue Types",
   leg.x = 0.1, 
   leg.y = 0.95
-); p
+); q
 
 tiff( paste(model.dir, "TissueStudies/boxplot_KNT.tiff", sep = ''),  width = 2100, height = 2100, units = "px",res = 300 )
-p
+q
 dev.off()
 
 ##### DNAm AGE vs CHRONOLOGICAL AGE #####
@@ -315,3 +414,4 @@ if(model.residual){
   t.test(res.N, res.T, var.equal = FALSE)
 
 }
+

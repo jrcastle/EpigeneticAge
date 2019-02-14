@@ -4,10 +4,26 @@ library(ggplot2)
 library(RColorBrewer)
 source("plot_functions.R")
 
-seed        <- "123"
-model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
-meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
-cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+MODEL <- 3
+
+if(MODEL == 1){
+  seed        <- "123"
+  model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
+  meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+}
+if(MODEL == 2){
+  seed        <- "123"
+  model.dir   <- paste("gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_seed", seed, "/", sep = '')
+  meth.file.T <- paste("data/meth_T_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+}
+if(MODEL == 3){
+  model.dir <- "HorvathClock/"
+  meth.file.T <- "data/meth_T_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_CGHorvathClock.txt"
+  cov.file.T  <- "data/cov_T_seed123.txt"
+}
+
 
 ###########################################################################################
 # AGE TRANSFORMATION FUNCTIONS

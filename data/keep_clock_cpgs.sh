@@ -1,11 +1,12 @@
 #!/bin/sh
-cpg_file="ClockCpGs.txt"
-meth_file_K="meth_K_cpgs_in_KNT_imputed_vali.txt"
-out_file_K="meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs.txt"
-meth_file_N="meth_N_cpgs_in_KNT_imputed.txt"
-out_file_N="meth_N_cpgs_in_KNT_imputed_ClockCpGs.txt"
-meth_file_T="meth_T_cpgs_in_KNT_imputed.txt"
-out_file_T="meth_T_cpgs_in_KNT_imputed_ClockCpGs.txt"
+cpg_file="HorvathClockCpGs_CHR-POS.txt"
+meth_file_K="meth_K_gt10R_AddMissHorvCpGs_KNT.txt"
+meth_file_N="meth_N_gt10R_AddMissHorvCpGs_KNT.txt"
+meth_file_T="meth_T_gt10R_AddMissHorvCpGs_KNT.txt"
+
+out_file_K="meth_K_gt10R_AddMissHorvCpGs_KNT_HorvClock.txt"
+out_file_N="meth_N_gt10R_AddMissHorvCpGs_KNT_HorvClock.txt"
+out_file_T="meth_T_gt10R_AddMissHorvCpGs_KNT_HorvClock.txt"
 
 
 # IF OUTFILE EXISTS, REMOVE

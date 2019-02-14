@@ -6,18 +6,28 @@ library(stargazer)
 source("debug_contr_error.R")
 source("plot_functions.R")
 
-seed        <- "123"
-model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
-meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
-cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+MODEL          <- 3
+age.covariate  <- TRUE
+model.residual <- TRUE
 
-#seed        <- ""
-#model.dir   <- "WhiteBlack_DiffMethAnalysis/ElasticNet/"
-#meth.file.K <- "data/meth_K_WhiteBlackDiffMethCpGs_imputed_vali_ClockCpGs.txt"
-#cov.file.K  <- "data/cov_K_vali_seed123.txt"
+if(MODEL == 1){
+  seed        <- "123"
+  model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
+  meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+}
+if(MODEL == 2){
+  seed        <- "123"
+  model.dir   <- paste("gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_seed", seed, "/", sep = '')
+  meth.file.K <- paste("data/meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_vali_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+}
+if(MODEL == 3){
+  model.dir <- "HorvathClock/"
+  meth.file.K <- "data/meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_CGHorvathClock.txt"
+  cov.file.K  <- "data/cov_K.txt"
+}
 
-age.covariate  = TRUE
-model.residual = TRUE
 
 ###########################################################################################
 # AGE TRANSFORMATION FUNCTIONS
@@ -232,7 +242,7 @@ if( age.covariate ){
                              #Menopause.Age + 
                              VDYes + 
                              Menopause + 
-                             Location 
+                             Location +
                              sample.ages.K
                             )
 } else{
@@ -1562,12 +1572,12 @@ df.sum
 if(age.covariate){
   rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Current Tobacco Consumption (yes vs no)", "Age at menarche", "Times pregnant", "Parity", 
-                        "Age at first birth", "Multivitamin use (yes vs no)", "Menopause status (pre vs post)", 
+                        "Age at first birth", "Multivitamin use (yes vs no)", "Menopause status (post vs pre)", 
                         "Location (urban vs rural)", "Chronological age")
 }else{
   rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Current Tobacco Consumption (yes vs no)", "Age at menarche", "Times pregnant", "Parity", 
-                        "Age at first birth", "Multivitamin use (yes vs no)", "Menopause status (pre vs post)", 
+                        "Age at first birth", "Multivitamin use (yes vs no)", "Menopause status (post vs pre)", 
                         "Location (urban vs rural)")
 }
 
@@ -1580,31 +1590,32 @@ colnames(df.sum) <- c("Coef", "pval")
 if(age.covariate){
   rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Current Tobacco Consumption (yes vs no)", "Age at menarche", "Times pregnant", "Parity", 
-                        "Age at first birth", "Multivitamin use (yes vs no)", "Menopause status (pre vs post)", 
+                        "Age at first birth", "Multivitamin use (yes vs no)", "Menopause status (post vs pre)", 
                         "Location (urban vs rural)", "Chronological age")
 }else{
   rownames(df.sum) <- c("Race (White vs African American)", "BMI", "Current alcohol consumption (yes vs no)",
                         "Current Tobacco Consumption (yes vs no)", "Age at menarche", "Times pregnant", "Parity", 
-                        "Age at first birth", "Multivitamin use (yes vs no)", "Menopause status (pre vs post)", 
+                        "Age at first birth", "Multivitamin use (yes vs no)", "Menopause status (post vs pre)", 
                         "Location (urban vs rural)")
 }
 
 stargazer(df.sum, summary = FALSE)
+summary(lm.DNAm.Age.Residual)
 
 
 ###########################
-mean(sample.age); sd(sample.age)
-100.* length(Race[which(Race == 1)])/length(Race)
-mean(BMI); sd(BMI)
-100.* length(Drinking[which(Drinking == 1)])/length(Drinking)
-100.* length(Smoking[which(Smoking == 1)])/length(Smoking)
-mean(Menarche); sd(Menarche)
-mean(Times.Pregnant); sd(Times.Pregnant)
-mean(Parity); sd(Parity)
-mean(Age.FB); sd(Age.FB)
-100.* length(VD[which(VD == 1)])/length(VD)
-100.* length(MenopausePre) / (length(MenopausePre) + length(MenopausePost) )
-100.* length(Location.Urban) / (length(Location.Urban) + length(Location.Rural) )
+#mean(sample.age); sd(sample.age)
+#100.* length(Race[which(Race == 1)])/length(Race)
+#mean(BMI); sd(BMI)
+#100.* length(Drinking[which(Drinking == 1)])/length(Drinking)
+#100.* length(Smoking[which(Smoking == 1)])/length(Smoking)
+#mean(Menarche); sd(Menarche)
+#mean(Times.Pregnant); sd(Times.Pregnant)
+#mean(Parity); sd(Parity)
+#mean(Age.FB); sd(Age.FB)
+#100.* length(VD[which(VD == 1)])/length(VD)
+#100.* length(MenopausePre) / (length(MenopausePre) + length(MenopausePost) )
+#100.* length(Location.Urban) / (length(Location.Urban) + length(Location.Rural) )
 
 
 

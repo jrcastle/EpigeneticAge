@@ -2,9 +2,9 @@ library(gtools)
 setwd("/home/jrca253/EpigeneticAge/data")
 
 REORDER = FALSE
-in.file  <- "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_vali.txt" #"tmp.csv"
-out.file <- "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_vali_clean.txt"
-delim = '\t'
+in.file  <- "tmp.csv"
+out.file <- "meth_T_gt10R_AddMissHorvCpGs_KNT_CGHorvClock.csv"
+delim = ','
 
 print("Loading ...")
 dat0 <- read.table(in.file, sep = delim, header = TRUE)

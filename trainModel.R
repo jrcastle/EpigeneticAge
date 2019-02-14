@@ -36,6 +36,7 @@ transform.age.inverse <- function(tage){
 ##########################################################################
 # LOAD COVARIATE FILE
 ##########################################################################
+print("Loading cov file ...")
 df.cov <- read.table(cov.train, header = TRUE, row.names = 1, sep = '\t')
 age <- unlist(df.cov[1,], use.names = FALSE)
 age.transformed <- sapply(age, transform.age)
@@ -44,6 +45,7 @@ age.transformed <- sapply(age, transform.age)
 ##########################################################################
 # LOAD METH TRAINING SAMPLES
 ##########################################################################
+print("Loading meth file ...")
 df.meth <- read.table(meth.train, header = TRUE, row.names = 1, sep = '\t', skipNul = FALSE)
 meth.training.data <- t(as.matrix(df.meth))
 
@@ -51,6 +53,7 @@ meth.training.data <- t(as.matrix(df.meth))
 ##########################################################################
 # TRAIN MODEL
 ##########################################################################
+print("Training ...")
 if( one.cv ){
   # This is old code that does a single cross validation, the glmnet
   # package notes that the results of this are random and will fluctuate
@@ -63,6 +66,9 @@ if( one.cv ){
   load( "lambda.min.100CV.RData" )
   lambda.glmnet.Training <- lambda.min
 }
+
+print("lambda.glmnet.Training:")
+print(lambda.glmnet.Training)
 
 glmnet.Training <- glmnet(meth.training.data, age.transformed, family = "gaussian", alpha = alpha, nlambda = 100)
 
@@ -81,4 +87,4 @@ indices <- model.coefficients[,1]
 
 model.coefficients$name = fit.features[indices]
 model.coefficients <- data.frame(model.coefficients$name, model.coefficients$x)
-write.table(model.coefficients, paste(model.dir, "model_coefficients.csv", sep = ''), sep = ",", row.names=FALSE)
+write.table(model.coefficients, "model_coefficients.csv", sep = ",", row.names=FALSE)

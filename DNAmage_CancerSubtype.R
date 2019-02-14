@@ -4,16 +4,39 @@ library(ggplot2)
 library(RColorBrewer)
 source("plot_functions.R")
 
-seed        <- "123"
-model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
-meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
-cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
-meth.file.N <- paste("data/meth_N_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
-cov.file.N  <- paste("data/cov_N_seed", seed, ".txt", sep = "")
-meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
-cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
- 
-model.residual = FALSE
+MODEL          <- 3
+model.residual <- FALSE
+
+if(MODEL == 1){
+  seed        <- "123"
+  model.dir   <- paste("cpgs_in_KNT_imputed_seed", seed, "/", sep = '')
+  meth.file.K <- paste("data/meth_K_cpgs_in_KNT_imputed_vali_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+  meth.file.N <- paste("data/meth_N_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.N  <- paste("data/cov_N_seed", seed, ".txt", sep = "")
+  meth.file.T <- paste("data/meth_T_cpgs_in_KNT_imputed_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+}
+if(MODEL == 2){
+  seed        <- "123"
+  model.dir   <- paste("gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_seed", seed, "/", sep = '')
+  meth.file.K <- paste("data/meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_vali_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.K  <- paste("data/cov_K_vali_seed", seed, ".txt", sep = "")
+  meth.file.N <- paste("data/meth_N_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.N  <- paste("data/cov_N_seed", seed, ".txt", sep = "")
+  meth.file.T <- paste("data/meth_T_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_ClockCpGs_seed", seed, ".txt", sep = "")
+  cov.file.T  <- paste("data/cov_T_seed", seed, ".txt", sep = "")
+}
+if(MODEL == 3){
+  model.dir <- "HorvathClock/"
+  meth.file.K <- "data/meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_CGHorvathClock.txt"
+  cov.file.K  <- "data/cov_K.txt"
+  meth.file.N <- "data/meth_N_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_CGHorvathClock.txt"
+  cov.file.N  <- "data/cov_N_seed123.txt"
+  meth.file.T <- "data/meth_T_gt10R_AddMissHorvCpGs_KNT_KnnImp_SSImpWgtd_FINAL_CGHorvathClock.txt"
+  cov.file.T  <- "data/cov_T_seed123.txt"
+}
+
 
 ###########################################################################################
 # AGE TRANSFORMATION FUNCTIONS
@@ -924,8 +947,8 @@ wilcox.test(residual.sIII.IV, mu=0, conf.int = TRUE)
 
 
 #wilcox.test(residual.sIV,  mu=0, conf.int = TRUE)
-median(residual.sIII.IV)
-mean(residual.EPpHn[ !(residual.EPpHn %in% boxplot.stats(residual.EPpHn)$out) ])
+median(residual.H2p)
+median(residual.sIII.IV[ !(residual.sIII.IV %in% boxplot.stats(residual.sIII.IV)$out) ])
 
 ##### REMOVE OUTLIERS #####
 wilcox.test(residual.LumA[ !(residual.LumA %in% boxplot.stats(residual.LumA)$out) ],          mu=0, conf.int = TRUE)

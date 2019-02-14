@@ -3,11 +3,11 @@ library(ggplot2)
 #######################################################################################
 # DNAm AGE VS CHRONOLOGICAL AGE
 #######################################################################################
-DNAmAge.ChronoAge.plot = function(df.ttype, legname, colors, symbol.shapes = "", labels, x.label, 
+DNAmAge.ChronoAge.plot = function(df.ttype, legname, colors, symbol.shapes = c(), labels, x.label, 
                                   y.label, title, x.min = 0, x.max = 100, y.min = 0, 
                                   y.max = 100, leg.x = 0.8, leg.y = 0.87, text.size = 18){
   
-  if(symbol.shapes == ""){ symbol.shapes <- c( rep(16, length(colors)) ) }
+  if(length(symbol.shapes) == 0){ symbol.shapes <- c( rep(16, length(colors)) ) }
   
   p <- ggplot(df.ttype, aes(x = Chrono.age, y = DNAm.age, color = ttype, shape = ttype)) +
     geom_point() + 
