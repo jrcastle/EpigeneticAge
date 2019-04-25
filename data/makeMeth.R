@@ -9,7 +9,7 @@ missingness.fraction = 0.01
 # K => Normal
 # N => Adjacent Normal
 # T => Tumor
-tissue.type <- "T"
+tissue.type <- "N"
 DATADIR     <- '/home/jrca253/DATA/Truseq/'
 #METHFILE    <- paste('meth_', tissue.type, '.txt', sep = '')
 METHFILE    <- paste('meth_', tissue.type, '_AllCpGs', '.txt', sep = '')
@@ -20,7 +20,8 @@ COVFILE     <- paste('cov_',  tissue.type, '.txt', sep = '')
 # LOAD MASTER FILE
 ########################################################################################
 #cov <- read.csv( paste(DATADIR, "For_Nan_DNA_Methylation_data_ids_001-624.csv", sep='') )
-cov <- read.csv( paste(DATADIR, "MasterFile.csv", sep = '') )
+#cov <- read.csv( paste(DATADIR, "MasterFile.csv", sep = '') )
+cov <- read.csv( paste(DATADIR, "MasterFile_Add_N_CancerInfo.csv", sep = '') )
 cov$ID <- as.numeric(rownames(cov))
 cov$Batch <- ifelse(cov$ID <= 48, 'HS_032',
                     ifelse(cov$ID <= 96, 'HS_049',
@@ -94,17 +95,12 @@ Times.Pregnant  <- as.numeric(as.character(cov.selected$How.Many.Times.))
 Age.FB          <- as.numeric(as.character(cov.selected$Age.at.First.Birth))
 Parity          <- as.numeric(as.character(cov.selected$Number.of.Live.Births))
 VD              <- as.character(cov.selected$Vitaminuse)
-Cancer.subtype  <- as.character(cov.selected$Cancer.subtypes)
 Cancer.gradeBin <- as.character(cov.selected$GradeBin)
 Cancer.grade    <- as.character(cov.selected$Grade)
 Cancer.stage    <- as.character(cov.selected$Stage)
 ERpos           <- as.numeric(as.character(cov.selected$ERpos))
 PRpos           <- as.numeric(as.character(cov.selected$PRpos))
 Her2pos         <- as.numeric(as.character(cov.selected$Her2pos))
-ERPRposHer2pos  <- as.numeric(as.character(cov.selected$ERPRposHer2pos))
-ERPRposHer2neg  <- as.numeric(as.character(cov.selected$ERPRposHer2neg))
-ERPRnegHer2pos  <- as.numeric(as.character(cov.selected$ERPRnegHer2pos))
-ERPRnegHer2neg  <- as.numeric(as.character(cov.selected$ERPRnegHer2neg))
 
 #Age.FB    <- ifelse(cov.selected$Age.at.First.Birth < 25, 1,
 #                    ifelse(cov.selected$Age.at.First.Birth < 30, 2,
@@ -120,11 +116,11 @@ options(na.action='na.pass')
 df.selected <- data.frame(Age, Race, Batch)
 X           <- model.matrix(~Age + Race + Batch, df.selected)
 
-if(tissue.type == "T"){
-  df.selected <- data.frame(Age, Race, Batch, Cancer.subtype, Cancer.grade, 
-                            Cancer.stage, ERPRposHer2pos, ERPRposHer2neg, ERPRnegHer2pos, ERPRnegHer2neg)
-  X           <- model.matrix(~Age + Race + Batch + Cancer.subtype + Cancer.grade + 
-                              Cancer.stage + ERPRposHer2pos + ERPRposHer2neg + ERPRnegHer2pos + ERPRnegHer2neg, 
+if(tissue.type == "N" | tissue.type == "T"){
+  df.selected <- data.frame(Age, Race, Batch, Cancer.grade, 
+                            Cancer.stage, ERpos, PRpos, Her2pos)
+  X           <- model.matrix(~Age + Race + Batch + Cancer.grade + 
+                              Cancer.stage + ERpos + PRpos + Her2pos, 
                               df.selected)
 }
 

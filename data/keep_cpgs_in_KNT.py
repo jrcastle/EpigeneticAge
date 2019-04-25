@@ -1,13 +1,13 @@
 #!/home/jrca253/anaconda2/bin/python
 import pandas as pd
 
-meth_file_K = "meth_K_gt10R_AddMissHorvCpGs.txt"
-meth_file_N = "meth_N_gt10R_AddMissHorvCpGs.txt"
+meth_file_K = "meth_K_gt10R.txt"
+meth_file_N = "meth_N_gt10R.txt"
 meth_file_T = "meth_T_gt10R_AddMissHorvCpGs.txt"
 
-out_file_K = "meth_K_gt10R_AddMissHorvCpGs_KNT.txt"
-out_file_N = "meth_N_gt10R_AddMissHorvCpGs_KNT.txt"
-out_file_T = "meth_T_gt10R_AddMissHorvCpGs_KNT.txt"
+out_file_K = "TMP_meth_K_gt10R.txt"
+out_file_N = "TMP_meth_N_gt10R.txt"
+out_file_T = "TMP_meth_T_gt10R.txt"
 
 
 ##### READ IN METH DATA #####

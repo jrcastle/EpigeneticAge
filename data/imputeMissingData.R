@@ -2,15 +2,15 @@ library("impute")
 setwd("/home/jrca253/EpigeneticAge/data")
 
 CLEAN             <- TRUE
-MISSINGNESS.LIMIT <- 0.5 
-maxp              <- 15000 #Default 1500, 150000 used for N
-knn               <- 20 # Default is 10
+MISSINGNESS.LIMIT <- 0.01 # Default is 0.50 
+maxp              <- 1500 # Default 1500, 150000 used for N
+knn               <- 10   # Default is 10
 options(expressions = 20000)
 
 delim         <- '\t'
 meth.file.in  <- "meth_K_gt10R_AddMissHorvCpGs_KNT.txt"
-meth.file.out <- "meth_K_gt10R_AddMissHorvCpGs_KNT_KnnImp4.txt"
-bad.cpg.out   <- "CpGsWithGt50pctMissingness4_K.txt"
+meth.file.out <- "TMP.txt"
+bad.cpg.out   <- "TMP2.txt"
 
 ###########################################################################################
 # LOAD DATA AND TRANSFORM INTO A MATRIX
